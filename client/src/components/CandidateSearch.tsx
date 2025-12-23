@@ -175,6 +175,13 @@ function SkeletonCard() {
   );
 }
 
+interface SubscriptionInfo {
+  plan: string;
+  searchesUsed: number;
+  searchesLimit: number;
+  status: string;
+}
+
 export default function CandidateSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -201,6 +208,12 @@ export default function CandidateSearch() {
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [searchMode, setSearchMode] = useState<"description" | "url">("description");
   const [sourceProfile, setSourceProfile] = useState<{ name: string; title: string; url: string } | null>(null);
+  const [subscription, setSubscription] = useState<SubscriptionInfo>({
+    plan: 'free',
+    searchesUsed: 0,
+    searchesLimit: 10,
+    status: 'active'
+  });
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
@@ -279,6 +292,20 @@ export default function CandidateSearch() {
     if (storedRecent) setRecentSearches(JSON.parse(storedRecent));
     if (storedSaved) setSavedSearches(JSON.parse(storedSaved));
     if (storedMetadata) setCandidateMetadata(JSON.parse(storedMetadata));
+    
+    // Fetch subscription info
+    const fetchSubscription = async () => {
+      try {
+        const response = await fetch('/api/subscription');
+        const data = await response.json();
+        if (data) {
+          setSubscription(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch subscription:', error);
+      }
+    };
+    fetchSubscription();
   }, []);
 
   const getCandidateKey = (candidate: SearchResult) => candidate.url || candidate.id;
@@ -337,10 +364,26 @@ export default function CandidateSearch() {
 
     try {
       const endpoint = searchMode === "url" ? "/api/find-similar" : "/api/search";
-      const response = await apiRequest("POST", endpoint, { query: q, mode: searchMode });
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: q, mode: searchMode })
+      });
       const data = await response.json();
+      
+      if (response.status === 403) {
+        alert(data.message || 'Search limit reached. Upgrade to continue searching.');
+        window.location.href = '/pricing';
+        return;
+      }
+      
       const searchResults = data.results || [];
       setResults(searchResults);
+
+      // Update subscription usage
+      if (data.usage) {
+        setSubscription(prev => ({ ...prev, ...data.usage }));
+      }
 
       if (searchMode === "url" && data.sourceProfile) {
         setSourceProfile(data.sourceProfile);
@@ -452,6 +495,38 @@ export default function CandidateSearch() {
             AI-powered search to discover exceptional talent across the web
           </p>
         </header>
+
+        <div className="max-w-3xl mx-auto mb-6">
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-slate-300">
+                <span className="font-semibold text-blue-400">
+                  {subscription.searchesUsed}
+                </span>
+                {" / "}
+                {subscription.searchesLimit}
+                {" searches used this month"}
+              </div>
+              <div className="h-2 w-32 bg-slate-700 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                  style={{ 
+                    width: `${Math.min((subscription.searchesUsed / subscription.searchesLimit) * 100, 100)}%` 
+                  }}
+                />
+              </div>
+            </div>
+            {subscription.plan === 'free' && (
+              <a 
+                href="/pricing" 
+                className="text-sm text-blue-400 hover:text-blue-300 font-medium"
+                data-testid="link-upgrade"
+              >
+                Upgrade
+              </a>
+            )}
+          </div>
+        </div>
 
         <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp" ref={searchContainerRef}>
           <div className="relative group">
