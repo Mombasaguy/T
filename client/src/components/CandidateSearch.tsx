@@ -23,6 +23,9 @@ import {
   Filter,
   MessageSquare,
   Tag,
+  Users,
+  Square,
+  CheckSquare,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -193,8 +196,41 @@ export default function CandidateSearch() {
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [candidateMetadata, setCandidateMetadata] = useState<Record<string, { notes: string; tags: string[]; rating: number }>>({});
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<string[]>([]);
+  const [compareList, setCompareList] = useState<SearchResult[]>([]);
+  const [showCompareModal, setShowCompareModal] = useState(false);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
+
+  const toggleCompareCandidate = (candidate: SearchResult) => {
+    const isSelected = compareList.some((c) => c.url === candidate.url);
+    if (isSelected) {
+      setCompareList(compareList.filter((c) => c.url !== candidate.url));
+    } else if (compareList.length < 3) {
+      setCompareList([...compareList, candidate]);
+    }
+  };
+
+  const extractSkills = (candidate: SearchResult): string[] => {
+    const text = `${candidate.title || ""} ${candidate.text || ""} ${candidate.role || ""}`.toLowerCase();
+    const skillPatterns = [
+      "python", "javascript", "typescript", "react", "node", "go", "rust", "java", "c++",
+      "aws", "gcp", "azure", "kubernetes", "docker", "terraform", "sql", "postgresql", "mongodb",
+      "machine learning", "deep learning", "ai", "data science", "analytics",
+      "product management", "agile", "scrum", "leadership", "strategy"
+    ];
+    return skillPatterns.filter((skill) => text.includes(skill)).slice(0, 6);
+  };
+
+  const extractExperienceLevel = (candidate: SearchResult): string => {
+    const text = `${candidate.title || ""} ${candidate.text || ""} ${candidate.role || ""}`.toLowerCase();
+    if (text.includes("vp") || text.includes("vice president") || text.includes("cto") || text.includes("ceo")) return "Executive";
+    if (text.includes("director") || text.includes("head of")) return "Director";
+    if (text.includes("principal") || text.includes("staff")) return "Staff/Principal";
+    if (text.includes("senior") || text.includes("sr.")) return "Senior";
+    if (text.includes("lead") || text.includes("manager")) return "Lead/Manager";
+    if (text.includes("junior") || text.includes("jr.")) return "Junior";
+    return "Mid-level";
+  };
 
   const getAutocompleteSuggestions = (input: string): string[] => {
     if (!input.trim() || input.length < 2) return [];
@@ -549,9 +585,26 @@ export default function CandidateSearch() {
                 </h2>
                 {results.length > 0 && (
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-slate-400">
-                      Click a result to view details
-                    </span>
+                    {compareList.length >= 2 && (
+                      <button
+                        onClick={() => setShowCompareModal(true)}
+                        className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 rounded-lg text-sm text-white font-medium flex items-center gap-2"
+                        data-testid="button-compare"
+                      >
+                        <Users className="w-4 h-4" />
+                        Compare ({compareList.length})
+                      </button>
+                    )}
+                    {compareList.length > 0 && compareList.length < 2 && (
+                      <span className="text-xs text-slate-400">
+                        Select {2 - compareList.length} more to compare
+                      </span>
+                    )}
+                    {compareList.length === 0 && (
+                      <span className="text-xs text-slate-400">
+                        Check boxes to compare
+                      </span>
+                    )}
                     <button
                       onClick={exportToCSV}
                       className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-sm text-slate-300 flex items-center gap-2"
@@ -713,6 +766,20 @@ export default function CandidateSearch() {
                         data-testid={`card-result-${index}`}
                       >
                         <div className="flex items-start gap-3 group">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleCompareCandidate(result);
+                            }}
+                            className="mt-1 text-slate-500 hover:text-blue-400 transition-colors"
+                            data-testid={`checkbox-compare-${index}`}
+                          >
+                            {compareList.some((c) => c.url === result.url) ? (
+                              <CheckSquare className="w-5 h-5 text-blue-400" />
+                            ) : (
+                              <Square className="w-5 h-5" />
+                            )}
+                          </button>
                           <div className={`p-2 rounded-lg ${getPlatformColor(result.platform)}`}>
                             {getPlatformIcon(result.platform)}
                           </div>
@@ -978,6 +1045,162 @@ export default function CandidateSearch() {
                 data-testid="button-close-email"
               >
                 Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCompareModal && compareList.length >= 2 && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-5xl w-full max-h-[90vh] overflow-hidden animate-fadeIn">
+            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+              <div className="flex items-center gap-3">
+                <Users className="w-5 h-5 text-purple-400" />
+                <h3 className="text-lg font-semibold text-slate-100">Compare Candidates</h3>
+              </div>
+              <button
+                onClick={() => setShowCompareModal(false)}
+                className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                data-testid="button-close-compare"
+              >
+                <X className="w-5 h-5 text-slate-400" />
+              </button>
+            </div>
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+              <div className={`grid gap-4 ${compareList.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+                {compareList.map((candidate, index) => (
+                  <div key={candidate.url} className="bg-slate-900 rounded-xl p-4 border border-slate-700">
+                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-700">
+                      <div className={`p-2 rounded-lg ${getPlatformColor(candidate.platform)}`}>
+                        {getPlatformIcon(candidate.platform)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-slate-100 truncate">
+                          {candidate.name || candidate.author || "Unknown"}
+                        </h4>
+                        <p className="text-xs text-slate-400 truncate">
+                          {candidate.role || candidate.subtitle || candidate.platform}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-2">
+                          <TrendingUp className="w-3 h-3" />
+                          Match Score
+                        </h5>
+                        <div className="flex items-center gap-2">
+                          <div className="flex-1 h-2 bg-slate-700 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                              style={{ width: `${Math.round((candidate.score || 0) * 100)}%` }}
+                            />
+                          </div>
+                          <span className="text-sm font-medium text-slate-300">
+                            {Math.round((candidate.score || 0) * 100)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                          Experience Level
+                        </h5>
+                        <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                          {extractExperienceLevel(candidate)}
+                        </Badge>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                          Skills Detected
+                        </h5>
+                        <div className="flex flex-wrap gap-1">
+                          {extractSkills(candidate).length > 0 ? (
+                            extractSkills(candidate).map((skill) => (
+                              <Badge key={skill} variant="outline" className="text-xs border-slate-600 text-slate-300">
+                                {skill}
+                              </Badge>
+                            ))
+                          ) : (
+                            <span className="text-xs text-slate-500">No skills detected</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-2">
+                          <Calendar className="w-3 h-3" />
+                          Recent Activity
+                        </h5>
+                        <span className="text-sm text-slate-300">
+                          {candidate.publishedDate
+                            ? new Date(candidate.publishedDate).toLocaleDateString("en-US", {
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })
+                            : "Unknown"}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                          Match Status
+                        </h5>
+                        {candidate.matchStatus === "match" ? (
+                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                            <CheckCircle2 className="h-3 w-3 mr-1" />
+                            Match
+                          </Badge>
+                        ) : candidate.matchStatus === "miss" ? (
+                          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                            <XCircle className="h-3 w-3 mr-1" />
+                            Miss
+                          </Badge>
+                        ) : (
+                          <Badge className="bg-slate-600/20 text-slate-400 border-slate-500/30">
+                            Unknown
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-slate-700">
+                      <a
+                        href={candidate.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                        data-testid={`link-compare-source-${index}`}
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        View Profile
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="p-4 border-t border-slate-700 flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setCompareList([]);
+                  setShowCompareModal(false);
+                }}
+                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg font-medium transition-colors"
+                data-testid="button-clear-compare"
+              >
+                Clear Selection
+              </button>
+              <button
+                onClick={() => setShowCompareModal(false)}
+                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all"
+                data-testid="button-done-compare"
+              >
+                Done
               </button>
             </div>
           </div>
