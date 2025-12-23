@@ -1,0 +1,53 @@
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# CANDIDATE COMMAND CENTER - ENVIRONMENT VARIABLES
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# ═══════════════════════════════════════════════════════
+# DATABASE
+# ═══════════════════════════════════════════════════════
+DATABASE_URL=postgresql://user:password@host:5432/database
+
+# ═══════════════════════════════════════════════════════
+# EXA SEARCH API
+# Get your key at: https://dashboard.exa.ai/api-keys
+# ═══════════════════════════════════════════════════════
+EXA_API_KEY=your_exa_api_key_here
+
+# ═══════════════════════════════════════════════════════
+# ANTHROPIC AI (for email generation)
+# Get your key at: https://console.anthropic.com/
+# ═══════════════════════════════════════════════════════
+AI_INTEGRATIONS_ANTHROPIC_API_KEY=your_anthropic_api_key_here
+AI_INTEGRATIONS_ANTHROPIC_BASE_URL=https://api.anthropic.com
+
+# ═══════════════════════════════════════════════════════
+# STRIPE (for billing)
+# Get your keys at: https://dashboard.stripe.com/apikeys
+# ═══════════════════════════════════════════════════════
+
+# Backend Stripe Keys (SECRET - never expose these)
+STRIPE_SECRET_KEY=sk_test_51xxxxxxxxxxxxx
+STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxx
+
+# Frontend Stripe Keys (safe to expose)
+VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51xxxxxxxxxxxxx
+
+# Price IDs (get these after creating products in Stripe)
+VITE_STRIPE_PRICE_PROFESSIONAL=price_xxxxxxxxxxxxx
+VITE_STRIPE_PRICE_TEAM=price_xxxxxxxxxxxxx
+
+# ═══════════════════════════════════════════════════════
+# SESSION SECRET
+# Generate with: node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+# ═══════════════════════════════════════════════════════
+SESSION_SECRET=your_random_secret_here_at_least_32_chars
+
+# ═══════════════════════════════════════════════════════
+# REPLIT CONFIGURATION (auto-set on Replit)
+# ═══════════════════════════════════════════════════════
+REPLIT_DOMAINS=your-app.repl.co
+
+# ═══════════════════════════════════════════════════════
+# NODE ENVIRONMENT
+# ═══════════════════════════════════════════════════════
+NODE_ENV=development

@@ -40,3 +40,9 @@ waitForPort = 5000
 
 [agent]
 integrations = ["javascript_anthropic_ai_integrations:2.0.0", "stripe:2.0.0"]
+
+[userenv]
+
+[userenv.shared]
+VITE_STRIPE_PRICE_PROFESSIONAL = "price_1ShbDQDyfOUmbDiGiY3Tv3EC"
+VITE_STRIPE_PRICE_TEAM = "price_1ShbDRDyfOUmbDiGC9VR4AiB"
