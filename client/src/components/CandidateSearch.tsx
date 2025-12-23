@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 import {
   Search,
   Sparkles,
@@ -26,6 +27,7 @@ import {
   Users,
   Square,
   CheckSquare,
+  BarChart3,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -319,7 +321,25 @@ export default function CandidateSearch() {
     try {
       const response = await apiRequest("POST", "/api/search", { query: q });
       const data = await response.json();
-      setResults(data.results || []);
+      const searchResults = data.results || [];
+      setResults(searchResults);
+
+      const platforms: Record<string, number> = {};
+      let matchCount = 0;
+      searchResults.forEach((r: SearchResult) => {
+        platforms[r.platform] = (platforms[r.platform] || 0) + 1;
+        if (r.matchStatus === "match") matchCount++;
+      });
+
+      const stat = {
+        query: q,
+        timestamp: Date.now(),
+        resultCount: searchResults.length,
+        matchCount,
+        platforms,
+      };
+      const existingStats = JSON.parse(localStorage.getItem("searchStats") || "[]");
+      localStorage.setItem("searchStats", JSON.stringify([...existingStats, stat]));
     } catch (error) {
       console.error("Search failed:", error);
       setResults([]);
@@ -405,6 +425,15 @@ export default function CandidateSearch() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Candidate Command Center
             </h1>
+            <Link href="/stats">
+              <a
+                className="ml-2 p-2 hover:bg-slate-800 rounded-lg transition-colors"
+                title="View Stats"
+                data-testid="link-stats"
+              >
+                <BarChart3 className="w-5 h-5 text-slate-400 hover:text-purple-400" />
+              </a>
+            </Link>
           </div>
           <p className="text-slate-400 text-sm">
             AI-powered search to discover exceptional talent across the web
