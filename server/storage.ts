@@ -107,7 +107,19 @@ export class MemStorage implements IStorage {
 
     sampleCandidates.forEach((candidate) => {
       const id = randomUUID();
-      this.candidates.set(id, { ...candidate, id });
+      const fullCandidate: Candidate = {
+        id,
+        name: candidate.name,
+        email: candidate.email,
+        phone: candidate.phone ?? null,
+        role: candidate.role,
+        stage: candidate.stage ?? "applied",
+        avatarUrl: candidate.avatarUrl ?? null,
+        notes: candidate.notes ?? null,
+        appliedDate: candidate.appliedDate,
+        rating: candidate.rating ?? null,
+      };
+      this.candidates.set(id, fullCandidate);
     });
   }
 
@@ -138,7 +150,18 @@ export class MemStorage implements IStorage {
 
   async createCandidate(insertCandidate: InsertCandidate): Promise<Candidate> {
     const id = randomUUID();
-    const candidate: Candidate = { ...insertCandidate, id };
+    const candidate: Candidate = {
+      id,
+      name: insertCandidate.name,
+      email: insertCandidate.email,
+      phone: insertCandidate.phone ?? null,
+      role: insertCandidate.role,
+      stage: insertCandidate.stage ?? "applied",
+      avatarUrl: insertCandidate.avatarUrl ?? null,
+      notes: insertCandidate.notes ?? null,
+      appliedDate: insertCandidate.appliedDate,
+      rating: insertCandidate.rating ?? null,
+    };
     this.candidates.set(id, candidate);
     return candidate;
   }
