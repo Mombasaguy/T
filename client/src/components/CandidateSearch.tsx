@@ -55,6 +55,62 @@ const exampleQueries = [
   "Machine learning engineers in the Bay Area",
 ];
 
+const benchmarkQueries = [
+  "Senior software engineer in San Francisco",
+  "Senior software engineer at startups",
+  "Senior software engineer remote",
+  "Senior software engineer in New York",
+  "Senior backend engineer in Seattle",
+  "Senior frontend engineer in Austin",
+  "Full stack developer in Bay Area",
+  "Full stack developer at fintech",
+  "Product manager in San Francisco",
+  "Product manager at startups",
+  "Product manager in NYC",
+  "Product manager at Series A companies",
+  "Engineering manager in Seattle",
+  "Engineering manager at FAANG",
+  "Director of engineering in Austin",
+  "Director of engineering at startups",
+  "VP of Engineering in San Francisco",
+  "CTO at startups",
+  "Machine learning engineer in Bay Area",
+  "Machine learning engineer at AI companies",
+  "Data scientist in New York",
+  "Data scientist at fintech",
+  "DevOps engineer in Seattle",
+  "DevOps engineer remote",
+  "Platform engineer in San Francisco",
+  "iOS developer in Los Angeles",
+  "Android developer in Austin",
+  "Mobile developer at startups",
+  "React developer in NYC",
+  "Python developer remote",
+  "Go developer in Seattle",
+  "Rust developer in San Francisco",
+  "Security engineer at fintech",
+  "Staff engineer in Bay Area",
+  "Principal engineer at FAANG",
+  "Tech lead in San Francisco",
+  "Solutions architect remote",
+  "Cloud engineer in Seattle",
+  "SRE in San Francisco",
+  "QA engineer at startups",
+];
+
+const querySuffixes: Record<string, string[]> = {
+  "senior software engineer": ["in San Francisco", "in New York", "in Seattle", "in Austin", "at startups", "remote", "at FAANG", "at fintech"],
+  "software engineer": ["in San Francisco", "in Bay Area", "at startups", "remote", "in NYC"],
+  "product manager": ["in San Francisco", "in NYC", "at startups", "at Series A companies", "at fintech"],
+  "engineering manager": ["in Seattle", "at FAANG", "at startups", "in San Francisco"],
+  "machine learning": ["engineer in Bay Area", "engineer at AI companies", "scientist in NYC"],
+  "data scientist": ["in New York", "at fintech", "remote", "in San Francisco"],
+  "devops": ["engineer in Seattle", "engineer remote", "engineer at startups"],
+  "frontend": ["developer in Austin", "engineer in NYC", "developer at startups"],
+  "backend": ["engineer in Seattle", "developer in San Francisco", "engineer remote"],
+  "full stack": ["developer in Bay Area", "developer at fintech", "engineer at startups"],
+};
+
 function getPlatformIcon(platform: string) {
   switch (platform) {
     case "GitHub":
@@ -136,8 +192,34 @@ export default function CandidateSearch() {
   const [savedSearches, setSavedSearches] = useState<string[]>([]);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const [candidateMetadata, setCandidateMetadata] = useState<Record<string, { notes: string; tags: string[]; rating: number }>>({});
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<string[]>([]);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
+
+  const getAutocompleteSuggestions = (input: string): string[] => {
+    if (!input.trim() || input.length < 2) return [];
+    const lowerInput = input.toLowerCase();
+    const suggestions: string[] = [];
+    
+    benchmarkQueries.forEach((q) => {
+      if (q.toLowerCase().includes(lowerInput) && q.toLowerCase() !== lowerInput) {
+        suggestions.push(q);
+      }
+    });
+    
+    Object.entries(querySuffixes).forEach(([prefix, suffixes]) => {
+      if (lowerInput.includes(prefix)) {
+        suffixes.forEach((suffix) => {
+          const suggestion = `${input.trim()} ${suffix}`;
+          if (!suggestions.includes(suggestion)) {
+            suggestions.push(suggestion);
+          }
+        });
+      }
+    });
+    
+    return suggestions.slice(0, 6);
+  };
 
   useEffect(() => {
     const storedRecent = localStorage.getItem("recentSearches");
@@ -303,7 +385,10 @@ export default function CandidateSearch() {
                   type="text"
                   placeholder="Search for candidates..."
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
+                  }}
                   onKeyDown={handleKeyDown}
                   onFocus={() => setShowSearchDropdown(true)}
                   className="pl-10 bg-transparent border-0 text-white placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -334,8 +419,33 @@ export default function CandidateSearch() {
               </Button>
             </div>
 
-            {showSearchDropdown && (savedSearches.length > 0 || recentSearches.length > 0) && (
+            {showSearchDropdown && (autocompleteSuggestions.length > 0 || savedSearches.length > 0 || recentSearches.length > 0) && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
+                {autocompleteSuggestions.length > 0 && (
+                  <div className="p-3 border-b border-slate-700">
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                      <Sparkles className="w-3 h-3" />
+                      Suggestions
+                    </div>
+                    <div className="space-y-1">
+                      {autocompleteSuggestions.map((suggestion, index) => (
+                        <button
+                          key={`suggestion-${index}`}
+                          onClick={() => {
+                            setQuery(suggestion);
+                            setAutocompleteSuggestions([]);
+                            handleSearch(suggestion);
+                          }}
+                          className="w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-lg transition-colors"
+                          data-testid={`button-suggestion-${index}`}
+                        >
+                          {suggestion}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {savedSearches.length > 0 && (
                   <div className="p-3 border-b border-slate-700">
                     <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
