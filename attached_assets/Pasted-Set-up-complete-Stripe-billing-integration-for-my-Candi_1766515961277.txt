@@ -1,0 +1,333 @@
+Set up complete Stripe billing integration for my Candidate Command Center recruiting app.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 1: INSTALL DEPENDENCIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Install these packages:
+- stripe
+- @stripe/stripe-js
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 2: CREATE STRIPE API ROUTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create server/routes/stripe.js with these endpoints:
+
+1. POST /api/stripe/create-checkout-session
+   - Accepts: { priceId, userId, email, plan }
+   - Creates Stripe checkout session
+   - Includes 14-day trial
+   - Allows promotion codes
+   - Returns: { url } for redirect
+
+2. POST /api/stripe/create-portal-session
+   - Accepts: { customerId }
+   - Creates billing portal session for managing subscription
+   - Returns: { url }
+
+3. POST /api/stripe/webhook
+   - Handles these events:
+     * checkout.session.completed → User subscribed
+     * customer.subscription.updated → Subscription changed
+     * customer.subscription.deleted → User cancelled
+     * invoice.payment_succeeded → Payment successful
+     * invoice.payment_failed → Payment failed
+   - Use express.raw() middleware for webhook signature verification
+   - Verify signature with stripe.webhooks.constructEvent()
+   - Log all events to console for now (TODO: update database)
+
+4. GET /api/stripe/config
+   - Returns: { publishableKey } for frontend
+
+Use these environment variables (I'll add them to Secrets):
+- process.env.STRIPE_SECRET_KEY
+- process.env.STRIPE_WEBHOOK_SECRET
+- process.env.APP_URL (for success/cancel URLs)
+
+Success URL: ${APP_URL}/welcome?session_id={CHECKOUT_SESSION_ID}
+Cancel URL: ${APP_URL}/pricing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 3: CREATE PRICING PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create client/src/pages/Pricing.jsx with:
+
+HEADER:
+- Title: "Find Better Candidates. Pay 10x Less."
+- Subtitle: "Search 1 billion profiles across LinkedIn, GitHub, and personal sites"
+- Comparison banner: "LinkedIn Recruiter: $2,040/year → We're $99/month"
+
+THREE PRICING TIERS:
+
+Tier 1: Free
+- Price: $0/month
+- Features:
+  * 10 searches per month
+  * Search LinkedIn, GitHub, blogs
+  * Export to CSV
+  * View candidate profiles
+- Button: "Start Free" → Link to signup
+
+Tier 2: Professional (FEATURED - add "Most Popular" badge)
+- Price: $99/month
+- Features:
+  * 200 searches per month
+  * AI-powered email generation
+  * "Find Similar" from any URL
+  * Advanced filters
+  * Unlimited exports
+  * Priority support
+- Comparison callout:
+  "vs. LinkedIn Recruiter Lite: Save $852/year"
+- Button: "Start 14-Day Trial"
+- Click handler: handleSubscribe('professional')
+
+Tier 3: Team
+- Price: $299/month
+- Features:
+  * 1,000 searches per month
+  * Up to 10 team members
+  * Shared candidate lists
+  * Team collaboration
+  * Slack integration
+- Comparison callout:
+  "vs. LinkedIn Corporate (5 seats): Save $61,212/year"
+- Button: "Start Team Trial"
+- Click handler: handleSubscribe('team')
+
+FAQ SECTION:
+- "How is this different from LinkedIn Recruiter?"
+- "What's included in AI email generation?"
+- "Can I export candidate lists?"
+- "What's your refund policy?"
+
+Add handleSubscribe function:
+```javascript
+const handleSubscribe = async (plan) => {
+  const priceIds = {
+    professional: process.env.REACT_APP_STRIPE_PRICE_PROFESSIONAL,
+    team: process.env.REACT_APP_STRIPE_PRICE_TEAM
+  };
+
+  const response = await fetch('/api/stripe/create-checkout-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      priceId: priceIds[plan],
+      userId: user?.id || 'guest',
+      email: user?.email || '',
+      plan: plan
+    })
+  });
+
+  const { url } = await response.json();
+  window.location.href = url;
+};
+```
+
+STYLING:
+- Use existing Tailwind classes
+- Dark theme (slate-900 background)
+- Gradient buttons (blue-500 to purple-600)
+- Card-based layout for tiers
+- Featured tier has gradient border
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 4: CREATE WELCOME PAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create client/src/pages/Welcome.jsx:
+
+Show after successful checkout:
+- Large checkmark icon (green)
+- "Welcome to Candidate Command Center! 🎉"
+- "Your subscription is active"
+- Steps to get started:
+  1. Run your first search
+  2. Try "Find Similar" feature
+  3. Generate an AI email
+- Button: "Start Searching" → Link to /search
+- Link: "Manage Subscription" → Opens billing portal
+
+Add function to open billing portal:
+```javascript
+const openBillingPortal = async () => {
+  // Get customerId from session or user data
+  const response = await fetch('/api/stripe/create-portal-session', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ customerId: user.stripeCustomerId })
+  });
+  
+  const { url } = await response.json();
+  window.location.href = url;
+};
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 5: UPDATE APP.JSX ROUTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add these routes to client/src/App.jsx:
+
+import Pricing from './pages/Pricing';
+import Welcome from './pages/Welcome';
+
+<Route path="/pricing" element={<Pricing />} />
+<Route path="/welcome" element={<Welcome />} />
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 6: ADD NAVIGATION LINKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Update the header/navigation to include:
+- "Pricing" link → /pricing
+- If user is subscribed, show "Manage Billing" → Opens portal
+- If user is on free tier, show "Upgrade" badge next to their profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 7: ENVIRONMENT VARIABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create .env.example file with:
+
+# Stripe (get from https://dashboard.stripe.com/test/apikeys)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Price IDs (get after creating products in Stripe)
+STRIPE_PRICE_PROFESSIONAL=price_...
+STRIPE_PRICE_TEAM=price_...
+
+# App URL
+APP_URL=https://[your-replit-url].repl.co
+
+# Frontend env vars
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_...
+REACT_APP_STRIPE_PRICE_PROFESSIONAL=price_...
+REACT_APP_STRIPE_PRICE_TEAM=price_...
+
+Add instructions in README.md:
+"To enable billing:
+1. Create Stripe account at stripe.com
+2. Get API keys from dashboard
+3. Create products with these exact names:
+   - Professional Plan ($99/month)
+   - Team Plan ($299/month)
+4. Copy price IDs to .env
+5. Set up webhook endpoint: /api/stripe/webhook"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 8: ERROR HANDLING & EDGE CASES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add error handling for:
+- Stripe API failures → Show friendly error message
+- Webhook signature verification fails → Log error, return 400
+- Missing environment variables → Log warning, disable billing features
+- User tries to checkout without email → Collect email first
+
+Add loading states:
+- While creating checkout session: Show spinner
+- While redirecting to Stripe: "Redirecting to checkout..."
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 9: REGISTER ROUTES IN EXPRESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In server/index.js (or wherever Express app is):
+
+Import and use stripe routes:
+const stripeRoutes = require('./routes/stripe');
+
+// IMPORTANT: Webhook route needs raw body
+app.use('/api/stripe/webhook', express.raw({ type: 'application/json' }));
+
+// Other routes use JSON
+app.use(express.json());
+app.use('/api/stripe', stripeRoutes);
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 10: CREATE CHECKOUT COMPONENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create client/src/components/SubscribeButton.jsx:
+
+Reusable button component that:
+- Accepts props: { plan, priceId, label }
+- Shows loading state while creating checkout
+- Handles errors gracefully
+- Can be used anywhere: "Upgrade to Pro", "Subscribe", etc.
+
+Example usage:
+<SubscribeButton 
+  plan="professional" 
+  label="Start 14-Day Trial" 
+  className="..."
+/>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PART 11: ADD PROMO CODE SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+In create-checkout-session endpoint, add:
+allow_promotion_codes: true
+
+This lets users enter "PRODUCTHUNT" at checkout for discount.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TESTING INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After setup, I can test with:
+- Test card: 4242 4242 4242 4242
+- Any future expiry date
+- Any 3-digit CVC
+- Any ZIP code
+
+Test flow:
+1. Go to /pricing
+2. Click "Start 14-Day Trial"
+3. Redirects to Stripe checkout
+4. Enter test card
+5. Complete checkout
+6. Redirects to /welcome
+7. Subscription active!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPORTANT NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Use Stripe TEST mode for development
+2. Webhook endpoint must use express.raw() for signature verification
+3. Trial period: 14 days (set in Stripe product settings)
+4. All prices in USD
+5. Include metadata in checkout session for tracking
+6. Log all webhook events for debugging
+7. Don't store sensitive data - use Stripe customer IDs
+8. Always verify webhook signatures
+9. Use environment variables for all keys
+10. Add proper error messages for users
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DELIVERABLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After completing this:
+✓ Stripe billing fully integrated
+✓ Pricing page with 3 tiers
+✓ Checkout flow with 14-day trial
+✓ Welcome page after purchase
+✓ Billing portal for managing subscriptions
+✓ Webhook handlers for subscription events
+✓ Promo code support (PRODUCTHUNT)
+✓ Error handling and loading states
+✓ Test mode ready
+
+Tell me when done and I'll:
+1. Add Stripe API keys to Secrets
+2. Create products in Stripe dashboard
+3. Copy price IDs
+4. Test the checkout flow
