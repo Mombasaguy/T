@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Candidate, type InsertCandidate, type Position, type InsertPosition } from "@shared/schema";
+import { type User, type InsertUser, type Candidate, type InsertCandidate, type Position, type InsertPosition, type Subscription, type InsertSubscription, getSearchLimitForPlan, SubscriptionPlan } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -21,17 +21,29 @@ export interface IStorage {
   createPosition(position: InsertPosition): Promise<Position>;
   updatePosition(id: string, data: Partial<InsertPosition>): Promise<Position | undefined>;
   deletePosition(id: string): Promise<boolean>;
+  
+  // Subscription methods
+  getSubscription(userId: string): Promise<Subscription | null>;
+  createSubscription(data: InsertSubscription): Promise<Subscription>;
+  updateSubscription(userId: string, data: Partial<InsertSubscription>): Promise<Subscription | null>;
+  incrementSearchUsage(userId: string): Promise<void>;
+  resetMonthlyUsage(userId: string): Promise<void>;
+  incrementEmailGenerated(userId: string): Promise<void>;
+  upgradeSubscription(userId: string, plan: string, stripeSubscriptionId: string, stripePriceId: string, currentPeriodEnd: string): Promise<Subscription | null>;
+  cancelSubscription(userId: string): Promise<Subscription | null>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private candidates: Map<string, Candidate>;
   private positions: Map<string, Position>;
+  private subscriptions: Map<string, Subscription>;
 
   constructor() {
     this.users = new Map();
     this.candidates = new Map();
     this.positions = new Map();
+    this.subscriptions = new Map();
     this.seedPositions();
     this.seedCandidates();
   }
@@ -310,6 +322,110 @@ export class MemStorage implements IStorage {
       }
     });
     return this.positions.delete(id);
+  }
+
+  // Subscription methods
+  async getSubscription(userId: string): Promise<Subscription | null> {
+    return Array.from(this.subscriptions.values()).find(s => s.userId === userId) || null;
+  }
+
+  async createSubscription(data: InsertSubscription): Promise<Subscription> {
+    const id = randomUUID();
+    const now = new Date().toISOString();
+    const subscription: Subscription = {
+      id,
+      userId: data.userId,
+      stripeCustomerId: data.stripeCustomerId ?? null,
+      stripeSubscriptionId: data.stripeSubscriptionId ?? null,
+      stripePriceId: data.stripePriceId ?? null,
+      plan: data.plan ?? SubscriptionPlan.FREE,
+      status: data.status ?? "active",
+      searchesUsed: data.searchesUsed ?? 0,
+      searchesLimit: data.searchesLimit ?? 10,
+      emailsGenerated: data.emailsGenerated ?? 0,
+      currentPeriodStart: data.currentPeriodStart ?? null,
+      currentPeriodEnd: data.currentPeriodEnd ?? null,
+      trialEnd: data.trialEnd ?? null,
+      createdAt: now,
+      updatedAt: now,
+    };
+    this.subscriptions.set(id, subscription);
+    return subscription;
+  }
+
+  async updateSubscription(userId: string, data: Partial<InsertSubscription>): Promise<Subscription | null> {
+    const existing = Array.from(this.subscriptions.values()).find(s => s.userId === userId);
+    if (!existing) return null;
+    const updated = { ...existing, ...data, updatedAt: new Date().toISOString() };
+    this.subscriptions.set(existing.id, updated);
+    return updated;
+  }
+
+  async incrementSearchUsage(userId: string): Promise<void> {
+    const existing = Array.from(this.subscriptions.values()).find(s => s.userId === userId);
+    if (existing) {
+      const updated = { ...existing, searchesUsed: existing.searchesUsed + 1, updatedAt: new Date().toISOString() };
+      this.subscriptions.set(existing.id, updated);
+    }
+  }
+
+  async resetMonthlyUsage(userId: string): Promise<void> {
+    const existing = Array.from(this.subscriptions.values()).find(s => s.userId === userId);
+    if (existing) {
+      const updated = { ...existing, searchesUsed: 0, updatedAt: new Date().toISOString() };
+      this.subscriptions.set(existing.id, updated);
+    }
+  }
+
+  async incrementEmailGenerated(userId: string): Promise<void> {
+    const existing = Array.from(this.subscriptions.values()).find(s => s.userId === userId);
+    if (existing) {
+      const updated = { ...existing, emailsGenerated: existing.emailsGenerated + 1, updatedAt: new Date().toISOString() };
+      this.subscriptions.set(existing.id, updated);
+    }
+  }
+
+  async upgradeSubscription(
+    userId: string,
+    plan: string,
+    stripeSubscriptionId: string,
+    stripePriceId: string,
+    currentPeriodEnd: string
+  ): Promise<Subscription | null> {
+    const existing = Array.from(this.subscriptions.values()).find(s => s.userId === userId);
+    if (!existing) return null;
+    
+    const searchesLimit = getSearchLimitForPlan(plan as any);
+    const updated: Subscription = {
+      ...existing,
+      plan,
+      status: "active",
+      stripeSubscriptionId,
+      stripePriceId,
+      searchesLimit,
+      searchesUsed: 0,
+      currentPeriodEnd,
+      updatedAt: new Date().toISOString(),
+    };
+    this.subscriptions.set(existing.id, updated);
+    return updated;
+  }
+
+  async cancelSubscription(userId: string): Promise<Subscription | null> {
+    const existing = Array.from(this.subscriptions.values()).find(s => s.userId === userId);
+    if (!existing) return null;
+    
+    const updated: Subscription = {
+      ...existing,
+      plan: SubscriptionPlan.FREE,
+      status: "canceled",
+      searchesLimit: 10,
+      stripeSubscriptionId: null,
+      stripePriceId: null,
+      updatedAt: new Date().toISOString(),
+    };
+    this.subscriptions.set(existing.id, updated);
+    return updated;
   }
 }
 

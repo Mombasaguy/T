@@ -1,0 +1,111 @@
+// ADD THESE IMPORTS AT THE TOP
+import { subscriptions, insertSubscriptionSchema, type Subscription, type InsertSubscription, getSearchLimitForPlan, SubscriptionPlan } from "@shared/schema";
+
+// ADD THESE METHODS TO YOUR STORAGE CLASS/OBJECT
+
+// ═══════════════════════════════════════════════════════
+// SUBSCRIPTION METHODS
+// ═══════════════════════════════════════════════════════
+
+async getSubscription(userId: string): Promise<Subscription | null> {
+  const [subscription] = await db
+    .select()
+    .from(subscriptions)
+    .where(eq(subscriptions.userId, userId))
+    .limit(1);
+  return subscription || null;
+},
+
+async createSubscription(data: InsertSubscription): Promise<Subscription> {
+  const [subscription] = await db
+    .insert(subscriptions)
+    .values(data)
+    .returning();
+  return subscription;
+},
+
+async updateSubscription(userId: string, data: Partial<InsertSubscription>): Promise<Subscription | null> {
+  const [subscription] = await db
+    .update(subscriptions)
+    .set({
+      ...data,
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    })
+    .where(eq(subscriptions.userId, userId))
+    .returning();
+  return subscription || null;
+},
+
+async incrementSearchUsage(userId: string): Promise<void> {
+  await db
+    .update(subscriptions)
+    .set({
+      searchesUsed: sql`${subscriptions.searchesUsed} + 1`,
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    })
+    .where(eq(subscriptions.userId, userId));
+},
+
+async resetMonthlyUsage(userId: string): Promise<void> {
+  await db
+    .update(subscriptions)
+    .set({
+      searchesUsed: 0,
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    })
+    .where(eq(subscriptions.userId, userId));
+},
+
+async incrementEmailGenerated(userId: string): Promise<void> {
+  await db
+    .update(subscriptions)
+    .set({
+      emailsGenerated: sql`${subscriptions.emailsGenerated} + 1`,
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    })
+    .where(eq(subscriptions.userId, userId));
+},
+
+async upgradeSubscription(
+  userId: string,
+  plan: string,
+  stripeSubscriptionId: string,
+  stripePriceId: string,
+  currentPeriodEnd: string
+): Promise<Subscription | null> {
+  const searchesLimit = getSearchLimitForPlan(plan as any);
+  
+  const [subscription] = await db
+    .update(subscriptions)
+    .set({
+      plan,
+      status: "active",
+      stripeSubscriptionId,
+      stripePriceId,
+      searchesLimit,
+      searchesUsed: 0, // Reset usage on upgrade
+      currentPeriodEnd,
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    })
+    .where(eq(subscriptions.userId, userId))
+    .returning();
+  
+  return subscription || null;
+},
+
+async cancelSubscription(userId: string): Promise<Subscription | null> {
+  const [subscription] = await db
+    .update(subscriptions)
+    .set({
+      plan: SubscriptionPlan.FREE,
+      status: "canceled",
+      searchesLimit: 10,
+      stripeSubscriptionId: null,
+      stripePriceId: null,
+      updatedAt: sql`CURRENT_TIMESTAMP`,
+    })
+    .where(eq(subscriptions.userId, userId))
+    .returning();
+  
+  return subscription || null;
+},
