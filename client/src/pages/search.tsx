@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Search, Loader2, ExternalLink, Globe, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,30 +24,84 @@ interface SearchResult {
 
 interface SearchResponse {
   results: SearchResult[];
+  usage?: {
+    searchesUsed: number;
+    searchesLimit: number;
+    plan: string;
+  };
+}
+
+interface SubscriptionInfo {
+  plan: string;
+  searchesUsed: number;
+  searchesLimit: number;
+  status: string;
 }
 
 export default function CandidateSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      try {
+        const response = await fetch('/api/subscription');
+        const data = await response.json();
+        setSubscription(data);
+      } catch (error) {
+        console.error('Failed to fetch subscription:', error);
+      }
+    };
+    
+    fetchSubscription();
+  }, []);
 
   const searchMutation = useMutation({
     mutationFn: async (searchQuery: string): Promise<SearchResponse> => {
-      const response = await apiRequest("POST", "/api/search", { query: searchQuery });
-      return response as unknown as SearchResponse;
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: searchQuery })
+      });
+      
+      const data = await response.json();
+      
+      if (response.status === 403) {
+        throw new Error(data.message || 'Search limit reached');
+      }
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Search failed');
+      }
+      
+      return data;
     },
     onSuccess: (data) => {
       setResults(data.results || []);
       if (data.results?.length === 0) {
         toast({ title: "No results found", description: "Try a different search query" });
       }
+      if (data.usage) {
+        setSubscription(prev => prev ? { ...prev, ...data.usage } : null);
+      }
     },
     onError: (error) => {
-      toast({ 
-        title: "Search failed", 
-        description: error instanceof Error ? error.message : "Please try again",
-        variant: "destructive" 
-      });
+      const message = error instanceof Error ? error.message : "Please try again";
+      if (message.includes('limit')) {
+        toast({ 
+          title: "Search limit reached", 
+          description: message,
+          variant: "destructive" 
+        });
+      } else {
+        toast({ 
+          title: "Search failed", 
+          description: message,
+          variant: "destructive" 
+        });
+      }
     },
   });
 
@@ -81,6 +135,40 @@ export default function CandidateSearch() {
           Use AI-powered search to find candidates across the web
         </p>
       </div>
+
+      {subscription && (
+        <div className="max-w-2xl">
+          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-muted-foreground">
+                <span className="font-semibold text-primary">
+                  {subscription.searchesUsed}
+                </span>
+                {" / "}
+                {subscription.searchesLimit}
+                {" searches used"}
+              </div>
+              <div className="h-2 w-32 bg-muted rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                  style={{ 
+                    width: `${Math.min((subscription.searchesUsed / subscription.searchesLimit) * 100, 100)}%` 
+                  }}
+                />
+              </div>
+            </div>
+            {subscription.plan === 'free' && (
+              <a 
+                href="/pricing" 
+                className="text-sm text-primary hover:underline font-medium"
+                data-testid="link-upgrade"
+              >
+                Upgrade
+              </a>
+            )}
+          </div>
+        </div>
+      )}
 
       <form onSubmit={handleSearch} className="flex gap-3 max-w-2xl">
         <div className="relative flex-1">

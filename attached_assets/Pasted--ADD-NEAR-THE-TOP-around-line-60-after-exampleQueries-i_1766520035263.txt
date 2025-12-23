@@ -1,0 +1,99 @@
+// ADD NEAR THE TOP (around line 60, after exampleQueries)
+
+interface SubscriptionInfo {
+  plan: string;
+  searchesUsed: number;
+  searchesLimit: number;
+  status: string;
+}
+
+// ADD TO YOUR COMPONENT STATE (around line 120)
+const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
+
+// ADD useEffect TO FETCH SUBSCRIPTION (around line 150)
+useEffect(() => {
+  const fetchSubscription = async () => {
+    try {
+      const response = await fetch('/api/subscription');
+      const data = await response.json();
+      setSubscription(data);
+    } catch (error) {
+      console.error('Failed to fetch subscription:', error);
+    }
+  };
+  
+  fetchSubscription();
+}, []);
+
+// UPDATE handleSearch TO HANDLE LIMITS (around line 200)
+const handleSearch = async () => {
+  if (!query.trim()) return;
+  
+  setLoading(true);
+  setSearchPerformed(true);
+  
+  try {
+    const response = await fetch('/api/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    });
+    
+    const data = await response.json();
+    
+    if (response.status === 403) {
+      // Hit search limit
+      alert(data.message + ' Upgrade to continue searching.');
+      window.location.href = '/pricing';
+      return;
+    }
+    
+    setResults(data.results || []);
+    
+    // Update subscription usage
+    if (data.usage) {
+      setSubscription(prev => ({
+        ...prev,
+        ...data.usage
+      }));
+    }
+  } catch (error) {
+    console.error('Search error:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+// ADD USAGE BANNER (add this JSX around line 300, before the search bar)
+{subscription && (
+  <div className="max-w-3xl mx-auto mb-4">
+    <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 flex items-center justify-between">
+      <div className="flex items-center gap-3">
+        <div className="text-sm text-slate-300">
+          <span className="font-semibold text-blue-400">
+            {subscription.searchesUsed}
+          </span>
+          {" / "}
+          {subscription.searchesLimit}
+          {" "}searches used this month
+        </div>
+        <div className="h-2 w-32 bg-slate-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+            style={{ 
+              width: `${(subscription.searchesUsed / subscription.searchesLimit) * 100}%` 
+            }}
+          />
+        </div>
+      </div>
+      {subscription.plan === 'free' && (
+        <a 
+          href="/pricing" 
+          className="text-sm text-blue-400 hover:text-blue-300 font-medium"
+        >
+          Upgrade →
+        </a>
+      )}
+    </div>
+  </div>
+)}
