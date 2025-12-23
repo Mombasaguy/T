@@ -11,6 +11,8 @@ import Candidates from "./pages/candidates";
 import Pipeline from "./pages/pipeline";
 import CandidateSearch from "./components/CandidateSearch";
 import Stats from "./pages/stats";
+import Positions from "./pages/positions";
+import Settings from "./pages/settings";
 import NotFound from "./pages/not-found";
 
 function Router() {
@@ -21,6 +23,8 @@ function Router() {
       <Route path="/pipeline" component={Pipeline} />
       <Route path="/search" component={CandidateSearch} />
       <Route path="/stats" component={Stats} />
+      <Route path="/positions" component={Positions} />
+      <Route path="/settings" component={Settings} />
       <Route component={NotFound} />
     </Switch>
   );
