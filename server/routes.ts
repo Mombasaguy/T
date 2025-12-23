@@ -1,4 +1,5 @@
 import type { Express } from "express";
+import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertCandidateSchema, insertPositionSchema } from "@shared/schema";
@@ -7,11 +8,81 @@ import Exa from "exa-js";
 import Anthropic from "@anthropic-ai/sdk";
 import { stripeService } from "./stripeService";
 import { getStripePublishableKey, getUncachableStripeClient } from "./stripeClient";
+import { optionalAuth, checkSearchLimit, type AuthRequest } from "./auth";
+import {
+  handleCheckoutCompleted,
+  handleSubscriptionUpdated,
+  handleSubscriptionDeleted,
+  handleInvoicePaymentSucceeded,
+  handleInvoicePaymentFailed
+} from "./webhookHandlers";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  
+  // Webhook endpoint - must be before express.json() in main app
+  app.post(
+    "/api/stripe/webhook",
+    express.raw({ type: "application/json" }),
+    async (req, res) => {
+      try {
+        const stripe = await getUncachableStripeClient();
+        const sig = req.headers["stripe-signature"];
+        
+        if (!sig) {
+          console.error("No signature in webhook");
+          return res.status(400).send("No signature");
+        }
+
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+        if (!webhookSecret) {
+          console.error("STRIPE_WEBHOOK_SECRET not configured");
+          return res.status(500).send("Webhook secret missing");
+        }
+
+        const event = stripe.webhooks.constructEvent(
+          req.body,
+          sig,
+          webhookSecret
+        );
+
+        console.log(`Webhook received: ${event.type}`);
+
+        switch (event.type) {
+          case "checkout.session.completed":
+            await handleCheckoutCompleted(event as any);
+            break;
+          
+          case "customer.subscription.updated":
+            await handleSubscriptionUpdated(event as any);
+            break;
+          
+          case "customer.subscription.deleted":
+            await handleSubscriptionDeleted(event as any);
+            break;
+          
+          case "invoice.payment_succeeded":
+            await handleInvoicePaymentSucceeded(event as any);
+            break;
+          
+          case "invoice.payment_failed":
+            await handleInvoicePaymentFailed(event as any);
+            break;
+          
+          default:
+            console.log(`Unhandled event type: ${event.type}`);
+        }
+
+        res.json({ received: true });
+      } catch (error: any) {
+        console.error("Webhook error:", error.message);
+        res.status(400).send(`Webhook Error: ${error.message}`);
+      }
+    }
+  );
+
   // Get all candidates
   app.get("/api/candidates", async (_req, res) => {
     try {
@@ -97,8 +168,8 @@ export async function registerRoutes(
     }
   });
 
-  // Exa search endpoint
-  app.post("/api/search", async (req, res) => {
+  // Exa search endpoint with usage tracking
+  app.post("/api/search", optionalAuth, checkSearchLimit, async (req: AuthRequest, res) => {
     try {
       const querySchema = z.object({ query: z.string().min(1) });
       const parsed = querySchema.safeParse(req.body);
@@ -112,6 +183,7 @@ export async function registerRoutes(
       }
 
       const userQuery = parsed.data.query;
+      const userId = req.userId || 'guest';
 
       const exa = new Exa(apiKey);
       const result = await exa.searchAndContents(userQuery, {
@@ -250,7 +322,20 @@ export async function registerRoutes(
         };
       });
 
-      res.json({ results: transformedResults });
+      // Increment usage after successful search
+      await storage.incrementSearchUsage(userId);
+
+      // Get updated subscription info
+      const subscription = await storage.getSubscription(userId);
+
+      res.json({ 
+        results: transformedResults,
+        usage: subscription ? {
+          searchesUsed: subscription.searchesUsed,
+          searchesLimit: subscription.searchesLimit,
+          plan: subscription.plan
+        } : null
+      });
     } catch (error) {
       console.error("Exa search error:", error);
       res.status(500).json({ error: "Search failed" });
@@ -442,13 +527,26 @@ export async function registerRoutes(
     }
   });
 
-  // Generate outreach email using Anthropic
-  app.post("/api/generate-email", async (req, res) => {
+  // Generate outreach email using Anthropic (requires paid plan)
+  app.post("/api/generate-email", optionalAuth, async (req: AuthRequest, res) => {
     try {
       const { candidate } = req.body;
       
       if (!candidate) {
         return res.status(400).json({ error: "Candidate data required" });
+      }
+
+      // Check if user has AI email feature (Professional or higher)
+      const userId = req.userId || 'guest';
+      const subscription = await storage.getSubscription(userId);
+      
+      if (!subscription || subscription.plan === 'free') {
+        return res.status(403).json({
+          error: "Feature not available",
+          message: "AI email generation requires Professional plan or higher",
+          upgradeUrl: "/pricing",
+          code: "UPGRADE_REQUIRED"
+        });
       }
 
       const anthropic = new Anthropic({
@@ -484,10 +582,36 @@ Do not include [brackets] or placeholders. Write a complete email ready to send.
       const textContent = message.content.find((c) => c.type === "text");
       const email = textContent ? textContent.text : "Unable to generate email.";
 
+      // Track email generation
+      await storage.incrementEmailGenerated(userId);
+
       res.json({ email });
     } catch (error) {
       console.error("Email generation error:", error);
       res.status(500).json({ error: "Failed to generate email" });
+    }
+  });
+
+  // Get subscription info
+  app.get("/api/subscription", optionalAuth, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.userId || 'guest';
+      const subscription = await storage.getSubscription(userId);
+      
+      if (!subscription) {
+        return res.json({
+          plan: 'free',
+          status: 'active',
+          searchesUsed: 0,
+          searchesLimit: 10,
+          emailsGenerated: 0
+        });
+      }
+      
+      res.json(subscription);
+    } catch (error) {
+      console.error("Subscription fetch error:", error);
+      res.status(500).json({ error: "Failed to fetch subscription" });
     }
   });
 

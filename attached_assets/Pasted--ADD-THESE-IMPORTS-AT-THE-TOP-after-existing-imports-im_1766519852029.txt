@@ -1,0 +1,240 @@
+// ADD THESE IMPORTS AT THE TOP (after existing imports)
+import { requireAuth, optionalAuth, checkSearchLimit, type AuthRequest } from "./auth";
+import { 
+  handleCheckoutCompleted,
+  handleSubscriptionUpdated,
+  handleSubscriptionDeleted,
+  handleInvoicePaymentSucceeded,
+  handleInvoicePaymentFailed
+} from "./webhookHandlers";
+import { getUncachableStripeClient } from "./stripeClient";
+
+// ═══════════════════════════════════════════════════════
+// ADD WEBHOOK ENDPOINT FIRST (before other middleware)
+// ═══════════════════════════════════════════════════════
+
+export async function registerRoutes(
+  httpServer: Server,
+  app: Express
+): Promise<Server> {
+  
+  // WEBHOOK MUST BE FIRST (before express.json())
+  app.post(
+    "/api/stripe/webhook",
+    express.raw({ type: "application/json" }),
+    async (req, res) => {
+      try {
+        const stripe = await getUncachableStripeClient();
+        const sig = req.headers["stripe-signature"];
+        
+        if (!sig) {
+          console.error("❌ No signature in webhook");
+          return res.status(400).send("No signature");
+        }
+
+        const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+        if (!webhookSecret) {
+          console.error("❌ STRIPE_WEBHOOK_SECRET not configured");
+          return res.status(500).send("Webhook secret missing");
+        }
+
+        const event = stripe.webhooks.constructEvent(
+          req.body,
+          sig,
+          webhookSecret
+        );
+
+        console.log(`🔔 Webhook received: ${event.type}`);
+
+        // Handle different event types
+        switch (event.type) {
+          case "checkout.session.completed":
+            await handleCheckoutCompleted(event as any);
+            break;
+          
+          case "customer.subscription.updated":
+            await handleSubscriptionUpdated(event as any);
+            break;
+          
+          case "customer.subscription.deleted":
+            await handleSubscriptionDeleted(event as any);
+            break;
+          
+          case "invoice.payment_succeeded":
+            await handleInvoicePaymentSucceeded(event as any);
+            break;
+          
+          case "invoice.payment_failed":
+            await handleInvoicePaymentFailed(event as any);
+            break;
+          
+          default:
+            console.log(`⚠️ Unhandled event type: ${event.type}`);
+        }
+
+        res.json({ received: true });
+      } catch (error: any) {
+        console.error("❌ Webhook error:", error.message);
+        res.status(400).send(`Webhook Error: ${error.message}`);
+      }
+    }
+  );
+
+  // NOW ADD express.json() for other routes
+  // (This should already exist in your code)
+
+  // ═══════════════════════════════════════════════════════
+  // UPDATE SEARCH ENDPOINT (around line 100)
+  // ═══════════════════════════════════════════════════════
+  
+  // REPLACE the existing /api/search endpoint with this:
+  app.post("/api/search", optionalAuth, checkSearchLimit, async (req: AuthRequest, res) => {
+    try {
+      const querySchema = z.object({ query: z.string().min(1) });
+      const parsed = querySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: "Query is required" });
+      }
+
+      const apiKey = process.env.EXA_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "EXA_API_KEY not configured" });
+      }
+
+      const userQuery = parsed.data.query;
+      const userId = req.userId || 'guest';
+
+      // Perform the search (existing code)
+      const exa = new Exa(apiKey);
+      const result = await exa.searchAndContents(userQuery, {
+        type: "auto",
+        category: "people" as any,
+        useAutoprompt: true,
+        numResults: 12,
+        text: { maxCharacters: 1000 },
+        highlights: { numSentences: 3, highlightsPerUrl: 3 },
+      });
+
+      // ... (keep all your existing transformation code) ...
+
+      // INCREMENT USAGE AFTER SUCCESSFUL SEARCH
+      await storage.incrementSearchUsage(userId);
+
+      // Get updated subscription info
+      const subscription = await storage.getSubscription(userId);
+
+      res.json({ 
+        results: transformedResults,
+        usage: subscription ? {
+          searchesUsed: subscription.searchesUsed,
+          searchesLimit: subscription.searchesLimit,
+          plan: subscription.plan
+        } : null
+      });
+    } catch (error) {
+      console.error("Search error:", error);
+      res.status(500).json({ error: "Search failed" });
+    }
+  });
+
+  // ═══════════════════════════════════════════════════════
+  // UPDATE EMAIL GENERATION ENDPOINT (around line 446)
+  // ═══════════════════════════════════════════════════════
+  
+  // REPLACE /api/generate-email with this:
+  app.post("/api/generate-email", optionalAuth, async (req: AuthRequest, res) => {
+    try {
+      const { candidate } = req.body;
+      
+      if (!candidate) {
+        return res.status(400).json({ error: "Candidate data required" });
+      }
+
+      // Check if user has AI email feature (Professional or higher)
+      const userId = req.userId || 'guest';
+      const subscription = await storage.getSubscription(userId);
+      
+      if (!subscription || subscription.plan === 'free') {
+        return res.status(403).json({
+          error: "Feature not available",
+          message: "AI email generation requires Professional plan or higher",
+          upgradeUrl: "/pricing",
+          code: "UPGRADE_REQUIRED"
+        });
+      }
+
+      const anthropic = new Anthropic({
+        apiKey: process.env.AI_INTEGRATIONS_ANTHROPIC_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_ANTHROPIC_BASE_URL,
+      });
+
+      const highlightsText = candidate.highlights?.join(". ") || "";
+      const profileText = candidate.text?.slice(0, 200) || "";
+
+      const prompt = `Generate a personalized recruiting outreach email for this candidate:
+
+Name: ${candidate.name || candidate.author || "Candidate"}
+Role: ${candidate.title || candidate.role || "Professional"}
+Recent Activity: ${highlightsText}
+Profile: ${profileText}
+
+The email should:
+- Be concise (3-4 sentences)
+- Reference their recent work
+- Express interest in their skills
+- Be professional but friendly
+- End with a clear call-to-action
+
+Do not include [brackets] or placeholders. Write a complete email ready to send.`;
+
+      const message = await anthropic.messages.create({
+        model: "claude-sonnet-4-5",
+        max_tokens: 1024,
+        messages: [{ role: "user", content: prompt }],
+      });
+
+      const textContent = message.content.find((c) => c.type === "text");
+      const email = textContent ? textContent.text : "Unable to generate email.";
+
+      // Track email generation
+      await storage.incrementEmailGenerated(userId);
+
+      res.json({ email });
+    } catch (error) {
+      console.error("Email generation error:", error);
+      res.status(500).json({ error: "Failed to generate email" });
+    }
+  });
+
+  // ═══════════════════════════════════════════════════════
+  // ADD SUBSCRIPTION INFO ENDPOINT
+  // ═══════════════════════════════════════════════════════
+  
+  app.get("/api/subscription", optionalAuth, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.userId || 'guest';
+      const subscription = await storage.getSubscription(userId);
+      
+      if (!subscription) {
+        // Return default free tier info
+        return res.json({
+          plan: 'free',
+          status: 'active',
+          searchesUsed: 0,
+          searchesLimit: 10,
+          emailsGenerated: 0
+        });
+      }
+      
+      res.json(subscription);
+    } catch (error) {
+      console.error("Subscription fetch error:", error);
+      res.status(500).json({ error: "Failed to fetch subscription" });
+    }
+  });
+
+  // Keep all your other existing routes...
+  // (candidates, positions, etc.)
+
+  return httpServer;
+}
