@@ -21,7 +21,10 @@ import {
   ChevronDown,
   MapPin,
   Filter,
+  MessageSquare,
+  Tag,
 } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -132,13 +135,41 @@ export default function CandidateSearch() {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [savedSearches, setSavedSearches] = useState<string[]>([]);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+  const [candidateMetadata, setCandidateMetadata] = useState<Record<string, { notes: string; tags: string[]; rating: number }>>({});
+
+  const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
 
   useEffect(() => {
     const storedRecent = localStorage.getItem("recentSearches");
     const storedSaved = localStorage.getItem("savedSearches");
+    const storedMetadata = localStorage.getItem("candidateMetadata");
     if (storedRecent) setRecentSearches(JSON.parse(storedRecent));
     if (storedSaved) setSavedSearches(JSON.parse(storedSaved));
+    if (storedMetadata) setCandidateMetadata(JSON.parse(storedMetadata));
   }, []);
+
+  const getCandidateKey = (candidate: SearchResult) => candidate.url || candidate.id;
+
+  const getCandidateData = (candidate: SearchResult) => {
+    const key = getCandidateKey(candidate);
+    return candidateMetadata[key] || { notes: "", tags: [], rating: 0 };
+  };
+
+  const updateCandidateData = (candidate: SearchResult, data: Partial<{ notes: string; tags: string[]; rating: number }>) => {
+    const key = getCandidateKey(candidate);
+    const current = getCandidateData(candidate);
+    const updated = { ...candidateMetadata, [key]: { ...current, ...data } };
+    setCandidateMetadata(updated);
+    localStorage.setItem("candidateMetadata", JSON.stringify(updated));
+  };
+
+  const toggleTag = (candidate: SearchResult, tag: string) => {
+    const current = getCandidateData(candidate);
+    const newTags = current.tags.includes(tag)
+      ? current.tags.filter((t) => t !== tag)
+      : [...current.tags, tag];
+    updateCandidateData(candidate, { tags: newTags });
+  };
 
   const addToRecentSearches = (searchQuery: string) => {
     const updated = [searchQuery, ...recentSearches.filter((s) => s !== searchQuery)].slice(0, 10);
@@ -680,6 +711,74 @@ export default function CandidateSearch() {
                           </ul>
                         </div>
                       )}
+
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Star className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Rating</span>
+                        </div>
+                        <div className="flex gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <button
+                              key={star}
+                              onClick={() => updateCandidateData(selectedCandidate, { rating: getCandidateData(selectedCandidate).rating === star ? 0 : star })}
+                              className="p-1 transition-colors"
+                              data-testid={`button-rating-${star}`}
+                            >
+                              <Star
+                                className={`w-5 h-5 ${
+                                  star <= getCandidateData(selectedCandidate).rating
+                                    ? "text-yellow-400 fill-yellow-400"
+                                    : "text-slate-600"
+                                }`}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Tag className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Status</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {statusTags.map((tag) => {
+                            const isActive = getCandidateData(selectedCandidate).tags.includes(tag);
+                            const tagColors: Record<string, string> = {
+                              Contacted: isActive ? "bg-blue-500/20 text-blue-400 border-blue-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
+                              Interview: isActive ? "bg-purple-500/20 text-purple-400 border-purple-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
+                              Rejected: isActive ? "bg-red-500/20 text-red-400 border-red-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
+                              "Follow-up": isActive ? "bg-amber-500/20 text-amber-400 border-amber-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
+                            };
+                            return (
+                              <button
+                                key={tag}
+                                onClick={() => toggleTag(selectedCandidate, tag)}
+                                className={`px-3 py-1 text-xs font-medium rounded-full border transition-colors ${tagColors[tag]}`}
+                                data-testid={`button-tag-${tag.toLowerCase()}`}
+                              >
+                                {tag}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <MessageSquare className="w-4 h-4 text-slate-400" />
+                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Notes</span>
+                        </div>
+                        <Textarea
+                          placeholder="Add notes about this candidate..."
+                          value={getCandidateData(selectedCandidate).notes}
+                          onChange={(e) => updateCandidateData(selectedCandidate, { notes: e.target.value })}
+                          className="bg-slate-900 border-slate-600 text-slate-300 placeholder:text-slate-500 text-sm resize-none"
+                          rows={3}
+                          data-testid="textarea-notes"
+                        />
+                      </div>
 
                       <button
                         onClick={generateEmail}
