@@ -19,6 +19,8 @@ import {
   History,
   Star,
   ChevronDown,
+  MapPin,
+  Filter,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,6 +122,8 @@ export default function CandidateSearch() {
     platform: "all",
     matchStatus: "all",
     minScore: 0,
+    dateRange: "all",
+    location: "all",
   });
   const [generatingEmail, setGeneratingEmail] = useState(false);
   const [emailDraft, setEmailDraft] = useState("");
@@ -420,42 +424,94 @@ export default function CandidateSearch() {
               </div>
 
               {results.length > 0 && (
-                <div className="flex gap-3 mb-6 flex-wrap">
-                  <select
-                    value={filters.platform}
-                    onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
-                    className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300"
-                    data-testid="select-platform"
-                  >
-                    <option value="all">All Platforms</option>
-                    <option value="GitHub">GitHub</option>
-                    <option value="LinkedIn">LinkedIn</option>
-                    <option value="Blog">Blog</option>
-                  </select>
+                <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Filter className="w-4 h-4 text-slate-400" />
+                    <span className="text-sm font-medium text-slate-300">Filters</span>
+                  </div>
+                  <div className="flex gap-3 flex-wrap items-center">
+                    <select
+                      value={filters.platform}
+                      onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
+                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      data-testid="select-platform"
+                    >
+                      <option value="all">All Platforms</option>
+                      <option value="GitHub">GitHub</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="Blog">Blog</option>
+                    </select>
 
-                  <select
-                    value={filters.matchStatus}
-                    onChange={(e) => setFilters({ ...filters, matchStatus: e.target.value })}
-                    className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300"
-                    data-testid="select-match-status"
-                  >
-                    <option value="all">All Matches</option>
-                    <option value="match">Match Only</option>
-                    <option value="miss">Miss Only</option>
-                  </select>
+                    <select
+                      value={filters.matchStatus}
+                      onChange={(e) => setFilters({ ...filters, matchStatus: e.target.value })}
+                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      data-testid="select-match-status"
+                    >
+                      <option value="all">All Matches</option>
+                      <option value="match">Match Only</option>
+                      <option value="miss">Miss Only</option>
+                    </select>
 
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm text-slate-400">Min Score:</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={filters.minScore}
-                      onChange={(e) => setFilters({ ...filters, minScore: parseInt(e.target.value) })}
-                      className="w-32"
-                      data-testid="slider-min-score"
-                    />
-                    <span className="text-sm text-slate-300">{filters.minScore}%</span>
+                    <select
+                      value={filters.dateRange}
+                      onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
+                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      data-testid="select-date-range"
+                    >
+                      <option value="all">Any Date</option>
+                      <option value="week">Last Week</option>
+                      <option value="month">Last Month</option>
+                      <option value="year">Last Year</option>
+                    </select>
+
+                    <select
+                      value={filters.location}
+                      onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      data-testid="select-location"
+                    >
+                      <option value="all">All Locations</option>
+                      {(() => {
+                        const locations = new Set<string>();
+                        const knownLocations = ["San Francisco", "New York", "Los Angeles", "Seattle", "Austin", "Boston", "Chicago", "Denver", "Atlanta", "Miami", "London", "Berlin", "Toronto", "Singapore", "Remote", "Bay Area", "NYC", "SF"];
+                        results.forEach((r) => {
+                          const text = `${r.title || ""} ${r.text || ""} ${r.role || ""}`;
+                          knownLocations.forEach((loc) => {
+                            if (text.toLowerCase().includes(loc.toLowerCase())) {
+                              locations.add(loc);
+                            }
+                          });
+                        });
+                        return Array.from(locations).slice(0, 10).map((loc) => (
+                          <option key={loc} value={loc}>{loc}</option>
+                        ));
+                      })()}
+                    </select>
+
+                    <div className="flex items-center gap-2 bg-slate-900 border border-slate-600 rounded-lg px-3 py-2">
+                      <label className="text-sm text-slate-400 whitespace-nowrap">Score:</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={filters.minScore}
+                        onChange={(e) => setFilters({ ...filters, minScore: parseInt(e.target.value) })}
+                        className="w-24 accent-blue-500"
+                        data-testid="slider-min-score"
+                      />
+                      <span className="text-sm text-slate-300 w-10">{filters.minScore}%</span>
+                    </div>
+
+                    {(filters.platform !== "all" || filters.matchStatus !== "all" || filters.dateRange !== "all" || filters.location !== "all" || filters.minScore > 0) && (
+                      <button
+                        onClick={() => setFilters({ platform: "all", matchStatus: "all", minScore: 0, dateRange: "all", location: "all" })}
+                        className="px-3 py-2 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                        data-testid="button-clear-filters"
+                      >
+                        Clear all
+                      </button>
+                    )}
                   </div>
                 </div>
               )}
@@ -475,6 +531,22 @@ export default function CandidateSearch() {
                       if (filters.matchStatus !== "all" && r.matchStatus !== filters.matchStatus) return false;
                       const score = r.score !== undefined && r.score !== null ? Math.round(r.score * 100) : 0;
                       if (score < filters.minScore) return false;
+                      
+                      if (filters.dateRange !== "all" && r.publishedDate) {
+                        const date = new Date(r.publishedDate);
+                        const now = new Date();
+                        const diffMs = now.getTime() - date.getTime();
+                        const diffDays = diffMs / (1000 * 60 * 60 * 24);
+                        if (filters.dateRange === "week" && diffDays > 7) return false;
+                        if (filters.dateRange === "month" && diffDays > 30) return false;
+                        if (filters.dateRange === "year" && diffDays > 365) return false;
+                      }
+                      
+                      if (filters.location !== "all") {
+                        const text = `${r.title || ""} ${r.text || ""} ${r.role || ""}`.toLowerCase();
+                        if (!text.includes(filters.location.toLowerCase())) return false;
+                      }
+                      
                       return true;
                     });
                     
