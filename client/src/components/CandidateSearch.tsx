@@ -109,6 +109,11 @@ export default function CandidateSearch() {
   const [selectedCandidate, setSelectedCandidate] = useState<SearchResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [filters, setFilters] = useState({
+    platform: "all",
+    matchStatus: "all",
+    minScore: 0,
+  });
 
   const handleSearch = async (searchQuery?: string) => {
     const q = searchQuery || query;
@@ -262,7 +267,48 @@ export default function CandidateSearch() {
                 )}
               </div>
 
-              <ScrollArea className="h-[calc(100vh-400px)]">
+              {results.length > 0 && (
+                <div className="flex gap-3 mb-6 flex-wrap">
+                  <select
+                    value={filters.platform}
+                    onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
+                    className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300"
+                    data-testid="select-platform"
+                  >
+                    <option value="all">All Platforms</option>
+                    <option value="GitHub">GitHub</option>
+                    <option value="LinkedIn">LinkedIn</option>
+                    <option value="Blog">Blog</option>
+                  </select>
+
+                  <select
+                    value={filters.matchStatus}
+                    onChange={(e) => setFilters({ ...filters, matchStatus: e.target.value })}
+                    className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-300"
+                    data-testid="select-match-status"
+                  >
+                    <option value="all">All Matches</option>
+                    <option value="match">Match Only</option>
+                    <option value="miss">Miss Only</option>
+                  </select>
+
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm text-slate-400">Min Score:</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={filters.minScore}
+                      onChange={(e) => setFilters({ ...filters, minScore: parseInt(e.target.value) })}
+                      className="w-32"
+                      data-testid="slider-min-score"
+                    />
+                    <span className="text-sm text-slate-300">{filters.minScore}%</span>
+                  </div>
+                </div>
+              )}
+
+              <ScrollArea className="h-[calc(100vh-480px)]">
                 <div className="space-y-3 pr-4">
                   {loading ? (
                     <>
@@ -271,15 +317,27 @@ export default function CandidateSearch() {
                       <SkeletonCard />
                       <SkeletonCard />
                     </>
-                  ) : results.length === 0 ? (
-                    <div className="text-center py-12 text-slate-400">
-                      <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>No results found. Try a different search query.</p>
-                    </div>
-                  ) : (
-                    results.map((result, index) => (
+                  ) : (() => {
+                    const filteredResults = results.filter((r) => {
+                      if (filters.platform !== "all" && r.platform !== filters.platform) return false;
+                      if (filters.matchStatus !== "all" && r.matchStatus !== filters.matchStatus) return false;
+                      const score = r.score !== undefined && r.score !== null ? Math.round(r.score * 100) : 0;
+                      if (score < filters.minScore) return false;
+                      return true;
+                    });
+                    
+                    if (filteredResults.length === 0) {
+                      return (
+                        <div className="text-center py-12 text-slate-400">
+                          <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p>No results found. Try adjusting filters or a different query.</p>
+                        </div>
+                      );
+                    }
+                    
+                    return filteredResults.map((result, index) => (
                       <Card
-                        key={result.id}
+                        key={result.id + index}
                         onClick={() => setSelectedCandidate(result)}
                         className={`p-4 cursor-pointer transition-all duration-200 animate-slideInLeft ${
                           selectedCandidate?.id === result.id
@@ -335,8 +393,8 @@ export default function CandidateSearch() {
                           </div>
                         </div>
                       </Card>
-                    ))
-                  )}
+                    ));
+                  })()}
                 </div>
               </ScrollArea>
             </div>
