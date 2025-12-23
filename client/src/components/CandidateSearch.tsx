@@ -22,6 +22,7 @@ import { apiRequest } from "@/lib/queryClient";
 interface SearchResult {
   id: string;
   title: string;
+  subtitle?: string;
   url: string;
   publishedDate?: string;
   author?: string;
@@ -266,6 +267,11 @@ export default function CandidateSearch() {
                                 ) : null}
                               </div>
                             </div>
+                            {result.subtitle && (
+                              <p className="text-sm text-slate-400 line-clamp-1 mt-0.5">
+                                {result.subtitle}
+                              </p>
+                            )}
                             <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
                               {formatDate(result.publishedDate) && (
                                 <span className="flex items-center gap-1">
@@ -315,9 +321,14 @@ export default function CandidateSearch() {
                         </div>
                       </div>
 
-                      <h3 className="text-lg font-semibold text-slate-100 mb-4">
+                      <h3 className="text-lg font-semibold text-slate-100 mb-2">
                         {selectedCandidate.title}
                       </h3>
+                      {selectedCandidate.subtitle && (
+                        <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                          {selectedCandidate.subtitle}
+                        </p>
+                      )}
 
                       {selectedCandidate.text && (
                         <div className="mb-4">

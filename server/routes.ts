@@ -108,16 +108,31 @@ export async function registerRoutes(
         return res.status(500).json({ error: "EXA_API_KEY not configured" });
       }
 
+      const userQuery = parsed.data.query;
+      const enhancedQuery = `Find personal websites and profiles of people who ${userQuery}`;
+
       const exa = new Exa(apiKey);
-      const result = await exa.searchAndContents(parsed.data.query, {
+      const result = await exa.searchAndContents(enhancedQuery, {
         type: "neural",
         useAutoprompt: true,
         numResults: 12,
+        category: "personal site" as any,
+        includeDomains: [
+          "github.com",
+          "twitter.com",
+          "x.com",
+          "substack.com",
+          "medium.com",
+          "linkedin.com",
+          "behance.net",
+          "dribbble.com",
+          "dev.to",
+        ],
         text: { maxCharacters: 500 },
         highlights: { numSentences: 3, highlightsPerUrl: 3 },
       });
 
-      const queryLower = parsed.data.query.toLowerCase();
+      const queryLower = userQuery.toLowerCase();
       const queryTerms = queryLower.split(/\s+/).filter(t => t.length > 2);
 
       const extractPlatform = (url: string): string => {
@@ -128,6 +143,8 @@ export async function registerRoutes(
           if (hostname.includes("linkedin.com")) return "LinkedIn";
           if (hostname.includes("medium.com")) return "Medium";
           if (hostname.includes("dev.to")) return "Dev.to";
+          if (hostname.includes("behance.net")) return "Behance";
+          if (hostname.includes("dribbble.com")) return "Dribbble";
           if (hostname.includes("stackoverflow.com")) return "StackOverflow";
           if (hostname.includes("youtube.com")) return "YouTube";
           if (hostname.includes("reddit.com")) return "Reddit";
@@ -138,6 +155,74 @@ export async function registerRoutes(
         }
       };
 
+      const extractAuthorFromUrl = (url: string): string | null => {
+        try {
+          const urlObj = new URL(url);
+          const hostname = urlObj.hostname.toLowerCase();
+          const pathname = urlObj.pathname;
+          
+          if (hostname.includes("github.com")) {
+            const match = pathname.match(/^\/([^\/]+)/);
+            if (match && match[1] && !["orgs", "topics", "trending", "explore"].includes(match[1])) {
+              return match[1];
+            }
+          }
+          if (hostname.includes("twitter.com") || hostname.includes("x.com")) {
+            const match = pathname.match(/^\/([^\/]+)/);
+            if (match && match[1] && !["home", "explore", "search", "i"].includes(match[1])) {
+              return `@${match[1]}`;
+            }
+          }
+          if (hostname.includes("medium.com")) {
+            const match = pathname.match(/^\/@([^\/]+)/);
+            if (match && match[1]) return match[1];
+          }
+          if (hostname.includes("substack.com")) {
+            const subdomain = hostname.split(".")[0];
+            if (subdomain && subdomain !== "www" && subdomain !== "substack") {
+              return subdomain;
+            }
+          }
+          if (hostname.includes("dev.to")) {
+            const match = pathname.match(/^\/([^\/]+)/);
+            if (match && match[1]) return match[1];
+          }
+          return null;
+        } catch {
+          return null;
+        }
+      };
+
+      const extractAuthorFromTitle = (title: string): string | null => {
+        if (!title) return null;
+        const patterns = [
+          /^([^|\-–—]+?)\s*[|\-–—]/,
+          /[|\-–—]\s*([^|\-–—]+?)$/,
+          /^([A-Z][a-z]+ [A-Z][a-z]+)/,
+        ];
+        for (const pattern of patterns) {
+          const match = title.match(pattern);
+          if (match && match[1]) {
+            const name = match[1].trim();
+            if (name.length > 2 && name.length < 40 && !name.includes("http")) {
+              return name;
+            }
+          }
+        }
+        return null;
+      };
+
+      const pickAuthor = (r: any): string => {
+        if (r.author && typeof r.author === "string" && r.author.trim()) {
+          return r.author.trim();
+        }
+        const urlAuthor = extractAuthorFromUrl(String(r.url || ""));
+        if (urlAuthor) return urlAuthor;
+        const titleAuthor = extractAuthorFromTitle(String(r.title || ""));
+        if (titleAuthor) return titleAuthor;
+        return "Unknown";
+      };
+
       const getMatchStatus = (title: string, text: string | null): "match" | "miss" | "unknown" => {
         if (!title && !text) return "unknown";
         const content = `${title} ${text || ""}`.toLowerCase();
@@ -145,18 +230,26 @@ export async function registerRoutes(
         return hasMatch ? "match" : "miss";
       };
 
-      const transformedResults = (result.results || []).map((r: any) => ({
-        id: String(r.url || ""),
-        title: String(r.title || ""),
-        url: String(r.url || ""),
-        publishedDate: r.publishedDate ? String(r.publishedDate) : null,
-        author: r.author ? String(r.author) : null,
-        text: r.text ? String(r.text) : null,
-        highlights: Array.isArray(r.highlights) ? r.highlights.map(String) : [],
-        score: typeof r.score === "number" ? r.score : null,
-        matchStatus: getMatchStatus(String(r.title || ""), r.text ? String(r.text) : null),
-        platform: extractPlatform(String(r.url || "")),
-      }));
+      const transformedResults = (result.results || []).map((r: any) => {
+        const author = pickAuthor(r);
+        const originalTitle = String(r.title || "");
+        const subtitle = originalTitle !== author ? originalTitle : 
+          (r.highlights && r.highlights.length > 0 ? String(r.highlights[0]).slice(0, 100) : null);
+
+        return {
+          id: String(r.url || ""),
+          title: author,
+          subtitle: subtitle,
+          url: String(r.url || ""),
+          publishedDate: r.publishedDate ? String(r.publishedDate) : null,
+          author: author,
+          text: r.text ? String(r.text) : null,
+          highlights: Array.isArray(r.highlights) ? r.highlights.map(String) : [],
+          score: typeof r.score === "number" ? r.score : null,
+          matchStatus: getMatchStatus(originalTitle, r.text ? String(r.text) : null),
+          platform: extractPlatform(String(r.url || "")),
+        };
+      });
 
       res.json({ results: transformedResults });
     } catch (error) {
