@@ -1,0 +1,63 @@
+Update the /api/search endpoint to use Exa's new People Search feature:
+
+CRITICAL CHANGES:
+
+1. Update the exa.searchAndContents() call to include:
+   - type: 'auto' (instead of 'neural')
+   - category: 'people' (this is the key!)
+
+2. Keep the rest of the parameters:
+   - useAutoprompt: true
+   - numResults: 12
+   - text: { maxCharacters: 500 }
+   - highlights: { numSentences: 3, highlightsPerUrl: 3 }
+
+Example:
+```javascript
+const results = await exa.searchAndContents(query, {
+  type: 'auto',
+  category: 'people',  // THIS IS THE MAGIC LINE
+  useAutoprompt: true,
+  numResults: 12,
+  text: { maxCharacters: 500 },
+  highlights: { numSentences: 3, highlightsPerUrl: 3 }
+});
+```
+
+3. The results will now return actual people profiles instead of articles
+
+4. Extract author/person name better:
+   - Exa's people search should return profiles with names
+   - If result.author exists, use that as the primary title
+   - If result.title contains a person's name, extract it
+   - Show the person's name as the main heading
+   - Show their role/company as subtitle
+
+5. Update result transformation:
+```javascript
+   const candidates = results.results.map((result) => {
+     // Extract person's name (Exa should provide this)
+     const personName = result.author || result.title.split('|')[0].trim();
+     
+     return {
+       id: result.url,
+       name: personName,  // NEW: actual person name
+       title: result.title,
+       url: result.url,
+       publishedDate: result.publishedDate || new Date().toISOString(),
+       author: result.author,
+       text: result.text || '',
+       highlights: result.highlights || [],
+       score: result.score || 0,
+       matchStatus: detectMatch(result.text || '', result.title, query),
+       platform: extractPlatform(result.url)
+     };
+   });
+```
+
+6. Update the frontend CandidateSearch.jsx to display:
+   - PRIMARY: {candidate.name || candidate.author} (person's name)
+   - SECONDARY: {candidate.title} (their role/bio)
+   - Keep existing preview text and highlights
+
+That's it! Just add category: 'people' to unlock Exa's 1B+ indexed people profiles.

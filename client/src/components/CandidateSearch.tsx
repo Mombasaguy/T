@@ -21,6 +21,7 @@ import { apiRequest } from "@/lib/queryClient";
 
 interface SearchResult {
   id: string;
+  name?: string;
   title: string;
   subtitle?: string;
   url: string;
@@ -251,7 +252,7 @@ export default function CandidateSearch() {
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <h3 className="font-medium text-slate-100 line-clamp-1">
-                                {result.title}
+                                {result.name || result.author || result.title}
                               </h3>
                               <div className="flex items-center gap-2 shrink-0">
                                 {result.matchStatus === "match" ? (
@@ -322,7 +323,7 @@ export default function CandidateSearch() {
                       </div>
 
                       <h3 className="text-lg font-semibold text-slate-100 mb-2">
-                        {selectedCandidate.title}
+                        {selectedCandidate.name || selectedCandidate.author || selectedCandidate.title}
                       </h3>
                       {selectedCandidate.subtitle && (
                         <p className="text-sm text-slate-400 mb-4 line-clamp-2">

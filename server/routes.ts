@@ -109,25 +109,13 @@ export async function registerRoutes(
       }
 
       const userQuery = parsed.data.query;
-      const enhancedQuery = `Find personal websites and profiles of people who ${userQuery}`;
 
       const exa = new Exa(apiKey);
-      const result = await exa.searchAndContents(enhancedQuery, {
-        type: "neural",
+      const result = await exa.searchAndContents(userQuery, {
+        type: "auto",
+        category: "people" as any,
         useAutoprompt: true,
         numResults: 12,
-        category: "personal site" as any,
-        includeDomains: [
-          "github.com",
-          "twitter.com",
-          "x.com",
-          "substack.com",
-          "medium.com",
-          "linkedin.com",
-          "behance.net",
-          "dribbble.com",
-          "dev.to",
-        ],
         text: { maxCharacters: 500 },
         highlights: { numSentences: 3, highlightsPerUrl: 3 },
       });
@@ -231,21 +219,22 @@ export async function registerRoutes(
       };
 
       const transformedResults = (result.results || []).map((r: any) => {
-        const author = pickAuthor(r);
+        const personName = pickAuthor(r);
         const originalTitle = String(r.title || "");
-        const subtitle = originalTitle !== author ? originalTitle : 
+        const subtitle = originalTitle !== personName ? originalTitle : 
           (r.highlights && r.highlights.length > 0 ? String(r.highlights[0]).slice(0, 100) : null);
 
         return {
           id: String(r.url || ""),
-          title: author,
+          name: personName,
+          title: personName,
           subtitle: subtitle,
           url: String(r.url || ""),
-          publishedDate: r.publishedDate ? String(r.publishedDate) : null,
-          author: author,
+          publishedDate: r.publishedDate ? String(r.publishedDate) : new Date().toISOString(),
+          author: r.author ? String(r.author) : personName,
           text: r.text ? String(r.text) : null,
           highlights: Array.isArray(r.highlights) ? r.highlights.map(String) : [],
-          score: typeof r.score === "number" ? r.score : null,
+          score: typeof r.score === "number" ? r.score : 0,
           matchStatus: getMatchStatus(originalTitle, r.text ? String(r.text) : null),
           platform: extractPlatform(String(r.url || "")),
         };
