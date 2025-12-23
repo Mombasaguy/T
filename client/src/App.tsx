@@ -10,7 +10,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import Dashboard from "@/pages/dashboard";
 import Candidates from "@/pages/candidates";
 import Pipeline from "@/pages/pipeline";
-import CandidateSearch from "@/pages/search";
+import CandidateSearch from "@/components/CandidateSearch";
 import NotFound from "@/pages/not-found";
 
 function Router() {
