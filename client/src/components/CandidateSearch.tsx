@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Search,
   Sparkles,
@@ -16,6 +16,9 @@ import {
   Copy,
   Check,
   X,
+  History,
+  Star,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -122,6 +125,33 @@ export default function CandidateSearch() {
   const [emailDraft, setEmailDraft] = useState("");
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [savedSearches, setSavedSearches] = useState<string[]>([]);
+  const [showSearchDropdown, setShowSearchDropdown] = useState(false);
+
+  useEffect(() => {
+    const storedRecent = localStorage.getItem("recentSearches");
+    const storedSaved = localStorage.getItem("savedSearches");
+    if (storedRecent) setRecentSearches(JSON.parse(storedRecent));
+    if (storedSaved) setSavedSearches(JSON.parse(storedSaved));
+  }, []);
+
+  const addToRecentSearches = (searchQuery: string) => {
+    const updated = [searchQuery, ...recentSearches.filter((s) => s !== searchQuery)].slice(0, 10);
+    setRecentSearches(updated);
+    localStorage.setItem("recentSearches", JSON.stringify(updated));
+  };
+
+  const toggleSavedSearch = (searchQuery: string) => {
+    let updated: string[];
+    if (savedSearches.includes(searchQuery)) {
+      updated = savedSearches.filter((s) => s !== searchQuery);
+    } else {
+      updated = [searchQuery, ...savedSearches];
+    }
+    setSavedSearches(updated);
+    localStorage.setItem("savedSearches", JSON.stringify(updated));
+  };
 
   const handleSearch = async (searchQuery?: string) => {
     const q = searchQuery || query;
@@ -130,6 +160,8 @@ export default function CandidateSearch() {
     setLoading(true);
     setSearchPerformed(true);
     setSelectedCandidate(null);
+    setShowSearchDropdown(false);
+    addToRecentSearches(q);
 
     try {
       const response = await apiRequest("POST", "/api/search", { query: q });
@@ -238,10 +270,18 @@ export default function CandidateSearch() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
+                  onFocus={() => setShowSearchDropdown(true)}
                   className="pl-10 bg-transparent border-0 text-white placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0"
                   data-testid="input-search"
                 />
               </div>
+              <button
+                onClick={() => setShowSearchDropdown(!showSearchDropdown)}
+                className="px-2 text-slate-400 hover:text-slate-300"
+                data-testid="button-toggle-history"
+              >
+                <ChevronDown className={`w-4 h-4 transition-transform ${showSearchDropdown ? "rotate-180" : ""}`} />
+              </button>
               <Button
                 onClick={() => handleSearch()}
                 disabled={loading || !query.trim()}
@@ -258,6 +298,84 @@ export default function CandidateSearch() {
                 )}
               </Button>
             </div>
+
+            {showSearchDropdown && (savedSearches.length > 0 || recentSearches.length > 0) && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
+                {savedSearches.length > 0 && (
+                  <div className="p-3 border-b border-slate-700">
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                      <Star className="w-3 h-3" />
+                      Saved Searches
+                    </div>
+                    <div className="space-y-1">
+                      {savedSearches.map((search, index) => (
+                        <div
+                          key={`saved-${index}`}
+                          className="flex items-center gap-2 group"
+                        >
+                          <button
+                            onClick={() => {
+                              setQuery(search);
+                              handleSearch(search);
+                            }}
+                            className="flex-1 text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-lg transition-colors"
+                            data-testid={`button-saved-search-${index}`}
+                          >
+                            {search}
+                          </button>
+                          <button
+                            onClick={() => toggleSavedSearch(search)}
+                            className="p-1.5 text-yellow-500 hover:bg-slate-700 rounded-lg"
+                            data-testid={`button-unsave-search-${index}`}
+                          >
+                            <Star className="w-4 h-4 fill-current" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {recentSearches.length > 0 && (
+                  <div className="p-3">
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                      <History className="w-3 h-3" />
+                      Recent Searches
+                    </div>
+                    <div className="space-y-1">
+                      {recentSearches.map((search, index) => (
+                        <div
+                          key={`recent-${index}`}
+                          className="flex items-center gap-2 group"
+                        >
+                          <button
+                            onClick={() => {
+                              setQuery(search);
+                              handleSearch(search);
+                            }}
+                            className="flex-1 text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-lg transition-colors"
+                            data-testid={`button-recent-search-${index}`}
+                          >
+                            {search}
+                          </button>
+                          <button
+                            onClick={() => toggleSavedSearch(search)}
+                            className={`p-1.5 hover:bg-slate-700 rounded-lg ${
+                              savedSearches.includes(search)
+                                ? "text-yellow-500"
+                                : "text-slate-500 hover:text-yellow-500"
+                            }`}
+                            data-testid={`button-save-search-${index}`}
+                          >
+                            <Star className={`w-4 h-4 ${savedSearches.includes(search) ? "fill-current" : ""}`} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-2 mt-4 justify-center">
