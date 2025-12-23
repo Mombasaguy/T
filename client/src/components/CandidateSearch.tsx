@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
 import {
   Search,
   Sparkles,
@@ -27,7 +26,6 @@ import {
   Users,
   Square,
   CheckSquare,
-  BarChart3,
   Link2,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
@@ -437,15 +435,6 @@ export default function CandidateSearch() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Candidate Command Center
             </h1>
-            <Link href="/stats">
-              <a
-                className="ml-2 p-2 hover:bg-slate-800 rounded-lg transition-colors"
-                title="View Stats"
-                data-testid="link-stats"
-              >
-                <BarChart3 className="w-5 h-5 text-slate-400 hover:text-purple-400" />
-              </a>
-            </Link>
           </div>
           <p className="text-slate-400 text-sm">
             AI-powered search to discover exceptional talent across the web
@@ -453,33 +442,6 @@ export default function CandidateSearch() {
         </header>
 
         <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp">
-          <div className="flex gap-2 mb-4">
-            <button
-              onClick={() => { setSearchMode("description"); setQuery(""); setSourceProfile(null); }}
-              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${
-                searchMode === "description"
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                  : "bg-slate-800/50 text-slate-400 hover:text-slate-300"
-              }`}
-              data-testid="button-mode-description"
-            >
-              <Search className="w-4 h-4 inline mr-2" />
-              Search by Description
-            </button>
-            <button
-              onClick={() => { setSearchMode("url"); setQuery(""); setAutocompleteSuggestions([]); }}
-              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${
-                searchMode === "url"
-                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                  : "bg-slate-800/50 text-slate-400 hover:text-slate-300"
-              }`}
-              data-testid="button-mode-url"
-            >
-              <Link2 className="w-4 h-4 inline mr-2" />
-              Find Similar to URL
-            </button>
-          </div>
-
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition duration-300" />
             <div className="relative flex gap-2 bg-slate-900 rounded-xl p-2 border border-slate-700">
@@ -518,6 +480,32 @@ export default function CandidateSearch() {
                   <ChevronDown className={`w-4 h-4 transition-transform ${showSearchDropdown ? "rotate-180" : ""}`} />
                 </button>
               )}
+              <div className="flex items-center border-l border-slate-700 pl-2">
+                <button
+                  onClick={() => { setSearchMode("description"); setQuery(""); setSourceProfile(null); }}
+                  className={`p-2 rounded-lg transition-all ${
+                    searchMode === "description"
+                      ? "bg-slate-700 text-white"
+                      : "text-slate-500 hover:text-slate-300"
+                  }`}
+                  title="Search by description"
+                  data-testid="button-mode-description"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => { setSearchMode("url"); setQuery(""); setAutocompleteSuggestions([]); }}
+                  className={`p-2 rounded-lg transition-all ${
+                    searchMode === "url"
+                      ? "bg-slate-700 text-white"
+                      : "text-slate-500 hover:text-slate-300"
+                  }`}
+                  title="Find similar by URL"
+                  data-testid="button-mode-url"
+                >
+                  <Link2 className="w-4 h-4" />
+                </button>
+              </div>
               <Button
                 onClick={() => handleSearch()}
                 disabled={loading || !query.trim()}

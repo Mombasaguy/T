@@ -6,7 +6,8 @@ import {
   Settings,
   Briefcase,
   UserCircle,
-  Search
+  Search,
+  BarChart3
 } from "lucide-react";
 import {
   Sidebar,
@@ -42,6 +43,11 @@ const navigationItems = [
     title: "Search",
     url: "/search",
     icon: Search,
+  },
+  {
+    title: "Stats",
+    url: "/stats",
+    icon: BarChart3,
   },
 ];
 
