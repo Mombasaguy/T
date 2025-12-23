@@ -245,14 +245,14 @@ export default function CandidateSearch() {
                         style={{ animationDelay: `${index * 0.05}s` }}
                         data-testid={`card-result-${index}`}
                       >
-                        <div className="flex items-start gap-3">
+                        <div className="flex items-start gap-3 group">
                           <div className={`p-2 rounded-lg ${getPlatformColor(result.platform)}`}>
                             {getPlatformIcon(result.platform)}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
-                              <h3 className="font-medium text-slate-100 line-clamp-1">
-                                {result.name || result.author || result.title}
+                              <h3 className="font-semibold text-slate-100 truncate group-hover:text-blue-400 transition-colors">
+                                {result.name || result.author || "Unknown"}
                               </h3>
                               <div className="flex items-center gap-2 shrink-0">
                                 {result.matchStatus === "match" ? (
@@ -268,22 +268,18 @@ export default function CandidateSearch() {
                                 ) : null}
                               </div>
                             </div>
-                            {result.subtitle && (
-                              <p className="text-sm text-slate-400 line-clamp-1 mt-0.5">
-                                {result.subtitle}
-                              </p>
-                            )}
-                            <div className="flex items-center gap-3 mt-1 text-xs text-slate-400">
-                              {formatDate(result.publishedDate) && (
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="h-3 w-3" />
-                                  {formatDate(result.publishedDate)}
-                                </span>
-                              )}
-                              {result.score !== undefined && result.score !== null && (
-                                <span className="flex items-center gap-1">
+                            <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                              {result.subtitle || result.title}
+                            </p>
+                            <div className="flex items-center gap-2 mt-1">
+                              <Calendar className="w-3 h-3 text-slate-500" />
+                              <span className="text-xs text-slate-400">
+                                {result.publishedDate ? new Date(result.publishedDate).toLocaleDateString() : "Recent"}
+                              </span>
+                              {result.score !== undefined && result.score !== null && result.score > 0 && (
+                                <span className="flex items-center gap-1 text-xs text-slate-400 ml-2">
                                   <TrendingUp className="h-3 w-3" />
-                                  {Math.round(result.score * 100)}% relevance
+                                  {Math.round(result.score * 100)}%
                                 </span>
                               )}
                             </div>
