@@ -10,17 +10,20 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
 interface SearchResult {
+  id: string;
   title: string;
   url: string;
   publishedDate?: string;
   author?: string;
   text?: string;
   highlights?: string[];
+  score?: number;
+  matchStatus: "match" | "miss" | "unknown";
+  platform: string;
 }
 
 interface SearchResponse {
   results: SearchResult[];
-  query: string;
 }
 
 export default function CandidateSearch() {
@@ -137,6 +140,9 @@ export default function CandidateSearch() {
                               {new URL(result.url).hostname}
                             </span>
                           </a>
+                          <Badge variant="outline" className="text-xs">
+                            {result.platform}
+                          </Badge>
                           {formatDate(result.publishedDate) && (
                             <div className="flex items-center gap-1 text-xs text-muted-foreground">
                               <Calendar className="h-3 w-3" />
@@ -147,6 +153,11 @@ export default function CandidateSearch() {
                             <span className="text-xs text-muted-foreground">
                               by {result.author}
                             </span>
+                          )}
+                          {result.matchStatus === "match" && (
+                            <Badge variant="default" className="text-xs bg-chart-2">
+                              Match
+                            </Badge>
                           )}
                         </div>
                       </div>

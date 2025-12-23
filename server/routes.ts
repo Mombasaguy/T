@@ -111,24 +111,54 @@ export async function registerRoutes(
       const exa = new Exa(apiKey);
       const result = await exa.searchAndContents(parsed.data.query, {
         type: "neural",
-        numResults: 10,
+        useAutoprompt: true,
+        numResults: 12,
         text: { maxCharacters: 500 },
-        highlights: { numSentences: 2 },
+        highlights: { numSentences: 3, highlightsPerUrl: 3 },
       });
 
-      const sanitizedResults = (result.results || []).map((r: any) => ({
+      const queryLower = parsed.data.query.toLowerCase();
+      const queryTerms = queryLower.split(/\s+/).filter(t => t.length > 2);
+
+      const extractPlatform = (url: string): string => {
+        try {
+          const hostname = new URL(url).hostname.toLowerCase();
+          if (hostname.includes("github.com")) return "GitHub";
+          if (hostname.includes("twitter.com") || hostname.includes("x.com")) return "Twitter";
+          if (hostname.includes("linkedin.com")) return "LinkedIn";
+          if (hostname.includes("medium.com")) return "Medium";
+          if (hostname.includes("dev.to")) return "Dev.to";
+          if (hostname.includes("stackoverflow.com")) return "StackOverflow";
+          if (hostname.includes("youtube.com")) return "YouTube";
+          if (hostname.includes("reddit.com")) return "Reddit";
+          if (hostname.includes("substack.com")) return "Substack";
+          return "Blog";
+        } catch {
+          return "Unknown";
+        }
+      };
+
+      const getMatchStatus = (title: string, text: string | null): "match" | "miss" | "unknown" => {
+        if (!title && !text) return "unknown";
+        const content = `${title} ${text || ""}`.toLowerCase();
+        const hasMatch = queryTerms.some(term => content.includes(term));
+        return hasMatch ? "match" : "miss";
+      };
+
+      const transformedResults = (result.results || []).map((r: any) => ({
+        id: String(r.url || ""),
         title: String(r.title || ""),
         url: String(r.url || ""),
         publishedDate: r.publishedDate ? String(r.publishedDate) : null,
         author: r.author ? String(r.author) : null,
         text: r.text ? String(r.text) : null,
         highlights: Array.isArray(r.highlights) ? r.highlights.map(String) : [],
+        score: typeof r.score === "number" ? r.score : null,
+        matchStatus: getMatchStatus(String(r.title || ""), r.text ? String(r.text) : null),
+        platform: extractPlatform(String(r.url || "")),
       }));
 
-      res.json({
-        query: parsed.data.query,
-        results: sanitizedResults,
-      });
+      res.json({ results: transformedResults });
     } catch (error) {
       console.error("Exa search error:", error);
       res.status(500).json({ error: "Search failed" });
