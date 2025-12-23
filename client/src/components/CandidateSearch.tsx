@@ -716,9 +716,8 @@ export default function CandidateSearch() {
                       data-testid="select-platform"
                     >
                       <option value="all">All Platforms</option>
-                      <option value="GitHub">GitHub</option>
                       <option value="LinkedIn">LinkedIn</option>
-                      <option value="Blog">Blog</option>
+                      <option value="Blog">Personal Sites</option>
                     </select>
 
                     <select
