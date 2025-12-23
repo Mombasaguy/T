@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
+  Download,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,6 +136,38 @@ export default function CandidateSearch() {
     }
   };
 
+  const exportToCSV = () => {
+    if (results.length === 0) return;
+
+    const headers = ["Name", "Role", "Platform", "URL", "Match Status", "Score"];
+    const rows = results.map((r) => [
+      r.name || r.author || "Unknown",
+      r.role || r.subtitle || "",
+      r.platform,
+      r.url,
+      r.matchStatus,
+      r.score !== undefined && r.score !== null ? Math.round(r.score * 100).toString() : "",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) =>
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+      ),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, "");
+    link.href = url;
+    link.download = `candidates-${timestamp}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
@@ -208,14 +241,24 @@ export default function CandidateSearch() {
         {searchPerformed && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between gap-4 mb-4">
                 <h2 className="text-lg font-semibold text-slate-200">
                   {loading ? "Searching..." : `${results.length} Results`}
                 </h2>
                 {results.length > 0 && (
-                  <span className="text-xs text-slate-400">
-                    Click a result to view details
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-slate-400">
+                      Click a result to view details
+                    </span>
+                    <button
+                      onClick={exportToCSV}
+                      className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-sm text-slate-300 flex items-center gap-2"
+                      data-testid="button-export-csv"
+                    >
+                      <Download className="w-4 h-4" />
+                      Export CSV
+                    </button>
+                  </div>
                 )}
               </div>
 
