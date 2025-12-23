@@ -36,10 +36,10 @@ interface SearchResult {
 }
 
 const exampleQueries = [
-  "Engineers who left FAANG for climate tech",
-  "Designers who write about design systems",
-  "Developers contributing to AI open source",
-  "Ex-founders now working as engineers",
+  "Senior software engineers in San Francisco",
+  "Product managers at fintech companies in NYC",
+  "Director of engineering based in Austin",
+  "Machine learning engineers in the Bay Area",
 ];
 
 function getPlatformIcon(platform: string) {
