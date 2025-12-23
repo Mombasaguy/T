@@ -50,6 +50,14 @@ shared/           # Shared types and schemas
 - **Candidates**: CRUD operations with grid/list views, filtering, search
 - **Pipeline**: Kanban board with drag-and-drop stage management
 - **Search**: External candidate search using Exa API integration
+- **Pricing**: Subscription tiers (Free, Professional $99/mo, Team $299/mo)
+- **Welcome**: Post-checkout success page with onboarding steps
+- **Stats**: Search analytics and usage tracking
+
+### Billing & Subscriptions
+- **Stripe Integration**: Uses stripe-replit-sync for managed webhooks and data sync
+- **Subscription Plans**: Free (10 searches), Professional (200 searches), Team (1000 searches)
+- **Database Tables**: `subscriptions` table tracks user plan, usage, and Stripe references
 
 ## External Dependencies
 

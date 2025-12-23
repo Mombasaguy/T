@@ -1,0 +1,77 @@
+// ADD THIS AFTER LINE 127 (after candidateFormSchema)
+
+// ═══════════════════════════════════════════════════════
+// SUBSCRIPTIONS TABLE
+// ═══════════════════════════════════════════════════════
+
+export const SubscriptionPlan = {
+  FREE: "free",
+  PROFESSIONAL: "professional",
+  TEAM: "team",
+  ENTERPRISE: "enterprise",
+} as const;
+
+export type SubscriptionPlanType = (typeof SubscriptionPlan)[keyof typeof SubscriptionPlan];
+
+export const SubscriptionStatus = {
+  ACTIVE: "active",
+  TRIALING: "trialing",
+  PAST_DUE: "past_due",
+  CANCELED: "canceled",
+  INCOMPLETE: "incomplete",
+} as const;
+
+export type SubscriptionStatusType = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus];
+
+export const subscriptions = pgTable("subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  // Stripe references
+  stripeCustomerId: text("stripe_customer_id"),
+  stripeSubscriptionId: text("stripe_subscription_id"),
+  stripePriceId: text("stripe_price_id"),
+  
+  // Subscription details
+  plan: text("plan").notNull().default(SubscriptionPlan.FREE),
+  status: text("status").notNull().default(SubscriptionStatus.ACTIVE),
+  
+  // Usage tracking
+  searchesUsed: integer("searches_used").notNull().default(0),
+  searchesLimit: integer("searches_limit").notNull().default(10), // Free tier limit
+  emailsGenerated: integer("emails_generated").notNull().default(0),
+  
+  // Billing periods
+  currentPeriodStart: text("current_period_start"),
+  currentPeriodEnd: text("current_period_end"),
+  trialEnd: text("trial_end"),
+  
+  // Timestamps
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
+export type Subscription = typeof subscriptions.$inferSelect;
+
+// Helper to get search limits by plan
+export function getSearchLimitForPlan(plan: SubscriptionPlanType): number {
+  switch (plan) {
+    case SubscriptionPlan.FREE:
+      return 10;
+    case SubscriptionPlan.PROFESSIONAL:
+      return 200;
+    case SubscriptionPlan.TEAM:
+      return 1000;
+    case SubscriptionPlan.ENTERPRISE:
+      return 999999; // Effectively unlimited
+    default:
+      return 10;
+  }
+}
