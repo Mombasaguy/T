@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Search,
   Sparkles,
@@ -201,8 +201,20 @@ export default function CandidateSearch() {
   const [showCompareModal, setShowCompareModal] = useState(false);
   const [searchMode, setSearchMode] = useState<"description" | "url">("description");
   const [sourceProfile, setSourceProfile] = useState<{ name: string; title: string; url: string } | null>(null);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowSearchDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const toggleCompareCandidate = (candidate: SearchResult) => {
     const isSelected = compareList.some((c) => c.url === candidate.url);
@@ -441,7 +453,7 @@ export default function CandidateSearch() {
           </p>
         </header>
 
-        <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp">
+        <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp" ref={searchContainerRef}>
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition duration-300" />
             <div className="relative flex gap-2 bg-slate-900 rounded-xl p-2 border border-slate-700">
