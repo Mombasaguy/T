@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type Candidate, type InsertCandidate } from "@shared/schema";
+import { type User, type InsertUser, type Candidate, type InsertCandidate, type Position, type InsertPosition } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -13,20 +13,89 @@ export interface IStorage {
   updateCandidate(id: string, data: Partial<InsertCandidate>): Promise<Candidate | undefined>;
   updateCandidateStage(id: string, stage: string): Promise<Candidate | undefined>;
   deleteCandidate(id: string): Promise<boolean>;
+  getCandidatesByPosition(positionId: string): Promise<Candidate[]>;
+  
+  // Position methods
+  getAllPositions(): Promise<Position[]>;
+  getPosition(id: string): Promise<Position | undefined>;
+  createPosition(position: InsertPosition): Promise<Position>;
+  updatePosition(id: string, data: Partial<InsertPosition>): Promise<Position | undefined>;
+  deletePosition(id: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private candidates: Map<string, Candidate>;
+  private positions: Map<string, Position>;
 
   constructor() {
     this.users = new Map();
     this.candidates = new Map();
+    this.positions = new Map();
+    this.seedPositions();
     this.seedCandidates();
   }
 
+  private seedPositions() {
+    const samplePositions: InsertPosition[] = [
+      {
+        title: "Senior Frontend Developer",
+        department: "Engineering",
+        location: "San Francisco, CA",
+        employmentType: "full-time",
+        status: "open",
+        description: "Build beautiful user interfaces with React and TypeScript",
+        openings: 2,
+      },
+      {
+        title: "Backend Engineer",
+        department: "Engineering",
+        location: "Remote",
+        employmentType: "full-time",
+        status: "open",
+        description: "Design and build scalable APIs and services",
+        openings: 3,
+      },
+      {
+        title: "Product Designer",
+        department: "Design",
+        location: "New York, NY",
+        employmentType: "full-time",
+        status: "open",
+        description: "Create intuitive user experiences and design systems",
+        openings: 1,
+      },
+      {
+        title: "DevOps Engineer",
+        department: "Engineering",
+        location: "Remote",
+        employmentType: "full-time",
+        status: "paused",
+        description: "Manage cloud infrastructure and CI/CD pipelines",
+        openings: 1,
+      },
+    ];
+
+    samplePositions.forEach((position) => {
+      const id = randomUUID();
+      const fullPosition: Position = {
+        id,
+        title: position.title,
+        department: position.department,
+        location: position.location,
+        employmentType: position.employmentType ?? "full-time",
+        status: position.status ?? "open",
+        description: position.description ?? null,
+        openings: position.openings ?? 1,
+      };
+      this.positions.set(id, fullPosition);
+    });
+  }
+
   private seedCandidates() {
-    const sampleCandidates: InsertCandidate[] = [
+    const positionIds = Array.from(this.positions.keys());
+    
+    const sampleCandidates: (InsertCandidate & { positionIndex?: number })[] = [
       {
         name: "Sarah Chen",
         email: "sarah.chen@email.com",
@@ -36,6 +105,7 @@ export class MemStorage implements IStorage {
         notes: "Strong React experience, 5+ years",
         appliedDate: "2024-12-15",
         rating: "4",
+        positionIndex: 0,
       },
       {
         name: "Michael Torres",
@@ -46,6 +116,7 @@ export class MemStorage implements IStorage {
         notes: "Python and Node.js expertise",
         appliedDate: "2024-12-18",
         rating: "5",
+        positionIndex: 1,
       },
       {
         name: "Emily Watson",
@@ -55,6 +126,7 @@ export class MemStorage implements IStorage {
         notes: "Great portfolio, Figma expert",
         appliedDate: "2024-12-20",
         rating: "4",
+        positionIndex: 2,
       },
       {
         name: "James Kim",
@@ -65,6 +137,7 @@ export class MemStorage implements IStorage {
         notes: "Excellent technical interview",
         appliedDate: "2024-12-10",
         rating: "5",
+        positionIndex: 0,
       },
       {
         name: "Lisa Martinez",
@@ -74,6 +147,7 @@ export class MemStorage implements IStorage {
         notes: "AWS and Kubernetes certified",
         appliedDate: "2024-12-12",
         rating: "4",
+        positionIndex: 3,
       },
       {
         name: "David Park",
@@ -93,6 +167,7 @@ export class MemStorage implements IStorage {
         notes: "Started on Jan 2nd",
         appliedDate: "2024-11-25",
         rating: "5",
+        positionIndex: 2,
       },
       {
         name: "Robert Johnson",
@@ -102,11 +177,13 @@ export class MemStorage implements IStorage {
         notes: "10+ years Java experience",
         appliedDate: "2024-12-21",
         rating: "3",
+        positionIndex: 1,
       },
     ];
 
     sampleCandidates.forEach((candidate) => {
       const id = randomUUID();
+      const positionId = candidate.positionIndex !== undefined ? positionIds[candidate.positionIndex] : null;
       const fullCandidate: Candidate = {
         id,
         name: candidate.name,
@@ -118,6 +195,7 @@ export class MemStorage implements IStorage {
         notes: candidate.notes ?? null,
         appliedDate: candidate.appliedDate,
         rating: candidate.rating ?? null,
+        positionId: positionId,
       };
       this.candidates.set(id, fullCandidate);
     });
@@ -161,6 +239,7 @@ export class MemStorage implements IStorage {
       notes: insertCandidate.notes ?? null,
       appliedDate: insertCandidate.appliedDate,
       rating: insertCandidate.rating ?? null,
+      positionId: insertCandidate.positionId ?? null,
     };
     this.candidates.set(id, candidate);
     return candidate;
@@ -184,6 +263,53 @@ export class MemStorage implements IStorage {
 
   async deleteCandidate(id: string): Promise<boolean> {
     return this.candidates.delete(id);
+  }
+
+  async getCandidatesByPosition(positionId: string): Promise<Candidate[]> {
+    return Array.from(this.candidates.values()).filter(c => c.positionId === positionId);
+  }
+
+  // Position methods
+  async getAllPositions(): Promise<Position[]> {
+    return Array.from(this.positions.values());
+  }
+
+  async getPosition(id: string): Promise<Position | undefined> {
+    return this.positions.get(id);
+  }
+
+  async createPosition(insertPosition: InsertPosition): Promise<Position> {
+    const id = randomUUID();
+    const position: Position = {
+      id,
+      title: insertPosition.title,
+      department: insertPosition.department,
+      location: insertPosition.location,
+      employmentType: insertPosition.employmentType ?? "full-time",
+      status: insertPosition.status ?? "open",
+      description: insertPosition.description ?? null,
+      openings: insertPosition.openings ?? 1,
+    };
+    this.positions.set(id, position);
+    return position;
+  }
+
+  async updatePosition(id: string, data: Partial<InsertPosition>): Promise<Position | undefined> {
+    const existing = this.positions.get(id);
+    if (!existing) return undefined;
+    const updated = { ...existing, ...data };
+    this.positions.set(id, updated);
+    return updated;
+  }
+
+  async deletePosition(id: string): Promise<boolean> {
+    // Remove position reference from candidates
+    Array.from(this.candidates.entries()).forEach(([candidateId, candidate]) => {
+      if (candidate.positionId === id) {
+        this.candidates.set(candidateId, { ...candidate, positionId: null });
+      }
+    });
+    return this.positions.delete(id);
   }
 }
 

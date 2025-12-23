@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertCandidateSchema } from "@shared/schema";
+import { insertCandidateSchema, insertPositionSchema } from "@shared/schema";
 import { z } from "zod";
 import Exa from "exa-js";
 import Anthropic from "@anthropic-ai/sdk";
@@ -343,6 +343,100 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Find similar error:", error);
       res.status(500).json({ error: "Find similar failed" });
+    }
+  });
+
+  // Position routes
+  app.get("/api/positions", async (_req, res) => {
+    try {
+      const positions = await storage.getAllPositions();
+      res.json(positions);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch positions" });
+    }
+  });
+
+  app.get("/api/positions/:id", async (req, res) => {
+    try {
+      const position = await storage.getPosition(req.params.id);
+      if (!position) {
+        return res.status(404).json({ error: "Position not found" });
+      }
+      res.json(position);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch position" });
+    }
+  });
+
+  app.post("/api/positions", async (req, res) => {
+    try {
+      const parsed = insertPositionSchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: parsed.error.errors });
+      }
+      const position = await storage.createPosition(parsed.data);
+      res.status(201).json(position);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create position" });
+    }
+  });
+
+  app.patch("/api/positions/:id", async (req, res) => {
+    try {
+      const parsed = insertPositionSchema.partial().safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: parsed.error.errors });
+      }
+      const position = await storage.updatePosition(req.params.id, parsed.data);
+      if (!position) {
+        return res.status(404).json({ error: "Position not found" });
+      }
+      res.json(position);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to update position" });
+    }
+  });
+
+  app.delete("/api/positions/:id", async (req, res) => {
+    try {
+      const success = await storage.deletePosition(req.params.id);
+      if (!success) {
+        return res.status(404).json({ error: "Position not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete position" });
+    }
+  });
+
+  app.get("/api/positions/:id/candidates", async (req, res) => {
+    try {
+      const candidates = await storage.getCandidatesByPosition(req.params.id);
+      res.json(candidates);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch candidates for position" });
+    }
+  });
+
+  app.get("/api/positions/:id/summary", async (req, res) => {
+    try {
+      const position = await storage.getPosition(req.params.id);
+      if (!position) {
+        return res.status(404).json({ error: "Position not found" });
+      }
+      const candidates = await storage.getCandidatesByPosition(req.params.id);
+      const summary = {
+        total: candidates.length,
+        applied: candidates.filter(c => c.stage === "applied").length || 0,
+        screening: candidates.filter(c => c.stage === "screening").length || 0,
+        interview: candidates.filter(c => c.stage === "interview").length || 0,
+        offer: candidates.filter(c => c.stage === "offer").length || 0,
+        hired: candidates.filter(c => c.stage === "hired").length || 0,
+        rejected: candidates.filter(c => c.stage === "rejected").length || 0,
+      };
+      res.json({ position, summary });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch position summary" });
     }
   });
 
