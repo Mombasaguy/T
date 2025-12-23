@@ -325,16 +325,23 @@ export async function registerRoutes(
       // Increment usage after successful search
       await storage.incrementSearchUsage(userId);
 
-      // Get updated subscription info
+      // Get updated subscription info (with defaults for free tier)
       const subscription = await storage.getSubscription(userId);
+      const usage = subscription 
+        ? {
+            searchesUsed: subscription.searchesUsed,
+            searchesLimit: subscription.searchesLimit,
+            plan: subscription.plan
+          }
+        : {
+            searchesUsed: 1,
+            searchesLimit: 10,
+            plan: 'free'
+          };
 
       res.json({ 
         results: transformedResults,
-        usage: subscription ? {
-          searchesUsed: subscription.searchesUsed,
-          searchesLimit: subscription.searchesLimit,
-          plan: subscription.plan
-        } : null
+        usage
       });
     } catch (error) {
       console.error("Exa search error:", error);

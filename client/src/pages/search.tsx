@@ -41,7 +41,12 @@ interface SubscriptionInfo {
 export default function CandidateSearch() {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<SearchResult[]>([]);
-  const [subscription, setSubscription] = useState<SubscriptionInfo | null>(null);
+  const [subscription, setSubscription] = useState<SubscriptionInfo>({
+    plan: 'free',
+    searchesUsed: 0,
+    searchesLimit: 10,
+    status: 'active'
+  });
   const { toast } = useToast();
 
   useEffect(() => {
@@ -49,7 +54,9 @@ export default function CandidateSearch() {
       try {
         const response = await fetch('/api/subscription');
         const data = await response.json();
-        setSubscription(data);
+        if (data) {
+          setSubscription(data);
+        }
       } catch (error) {
         console.error('Failed to fetch subscription:', error);
       }
@@ -84,7 +91,7 @@ export default function CandidateSearch() {
         toast({ title: "No results found", description: "Try a different search query" });
       }
       if (data.usage) {
-        setSubscription(prev => prev ? { ...prev, ...data.usage } : null);
+        setSubscription(prev => ({ ...prev, ...data.usage }));
       }
     },
     onError: (error) => {
@@ -136,39 +143,37 @@ export default function CandidateSearch() {
         </p>
       </div>
 
-      {subscription && (
-        <div className="max-w-2xl">
-          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="text-sm text-muted-foreground">
-                <span className="font-semibold text-primary">
-                  {subscription.searchesUsed}
-                </span>
-                {" / "}
-                {subscription.searchesLimit}
-                {" searches used"}
-              </div>
-              <div className="h-2 w-32 bg-muted rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
-                  style={{ 
-                    width: `${Math.min((subscription.searchesUsed / subscription.searchesLimit) * 100, 100)}%` 
-                  }}
-                />
-              </div>
+      <div className="max-w-2xl">
+        <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="text-sm text-muted-foreground">
+              <span className="font-semibold text-primary">
+                {subscription.searchesUsed}
+              </span>
+              {" / "}
+              {subscription.searchesLimit}
+              {" searches used"}
             </div>
-            {subscription.plan === 'free' && (
-              <a 
-                href="/pricing" 
-                className="text-sm text-primary hover:underline font-medium"
-                data-testid="link-upgrade"
-              >
-                Upgrade
-              </a>
-            )}
+            <div className="h-2 w-32 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                style={{ 
+                  width: `${Math.min((subscription.searchesUsed / subscription.searchesLimit) * 100, 100)}%` 
+                }}
+              />
+            </div>
           </div>
+          {subscription.plan === 'free' && (
+            <a 
+              href="/pricing" 
+              className="text-sm text-primary hover:underline font-medium"
+              data-testid="link-upgrade"
+            >
+              Upgrade
+            </a>
+          )}
         </div>
-      )}
+      </div>
 
       <form onSubmit={handleSearch} className="flex gap-3 max-w-2xl">
         <div className="relative flex-1">
