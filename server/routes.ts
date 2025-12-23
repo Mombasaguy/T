@@ -255,6 +255,97 @@ export async function registerRoutes(
     }
   });
 
+  // Find similar candidates by URL
+  app.post("/api/find-similar", async (req, res) => {
+    try {
+      const querySchema = z.object({ query: z.string().min(1) });
+      const parsed = querySchema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: "URL is required" });
+      }
+
+      const apiKey = process.env.EXA_API_KEY;
+      if (!apiKey) {
+        return res.status(500).json({ error: "EXA_API_KEY not configured" });
+      }
+
+      const profileUrl = parsed.data.query;
+      const exa = new Exa(apiKey);
+
+      // First, fetch the source profile content
+      let sourceProfile = { name: "Unknown", title: "Professional", url: profileUrl };
+      try {
+        const sourceResult = await exa.getContents([profileUrl], {
+          text: { maxCharacters: 500 },
+        });
+        if (sourceResult.results && sourceResult.results.length > 0) {
+          const source = sourceResult.results[0];
+          const title = source.title || "";
+          const titleParts = title.split("|").map((s: string) => s.trim());
+          sourceProfile = {
+            name: titleParts[0] || source.author || "Unknown",
+            title: titleParts[1] || titleParts[0] || "Professional",
+            url: profileUrl,
+          };
+        }
+      } catch (e) {
+        console.log("Could not fetch source profile, continuing with findSimilar");
+      }
+
+      // Use Exa's findSimilar to find similar profiles
+      const result = await exa.findSimilarAndContents(profileUrl, {
+        category: "people" as any,
+        numResults: 12,
+        text: { maxCharacters: 1000 },
+        highlights: { numSentences: 3, highlightsPerUrl: 3 },
+        excludeSourceDomain: false,
+      });
+
+      const extractPlatform = (url: string): string => {
+        try {
+          const hostname = new URL(url).hostname.toLowerCase();
+          if (hostname.includes("github.com")) return "GitHub";
+          if (hostname.includes("twitter.com") || hostname.includes("x.com")) return "Twitter";
+          if (hostname.includes("linkedin.com")) return "LinkedIn";
+          if (hostname.includes("medium.com")) return "Medium";
+          if (hostname.includes("dev.to")) return "Dev.to";
+          if (hostname.includes("substack.com")) return "Substack";
+          return "Blog";
+        } catch {
+          return "Unknown";
+        }
+      };
+
+      const transformedResults = (result.results || []).map((r: any) => {
+        const originalTitle = String(r.title || "");
+        const titleParts = originalTitle.split("|").map((s: string) => s.trim());
+        const personName = r.author || titleParts[0] || "Unknown";
+        const role = titleParts[1] || titleParts[0] !== personName ? titleParts[0] : "";
+
+        return {
+          id: String(r.url || ""),
+          name: personName,
+          role: role,
+          title: originalTitle,
+          subtitle: role || (r.highlights && r.highlights.length > 0 ? String(r.highlights[0]).slice(0, 100) : null),
+          url: String(r.url || ""),
+          publishedDate: r.publishedDate ? String(r.publishedDate) : new Date().toISOString(),
+          author: r.author ? String(r.author) : personName,
+          text: r.text ? String(r.text) : null,
+          highlights: Array.isArray(r.highlights) ? r.highlights.map(String) : [],
+          score: typeof r.score === "number" ? r.score : 0.8,
+          matchStatus: "match" as const,
+          platform: extractPlatform(String(r.url || "")),
+        };
+      });
+
+      res.json({ results: transformedResults, sourceProfile });
+    } catch (error) {
+      console.error("Find similar error:", error);
+      res.status(500).json({ error: "Find similar failed" });
+    }
+  });
+
   // Generate outreach email using Anthropic
   app.post("/api/generate-email", async (req, res) => {
     try {

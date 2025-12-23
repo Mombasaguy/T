@@ -28,6 +28,7 @@ import {
   Square,
   CheckSquare,
   BarChart3,
+  Link2,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -200,6 +201,8 @@ export default function CandidateSearch() {
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<string[]>([]);
   const [compareList, setCompareList] = useState<SearchResult[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
+  const [searchMode, setSearchMode] = useState<"description" | "url">("description");
+  const [sourceProfile, setSourceProfile] = useState<{ name: string; title: string; url: string } | null>(null);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
 
@@ -316,13 +319,22 @@ export default function CandidateSearch() {
     setSearchPerformed(true);
     setSelectedCandidate(null);
     setShowSearchDropdown(false);
-    addToRecentSearches(q);
+    setSourceProfile(null);
+    
+    if (searchMode === "description") {
+      addToRecentSearches(q);
+    }
 
     try {
-      const response = await apiRequest("POST", "/api/search", { query: q });
+      const endpoint = searchMode === "url" ? "/api/find-similar" : "/api/search";
+      const response = await apiRequest("POST", endpoint, { query: q, mode: searchMode });
       const data = await response.json();
       const searchResults = data.results || [];
       setResults(searchResults);
+
+      if (searchMode === "url" && data.sourceProfile) {
+        setSourceProfile(data.sourceProfile);
+      }
 
       const platforms: Record<string, number> = {};
       let matchCount = 0;
@@ -332,7 +344,7 @@ export default function CandidateSearch() {
       });
 
       const stat = {
-        query: q,
+        query: searchMode === "url" ? `[URL] ${q}` : q,
         timestamp: Date.now(),
         resultCount: searchResults.length,
         matchCount,
@@ -441,32 +453,71 @@ export default function CandidateSearch() {
         </header>
 
         <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp">
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={() => { setSearchMode("description"); setQuery(""); setSourceProfile(null); }}
+              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${
+                searchMode === "description"
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                  : "bg-slate-800/50 text-slate-400 hover:text-slate-300"
+              }`}
+              data-testid="button-mode-description"
+            >
+              <Search className="w-4 h-4 inline mr-2" />
+              Search by Description
+            </button>
+            <button
+              onClick={() => { setSearchMode("url"); setQuery(""); setAutocompleteSuggestions([]); }}
+              className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${
+                searchMode === "url"
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                  : "bg-slate-800/50 text-slate-400 hover:text-slate-300"
+              }`}
+              data-testid="button-mode-url"
+            >
+              <Link2 className="w-4 h-4 inline mr-2" />
+              Find Similar to URL
+            </button>
+          </div>
+
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition duration-300" />
             <div className="relative flex gap-2 bg-slate-900 rounded-xl p-2 border border-slate-700">
               <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                {searchMode === "description" ? (
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                ) : (
+                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                )}
                 <Input
                   type="text"
-                  placeholder="Search for candidates..."
+                  placeholder={
+                    searchMode === "description"
+                      ? "Find engineers who left Meta and started AI companies..."
+                      : "Paste LinkedIn, GitHub, or profile URL to find similar candidates..."
+                  }
                   value={query}
                   onChange={(e) => {
                     setQuery(e.target.value);
-                    setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
+                    if (searchMode === "description") {
+                      setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
+                    }
                   }}
                   onKeyDown={handleKeyDown}
-                  onFocus={() => setShowSearchDropdown(true)}
+                  onFocus={() => searchMode === "description" && setShowSearchDropdown(true)}
                   className="pl-10 bg-transparent border-0 text-white placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0"
                   data-testid="input-search"
                 />
               </div>
-              <button
-                onClick={() => setShowSearchDropdown(!showSearchDropdown)}
-                className="px-2 text-slate-400 hover:text-slate-300"
-                data-testid="button-toggle-history"
-              >
-                <ChevronDown className={`w-4 h-4 transition-transform ${showSearchDropdown ? "rotate-180" : ""}`} />
-              </button>
+              {searchMode === "description" && (
+                <button
+                  onClick={() => setShowSearchDropdown(!showSearchDropdown)}
+                  className="px-2 text-slate-400 hover:text-slate-300"
+                  data-testid="button-toggle-history"
+                >
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showSearchDropdown ? "rotate-180" : ""}`} />
+                </button>
+              )}
               <Button
                 onClick={() => handleSearch()}
                 disabled={loading || !query.trim()}
@@ -478,11 +529,16 @@ export default function CandidateSearch() {
                 ) : (
                   <>
                     <Sparkles className="h-4 w-4 mr-2" />
-                    Search
+                    {searchMode === "description" ? "Search" : "Find Similar"}
                   </>
                 )}
               </Button>
             </div>
+            {searchMode === "url" && (
+              <p className="text-sm text-slate-400 text-center mt-2">
+                Paste any LinkedIn, GitHub, or profile URL to discover similar candidates
+              </p>
+            )}
 
             {showSearchDropdown && (autocompleteSuggestions.length > 0 || savedSearches.length > 0 || recentSearches.length > 0) && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
@@ -735,6 +791,23 @@ export default function CandidateSearch() {
                         Clear all
                       </button>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {searchMode === "url" && sourceProfile && (
+                <div className="mb-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Finding candidates similar to:</p>
+                      <h3 className="text-lg font-semibold text-slate-100">
+                        {sourceProfile.name}
+                      </h3>
+                      <p className="text-sm text-slate-400">{sourceProfile.title}</p>
+                    </div>
                   </div>
                 </div>
               )}

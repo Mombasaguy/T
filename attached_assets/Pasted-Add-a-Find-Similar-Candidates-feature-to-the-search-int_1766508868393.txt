@@ -1,0 +1,121 @@
+Add a "Find Similar Candidates" feature to the search interface.
+
+CHANGES TO MAKE:
+
+1. Add a toggle/tab above the search bar to switch between two modes:
+   - "Search by Description" (default, current behavior)
+   - "Find Similar to URL" (new feature)
+
+UI for the toggle:
+<div className="flex gap-2 mb-4 max-w-3xl mx-auto">
+  <button
+    onClick={() => setSearchMode('description')}
+    className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${
+      searchMode === 'description'
+        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+        : 'bg-slate-800/50 text-slate-400 hover:text-slate-300'
+    }`}
+  >
+    <Search className="w-4 h-4 inline mr-2" />
+    Search by Description
+  </button>
+  <button
+    onClick={() => setSearchMode('url')}
+    className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all ${
+      searchMode === 'url'
+        ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white'
+        : 'bg-slate-800/50 text-slate-400 hover:text-slate-300'
+    }`}
+  >
+    <Link className="w-4 h-4 inline mr-2" />
+    Find Similar to URL
+  </button>
+</div>
+
+2. Add state for search mode:
+const [searchMode, setSearchMode] = useState('description');
+
+3. Change search bar placeholder based on mode:
+placeholder={
+  searchMode === 'description'
+    ? 'Find engineers who left Meta and started AI companies...'
+    : 'Paste LinkedIn, GitHub, or profile URL to find similar candidates...'
+}
+
+4. Change button text based on mode:
+{searchMode === 'description' ? 'Search' : 'Find Similar'}
+
+5. Add helper text below search bar when in URL mode:
+{searchMode === 'url' && (
+  <p className="text-sm text-slate-400 text-center mt-2">
+    Paste any LinkedIn, GitHub, or profile URL to discover similar candidates
+  </p>
+)}
+
+6. Update handleSearch function to handle both modes:
+
+const handleSearch = async () => {
+  if (!query.trim()) return;
+  
+  setLoading(true);
+  setSearchPerformed(true);
+  
+  try {
+    const endpoint = searchMode === 'url' ? '/api/find-similar' : '/api/search';
+    
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        query: searchMode === 'url' ? query.trim() : query,
+        mode: searchMode 
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (searchMode === 'url' && data.sourceProfile) {
+      setSourceProfile(data.sourceProfile); // Display who we're finding similar to
+    }
+    
+    setResults(data.results || []);
+  } catch (error) {
+    console.error('Search error:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+7. Add state for source profile:
+const [sourceProfile, setSourceProfile] = useState(null);
+
+8. Show source profile header when in URL mode and results exist:
+{searchMode === 'url' && sourceProfile && (
+  <div className="mb-6 p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
+    <div className="flex items-center gap-3">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+        <Users className="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <p className="text-sm text-slate-400">Finding candidates similar to:</p>
+        <h3 className="text-lg font-semibold text-slate-100">
+          {sourceProfile.name}
+        </h3>
+        <p className="text-sm text-slate-400">{sourceProfile.title}</p>
+      </div>
+    </div>
+  </div>
+)}
+
+9. CREATE NEW API ROUTE: server/routes/find-similar.js (or add to existing routes)
+
+This endpoint should:
+a) Take a URL from the request body
+b) Use Exa to fetch the profile at that URL
+c) Extract key information (name, role, skills, company, location)
+d) Generate a smart search query based on that profile
+e) Run a people search with category: 'people'
+f) Return both the source profile info AND similar candidates
+
+Code structure:
+```javascript
