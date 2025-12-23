@@ -13,6 +13,8 @@ import CandidateSearch from "./components/CandidateSearch";
 import Stats from "./pages/stats";
 import Positions from "./pages/positions";
 import Settings from "./pages/settings";
+import Pricing from "./pages/pricing";
+import Welcome from "./pages/welcome";
 import NotFound from "./pages/not-found";
 
 function Router() {
@@ -25,6 +27,8 @@ function Router() {
       <Route path="/stats" component={Stats} />
       <Route path="/positions" component={Positions} />
       <Route path="/settings" component={Settings} />
+      <Route path="/pricing" component={Pricing} />
+      <Route path="/welcome" component={Welcome} />
       <Route component={NotFound} />
     </Switch>
   );

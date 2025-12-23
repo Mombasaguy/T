@@ -7,7 +7,8 @@ import {
   Briefcase,
   UserCircle,
   Search,
-  BarChart3
+  BarChart3,
+  CreditCard
 } from "lucide-react";
 import {
   Sidebar,
@@ -56,6 +57,11 @@ const secondaryItems = [
     title: "Job Positions",
     url: "/positions",
     icon: Briefcase,
+  },
+  {
+    title: "Pricing",
+    url: "/pricing",
+    icon: CreditCard,
   },
   {
     title: "Settings",

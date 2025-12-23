@@ -5,6 +5,8 @@ import { insertCandidateSchema, insertPositionSchema } from "@shared/schema";
 import { z } from "zod";
 import Exa from "exa-js";
 import Anthropic from "@anthropic-ai/sdk";
+import { stripeService } from "./stripeService";
+import { getStripePublishableKey, getUncachableStripeClient } from "./stripeClient";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -486,6 +488,98 @@ Do not include [brackets] or placeholders. Write a complete email ready to send.
     } catch (error) {
       console.error("Email generation error:", error);
       res.status(500).json({ error: "Failed to generate email" });
+    }
+  });
+
+  // Stripe config endpoint
+  app.get("/api/stripe/config", async (_req, res) => {
+    try {
+      const publishableKey = await getStripePublishableKey();
+      res.json({ publishableKey });
+    } catch (error) {
+      console.error("Stripe config error:", error);
+      res.status(500).json({ error: "Failed to get Stripe config" });
+    }
+  });
+
+  // Create checkout session
+  app.post("/api/stripe/create-checkout-session", async (req, res) => {
+    try {
+      const { priceId, email, plan, userId } = req.body;
+
+      if (!priceId) {
+        return res.status(400).json({ error: "Price ID is required" });
+      }
+
+      const baseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || req.get('host')}`;
+      
+      const session = await stripeService.createCheckoutSession({
+        priceId,
+        customerEmail: email,
+        successUrl: `${baseUrl}/welcome?session_id={CHECKOUT_SESSION_ID}`,
+        cancelUrl: `${baseUrl}/pricing`,
+        trialDays: 14,
+        metadata: { plan, userId: userId || 'guest' },
+      });
+
+      res.json({ url: session.url });
+    } catch (error) {
+      console.error("Checkout session error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  // Create customer portal session
+  app.post("/api/stripe/create-portal-session", async (req, res) => {
+    try {
+      const { customerId } = req.body;
+
+      if (!customerId) {
+        return res.status(400).json({ error: "Customer ID is required" });
+      }
+
+      const baseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0] || req.get('host')}`;
+      
+      const session = await stripeService.createPortalSession(
+        customerId,
+        `${baseUrl}/settings`
+      );
+
+      res.json({ url: session.url });
+    } catch (error) {
+      console.error("Portal session error:", error);
+      res.status(500).json({ error: "Failed to create portal session" });
+    }
+  });
+
+  // Get Stripe products with prices
+  app.get("/api/stripe/products", async (_req, res) => {
+    try {
+      const products = await stripeService.listProductsWithPrices();
+      res.json({ products });
+    } catch (error) {
+      console.error("Products fetch error:", error);
+      res.status(500).json({ error: "Failed to fetch products" });
+    }
+  });
+
+  // Get checkout session details (for welcome page)
+  app.get("/api/stripe/checkout-session/:sessionId", async (req, res) => {
+    try {
+      const stripe = await getUncachableStripeClient();
+      const session = await stripe.checkout.sessions.retrieve(req.params.sessionId, {
+        expand: ['subscription', 'customer'],
+      });
+      
+      res.json({
+        customerId: session.customer,
+        subscriptionId: session.subscription,
+        customerEmail: session.customer_details?.email,
+        status: session.status,
+      });
+    } catch (error) {
+      console.error("Checkout session error:", error);
+      res.status(500).json({ error: "Failed to retrieve checkout session" });
     }
   });
 
