@@ -137,7 +137,7 @@ export default function CandidateSearch() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
       
       <div className="relative z-10 container mx-auto px-4 py-8">
-        <header className="text-center mb-12">
+        <header className="text-center mb-12 animate-fadeIn">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
               <Sparkles className="h-5 w-5 text-white" />
@@ -151,7 +151,7 @@ export default function CandidateSearch() {
           </p>
         </header>
 
-        <div className="max-w-2xl mx-auto mb-8">
+        <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp">
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition duration-300" />
             <div className="relative flex gap-2 bg-slate-900 rounded-xl p-2 border border-slate-700">
@@ -235,12 +235,12 @@ export default function CandidateSearch() {
                       <Card
                         key={result.id}
                         onClick={() => setSelectedCandidate(result)}
-                        className={`p-4 cursor-pointer transition-all duration-200 ${
+                        className={`p-4 cursor-pointer transition-all duration-200 animate-slideInLeft ${
                           selectedCandidate?.id === result.id
                             ? "bg-slate-700/50 border-blue-500/50"
                             : "bg-slate-800/50 border-slate-700 hover:bg-slate-700/30 hover:border-slate-600"
                         }`}
-                        style={{ animationDelay: `${index * 50}ms` }}
+                        style={{ animationDelay: `${index * 0.05}s` }}
                         data-testid={`card-result-${index}`}
                       >
                         <div className="flex items-start gap-3">
@@ -294,7 +294,7 @@ export default function CandidateSearch() {
               </ScrollArea>
             </div>
 
-            <div className="hidden lg:block">
+            <div className="hidden lg:block animate-slideInRight">
               <div className="sticky top-6">
                 <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-xl overflow-hidden">
                   {selectedCandidate ? (
