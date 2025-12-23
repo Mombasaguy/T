@@ -5,7 +5,8 @@ import {
   Kanban, 
   Settings,
   Briefcase,
-  UserCircle
+  UserCircle,
+  Search
 } from "lucide-react";
 import {
   Sidebar,
@@ -36,6 +37,11 @@ const navigationItems = [
     title: "Pipeline",
     url: "/pipeline",
     icon: Kanban,
+  },
+  {
+    title: "Search",
+    url: "/search",
+    icon: Search,
   },
 ];
 
