@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertCandidateSchema } from "@shared/schema";
 import { z } from "zod";
 import Exa from "exa-js";
+import Anthropic from "@anthropic-ai/sdk";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -251,6 +252,55 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Exa search error:", error);
       res.status(500).json({ error: "Search failed" });
+    }
+  });
+
+  // Generate outreach email using Anthropic
+  app.post("/api/generate-email", async (req, res) => {
+    try {
+      const { candidate } = req.body;
+      
+      if (!candidate) {
+        return res.status(400).json({ error: "Candidate data required" });
+      }
+
+      const anthropic = new Anthropic({
+        apiKey: process.env.AI_INTEGRATIONS_ANTHROPIC_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_ANTHROPIC_BASE_URL,
+      });
+
+      const highlightsText = candidate.highlights?.join(". ") || "";
+      const profileText = candidate.text?.slice(0, 200) || "";
+
+      const prompt = `Generate a personalized recruiting outreach email for this candidate:
+
+Name: ${candidate.name || candidate.author || "Candidate"}
+Role: ${candidate.title || candidate.role || "Professional"}
+Recent Activity: ${highlightsText}
+Profile: ${profileText}
+
+The email should:
+- Be concise (3-4 sentences)
+- Reference their recent work
+- Express interest in their skills
+- Be professional but friendly
+- End with a clear call-to-action
+
+Do not include [brackets] or placeholders. Write a complete email ready to send.`;
+
+      const message = await anthropic.messages.create({
+        model: "claude-sonnet-4-5",
+        max_tokens: 1024,
+        messages: [{ role: "user", content: prompt }],
+      });
+
+      const textContent = message.content.find((c) => c.type === "text");
+      const email = textContent ? textContent.text : "Unable to generate email.";
+
+      res.json({ email });
+    } catch (error) {
+      console.error("Email generation error:", error);
+      res.status(500).json({ error: "Failed to generate email" });
     }
   });
 

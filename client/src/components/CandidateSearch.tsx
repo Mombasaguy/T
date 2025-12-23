@@ -12,6 +12,10 @@ import {
   XCircle,
   Loader2,
   Download,
+  Mail,
+  Copy,
+  Check,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -114,6 +118,10 @@ export default function CandidateSearch() {
     matchStatus: "all",
     minScore: 0,
   });
+  const [generatingEmail, setGeneratingEmail] = useState(false);
+  const [emailDraft, setEmailDraft] = useState("");
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const handleSearch = async (searchQuery?: string) => {
     const q = searchQuery || query;
@@ -171,6 +179,32 @@ export default function CandidateSearch() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  };
+
+  const generateEmail = async () => {
+    if (!selectedCandidate) return;
+    
+    setGeneratingEmail(true);
+    setCopied(false);
+    
+    try {
+      const response = await apiRequest("POST", "/api/generate-email", {
+        candidate: selectedCandidate,
+      });
+      const data = await response.json();
+      setEmailDraft(data.email);
+      setShowEmailModal(true);
+    } catch (error) {
+      console.error("Failed to generate email:", error);
+    } finally {
+      setGeneratingEmail(false);
+    }
+  };
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(emailDraft);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -457,6 +491,20 @@ export default function CandidateSearch() {
                         </div>
                       )}
 
+                      <button
+                        onClick={generateEmail}
+                        disabled={generatingEmail}
+                        className="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 text-white rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 mb-3"
+                        data-testid="button-draft-email"
+                      >
+                        {generatingEmail ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Mail className="w-4 h-4" />
+                        )}
+                        {generatingEmail ? "Generating..." : "Draft Outreach Email"}
+                      </button>
+
                       <Button
                         asChild
                         className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
@@ -488,6 +536,54 @@ export default function CandidateSearch() {
           </div>
         )}
       </div>
+
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-fadeIn">
+            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+              <h3 className="text-lg font-semibold text-slate-100">Draft Outreach Email</h3>
+              <button
+                onClick={() => setShowEmailModal(false)}
+                className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                data-testid="button-close-modal"
+              >
+                <X className="w-5 h-5 text-slate-400" />
+              </button>
+            </div>
+            <div className="p-4 overflow-y-auto max-h-[50vh]">
+              <pre className="whitespace-pre-wrap text-sm text-slate-300 font-sans leading-relaxed">
+                {emailDraft}
+              </pre>
+            </div>
+            <div className="p-4 border-t border-slate-700 flex gap-3">
+              <button
+                onClick={copyEmail}
+                className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2"
+                data-testid="button-copy-email"
+              >
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Copy to Clipboard
+                  </>
+                )}
+              </button>
+              <button
+                onClick={() => setShowEmailModal(false)}
+                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg font-medium transition-colors"
+                data-testid="button-close-email"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
