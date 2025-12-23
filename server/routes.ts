@@ -116,7 +116,7 @@ export async function registerRoutes(
         category: "people" as any,
         useAutoprompt: true,
         numResults: 12,
-        text: { maxCharacters: 500 },
+        text: { maxCharacters: 1000 },
         highlights: { numSentences: 3, highlightsPerUrl: 3 },
       });
 
@@ -219,16 +219,23 @@ export async function registerRoutes(
       };
 
       const transformedResults = (result.results || []).map((r: any) => {
-        const personName = pickAuthor(r);
         const originalTitle = String(r.title || "");
-        const subtitle = originalTitle !== personName ? originalTitle : 
-          (r.highlights && r.highlights.length > 0 ? String(r.highlights[0]).slice(0, 100) : null);
+        
+        // Extract person name - prefer author, then parse from title
+        const personName = r.author || 
+          originalTitle.split("|")[0].split("-")[0].trim() ||
+          pickAuthor(r);
+        
+        // Extract role/company from title parts
+        const titleParts = originalTitle.split("|").map((s: string) => s.trim());
+        const role = titleParts[1] || titleParts[0] !== personName ? titleParts[0] : "";
 
         return {
           id: String(r.url || ""),
           name: personName,
-          title: personName,
-          subtitle: subtitle,
+          role: role,
+          title: originalTitle,
+          subtitle: role || (r.highlights && r.highlights.length > 0 ? String(r.highlights[0]).slice(0, 100) : null),
           url: String(r.url || ""),
           publishedDate: r.publishedDate ? String(r.publishedDate) : new Date().toISOString(),
           author: r.author ? String(r.author) : personName,

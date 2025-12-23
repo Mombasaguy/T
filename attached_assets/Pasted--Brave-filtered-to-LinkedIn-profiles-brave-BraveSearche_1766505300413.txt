@@ -1,0 +1,93 @@
+# Brave filtered to LinkedIn profiles
+brave = BraveSearcher(site_filter="linkedin.com/in")
+
+# Parallel (internal) filtered to LinkedIn
+parallel = ParallelSearcher(source_policy={"include_domains": ["linkedin.com"]})
+```
+
+**The benchmark is optimized for finding LinkedIn profiles!**
+
+Exa scored:
+- **72% Recall@1** (finds the right person 72% of the time)
+- **94.5% Recall@10** (finds them in top 10 results)
+- **63.3% Precision** (results actually match the query)
+
+Brave (regular search) only got **44.4% Recall@1**.
+
+---
+
+## 💡 What This Means for Your App
+
+### Good News ✅
+1. **Just use `category: "people"`** and Exa will do the heavy lifting
+2. You don't need to filter domains or parse profiles
+3. Exa's already indexed 1B+ people specifically for this
+
+### Reality Check ⚠️
+1. **Results will be heavily LinkedIn** (that's what works best)
+2. **You'll also get**: GitHub profiles, personal blogs, company bios
+3. **You might NOT find**: People without public profiles
+
+---
+
+## 🛠️ Updated Implementation Strategy
+
+Based on the benchmark, here's the optimal setup:
+
+### **Prompt for Replit AI:**
+```
+Update the /api/search endpoint based on Exa's benchmark best practices:
+
+1. Use these exact parameters:
+```javascript
+const results = await exa.searchAndContents(query, {
+  type: 'auto',           // Auto-selects best search type
+  category: 'people',     // THE MAGIC - returns people profiles
+  useAutoprompt: true,    // Optimizes the query
+  numResults: 12,
+  text: {
+    maxCharacters: 1000   // Increased from 500 to get full bios
+  },
+  highlights: {
+    numSentences: 3,
+    highlightsPerUrl: 3
+  }
+});
+```
+
+2. Results will primarily be LinkedIn profiles and personal sites
+
+3. Extract person info from results:
+```javascript
+const candidates = results.results.map((result) => {
+  // Exa returns profiles, extract the name
+  const personName = result.author || 
+                     result.title.split('|')[0].split('-')[0].trim();
+  
+  // Extract role/company from title
+  const titleParts = result.title.split('|').map(s => s.trim());
+  const role = titleParts[1] || '';
+  
+  return {
+    id: result.url,
+    name: personName,
+    role: role,
+    title: result.title,
+    url: result.url,
+    publishedDate: result.publishedDate || new Date().toISOString(),
+    text: result.text || '',
+    highlights: result.highlights || [],
+    score: result.score || 0,
+    matchStatus: detectMatch(result.text || '', result.title, query),
+    platform: extractPlatform(result.url)
+  };
+});
+```
+
+4. Update frontend to show:
+- PRIMARY: Person's Name (large, bold)
+- SECONDARY: Their Role/Title (smaller)
+- PLATFORM: LinkedIn, GitHub, Personal Site badge
+- PREVIEW: Bio excerpt from their profile
+
+The key insight: Exa's people search is specifically trained to return LinkedIn and personal profiles, not blog posts about topics.

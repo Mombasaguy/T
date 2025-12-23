@@ -22,6 +22,7 @@ import { apiRequest } from "@/lib/queryClient";
 interface SearchResult {
   id: string;
   name?: string;
+  role?: string;
   title: string;
   subtitle?: string;
   url: string;
@@ -269,7 +270,7 @@ export default function CandidateSearch() {
                               </div>
                             </div>
                             <p className="text-xs text-slate-400 mt-1 line-clamp-1">
-                              {result.subtitle || result.title}
+                              {result.role || result.subtitle || result.title}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
                               <Calendar className="w-3 h-3 text-slate-500" />
