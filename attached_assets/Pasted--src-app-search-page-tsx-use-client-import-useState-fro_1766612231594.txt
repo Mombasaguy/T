@@ -1,0 +1,85 @@
+// src/app/search/page.tsx
+'use client';
+
+import { useState } from 'react';
+
+export default function SearchPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const exampleSearches = [
+    'Senior software engineers in San Francisco',
+    'Product managers at fintech companies in NYC',
+    'Director of engineering based in Austin',
+    'Machine learning engineers in the Bay Area',
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        {/* Hero Section */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-gray-900 mb-6">
+            Find Your Next Hire
+          </h1>
+          <p className="text-xl text-gray-600">
+            Search 1+ billion profiles by name, description, or URL
+          </p>
+        </div>
+
+        {/* Search Input */}
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
+          <div className="flex gap-3">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Senior React developers in Austin"
+              className="flex-1 px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
+            />
+            <button className="px-8 py-4 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors shadow-md">
+              Search
+            </button>
+          </div>
+        </div>
+
+        {/* Example Searches */}
+        <div className="mb-12">
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
+            Try these searches:
+          </h3>
+          <div className="space-y-3">
+            {exampleSearches.map((example, index) => (
+              <button
+                key={index}
+                onClick={() => setSearchQuery(example)}
+                className="w-full text-left px-6 py-4 bg-white border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-gray-700"
+              >
+                {example}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="grid grid-cols-4 gap-6">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-gray-900 mb-1">1B+</div>
+            <div className="text-sm text-gray-600">profiles</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-gray-900 mb-1">50M</div>
+            <div className="text-sm text-gray-600">weekly updates</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-gray-900 mb-1">92%</div>
+            <div className="text-sm text-gray-600">match rate</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-gray-900 mb-1">0/10</div>
+            <div className="text-sm text-gray-600">searches</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

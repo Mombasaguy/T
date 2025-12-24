@@ -480,55 +480,23 @@ export default function CandidateSearch() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">Find Your Next Hire</h1>
-          <p className="text-xl text-gray-600">Search 1+ billion profiles with AI-powered natural language</p>
+          <p className="text-xl text-gray-600">Search 1+ billion profiles by name, description, or URL</p>
         </div>
 
         <div ref={searchContainerRef}>
-          <div className="flex gap-3 mb-8 justify-center">
-            <button
-              onClick={() => { setSearchMode("description"); setQuery(""); setSourceProfile(null); }}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                searchMode === "description"
-                  ? "bg-blue-500 text-white shadow-md"
-                  : "bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300"
-              }`}
-              data-testid="button-mode-description"
-            >
-              <Search className="w-5 h-5" />
-              Search by Description
-            </button>
-            <button
-              onClick={() => { setSearchMode("url"); setQuery(""); setAutocompleteSuggestions([]); }}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
-                searchMode === "url"
-                  ? "bg-blue-500 text-white shadow-md"
-                  : "bg-white text-gray-700 border-2 border-gray-200 hover:border-gray-300"
-              }`}
-              data-testid="button-mode-url"
-            >
-              <Link2 className="w-5 h-5" />
-              Find Similar by URL
-            </button>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-12">
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
             <div className="flex gap-3">
               <input
                 type="text"
                 value={query}
                 onChange={(e) => {
                   setQuery(e.target.value);
-                  if (searchMode === "description") {
-                    setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
-                  }
+                  setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
                 }}
                 onKeyDown={handleKeyDown}
-                placeholder={searchMode === "description" 
-                  ? "Senior React developers in Austin..."
-                  : "linkedin.com/in/username"
-                }
+                placeholder="Senior React developers in Austin"
                 className="flex-1 px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
                 data-testid="input-search"
               />
@@ -546,28 +514,9 @@ export default function CandidateSearch() {
               </Button>
             </div>
           </div>
-          
-          <div className="grid grid-cols-4 gap-6 mb-16">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">1B+</div>
-              <div className="text-sm text-gray-600">profiles</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">50M</div>
-              <div className="text-sm text-gray-600">weekly updates</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">92%</div>
-              <div className="text-sm text-gray-600">match rate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 mb-1">{subscription.searchesUsed}/{subscription.searchesLimit}</div>
-              <div className="text-sm text-gray-600">searches</div>
-            </div>
-          </div>
 
           {!searchPerformed && (
-            <div>
+            <div className="mb-12">
               <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
                 Try these searches:
               </h3>
@@ -585,6 +534,27 @@ export default function CandidateSearch() {
                     {exampleQuery}
                   </button>
                 ))}
+              </div>
+            </div>
+          )}
+          
+          {!searchPerformed && (
+            <div className="grid grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 mb-1">1B+</div>
+                <div className="text-sm text-gray-600">profiles</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 mb-1">50M</div>
+                <div className="text-sm text-gray-600">weekly updates</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 mb-1">92%</div>
+                <div className="text-sm text-gray-600">match rate</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-gray-900 mb-1">{subscription.searchesUsed}/{subscription.searchesLimit}</div>
+                <div className="text-sm text-gray-600">searches</div>
               </div>
             </div>
           )}
