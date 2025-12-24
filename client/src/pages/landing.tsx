@@ -240,23 +240,23 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white rounded-2xl p-8 border-2 border-red-200">
                 <div className="text-red-600 font-bold text-lg mb-6 flex items-center gap-2">
-                  <span className="text-2xl">-</span> Traditional Recruiting
+                  <span className="w-6 h-6 flex items-center justify-center bg-red-100 rounded-full text-sm">X</span> Traditional Recruiting
                 </div>
                 <div className="space-y-4 text-gray-700">
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1">-</span>
+                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
                     <span>30 min searching LinkedIn manually</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1">-</span>
+                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
                     <span>30 min checking GitHub profiles</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1">-</span>
+                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
                     <span>30 min finding personal websites</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1">-</span>
+                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
                     <span>30 min writing personalized emails</span>
                   </div>
                   <div className="pt-4 border-t border-gray-200 mt-6">
@@ -271,19 +271,19 @@ export default function LandingPage() {
                 </div>
                 <div className="space-y-4 text-gray-700">
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">+</span>
+                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
                     <span>One search across all platforms</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">+</span>
+                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
                     <span>Semantic AI finds best matches</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">+</span>
+                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
                     <span>Includes GitHub, blogs, portfolios</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1">+</span>
+                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
                     <span>AI-generated personalized outreach</span>
                   </div>
                   <div className="pt-4 border-t border-gray-200 mt-6">
