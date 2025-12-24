@@ -162,13 +162,13 @@ function formatDate(dateStr?: string) {
 
 function SkeletonCard() {
   return (
-    <Card className="p-4 bg-slate-800/50 border-slate-700 animate-pulse">
+    <Card className="p-4 bg-white border-gray-200 animate-pulse">
       <div className="flex items-start gap-3">
-        <div className="w-8 h-8 rounded-full bg-slate-700" />
+        <div className="w-8 h-8 rounded-full bg-gray-200" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 bg-slate-700 rounded w-3/4" />
-          <div className="h-3 bg-slate-700 rounded w-1/2" />
-          <div className="h-3 bg-slate-700 rounded w-full" />
+          <div className="h-4 bg-gray-200 rounded w-3/4" />
+          <div className="h-3 bg-gray-200 rounded w-1/2" />
+          <div className="h-3 bg-gray-200 rounded w-full" />
         </div>
       </div>
     </Card>
@@ -478,39 +478,30 @@ export default function CandidateSearch() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white relative overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.03)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b border-gray-200">
+        <div className="container mx-auto px-6 py-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Find Your Next Hire</h1>
+          <p className="text-gray-600">Search 1+ billion profiles with AI-powered natural language</p>
+        </div>
+      </div>
       
-      <div className="relative z-10 container mx-auto px-4 py-8">
-        <header className="text-center mb-12 animate-fadeIn">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-              <Sparkles className="h-5 w-5 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Candidate Command Center
-            </h1>
-          </div>
-          <p className="text-slate-400 text-sm">
-            AI-powered search to discover exceptional talent across the web
-          </p>
-        </header>
+      <div className="container mx-auto px-6 py-8">
 
-        <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp" ref={searchContainerRef}>
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition duration-300" />
-            <div className="relative flex gap-2 bg-slate-900 rounded-xl p-2 border border-slate-700">
+        <div className="max-w-4xl mx-auto mb-8" ref={searchContainerRef}>
+          <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+            <div className="flex items-center gap-4 mb-4">
               <div className="flex-1 relative">
                 {searchMode === "description" ? (
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 ) : (
-                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                  <Link2 className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 )}
                 <Input
                   type="text"
                   placeholder={
                     searchMode === "description"
-                      ? "Find engineers who left Meta and started AI companies..."
+                      ? "Find senior React developers in Austin who blog about TypeScript..."
                       : "Paste LinkedIn, GitHub, or profile URL to find similar candidates..."
                   }
                   value={query}
@@ -522,26 +513,17 @@ export default function CandidateSearch() {
                   }}
                   onKeyDown={handleKeyDown}
                   onFocus={() => searchMode === "description" && setShowSearchDropdown(true)}
-                  className="pl-10 bg-transparent border-0 text-white placeholder:text-slate-500 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="pl-10 bg-transparent border-0 text-gray-900 placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
                   data-testid="input-search"
                 />
               </div>
-              {searchMode === "description" && (
-                <button
-                  onClick={() => setShowSearchDropdown(!showSearchDropdown)}
-                  className="px-2 text-slate-400 hover:text-slate-300"
-                  data-testid="button-toggle-history"
-                >
-                  <ChevronDown className={`w-4 h-4 transition-transform ${showSearchDropdown ? "rotate-180" : ""}`} />
-                </button>
-              )}
-              <div className="flex items-center border-l border-slate-700 pl-2">
+              <div className="flex items-center border-l border-gray-200 pl-4 gap-1">
                 <button
                   onClick={() => { setSearchMode("description"); setQuery(""); setSourceProfile(null); }}
                   className={`p-2 rounded-lg transition-all ${
                     searchMode === "description"
-                      ? "bg-slate-700 text-white"
-                      : "text-slate-500 hover:text-slate-300"
+                      ? "bg-blue-100 text-blue-600"
+                      : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
                   }`}
                   title="Search by description"
                   data-testid="button-mode-description"
@@ -552,8 +534,8 @@ export default function CandidateSearch() {
                   onClick={() => { setSearchMode("url"); setQuery(""); setAutocompleteSuggestions([]); }}
                   className={`p-2 rounded-lg transition-all ${
                     searchMode === "url"
-                      ? "bg-slate-700 text-white"
-                      : "text-slate-500 hover:text-slate-300"
+                      ? "bg-blue-100 text-blue-600"
+                      : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
                   }`}
                   title="Find similar by URL"
                   data-testid="button-mode-url"
@@ -564,130 +546,143 @@ export default function CandidateSearch() {
               <Button
                 onClick={() => handleSearch()}
                 disabled={loading || !query.trim()}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-semibold"
                 data-testid="button-search"
               >
                 {loading ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    {searchMode === "description" ? "Search" : "Find Similar"}
-                  </>
+                  searchMode === "description" ? "Search" : "Find Similar"
                 )}
               </Button>
             </div>
-            {searchMode === "url" && (
-              <p className="text-sm text-slate-400 text-center mt-2">
-                Paste any LinkedIn, GitHub, or profile URL to discover similar candidates
-              </p>
-            )}
-
-            {showSearchDropdown && (autocompleteSuggestions.length > 0 || savedSearches.length > 0 || recentSearches.length > 0) && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-slate-700 rounded-xl shadow-xl z-20 overflow-hidden">
-                {autocompleteSuggestions.length > 0 && (
-                  <div className="p-3 border-b border-slate-700">
-                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
-                      <Sparkles className="w-3 h-3" />
-                      Suggestions
-                    </div>
-                    <div className="space-y-1">
-                      {autocompleteSuggestions.map((suggestion, index) => (
-                        <button
-                          key={`suggestion-${index}`}
-                          onClick={() => {
-                            setQuery(suggestion);
-                            setAutocompleteSuggestions([]);
-                            handleSearch(suggestion);
-                          }}
-                          className="w-full text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-lg transition-colors"
-                          data-testid={`button-suggestion-${index}`}
-                        >
-                          {suggestion}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {savedSearches.length > 0 && (
-                  <div className="p-3 border-b border-slate-700">
-                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
-                      <Star className="w-3 h-3" />
-                      Saved Searches
-                    </div>
-                    <div className="space-y-1">
-                      {savedSearches.map((search, index) => (
-                        <div
-                          key={`saved-${index}`}
-                          className="flex items-center gap-2 group"
-                        >
-                          <button
-                            onClick={() => {
-                              setQuery(search);
-                              handleSearch(search);
-                            }}
-                            className="flex-1 text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-lg transition-colors"
-                            data-testid={`button-saved-search-${index}`}
-                          >
-                            {search}
-                          </button>
-                          <button
-                            onClick={() => toggleSavedSearch(search)}
-                            className="p-1.5 text-yellow-500 hover:bg-slate-700 rounded-lg"
-                            data-testid={`button-unsave-search-${index}`}
-                          >
-                            <Star className="w-4 h-4 fill-current" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {recentSearches.length > 0 && (
-                  <div className="p-3">
-                    <div className="flex items-center gap-2 text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
-                      <History className="w-3 h-3" />
-                      Recent Searches
-                    </div>
-                    <div className="space-y-1">
-                      {recentSearches.map((search, index) => (
-                        <div
-                          key={`recent-${index}`}
-                          className="flex items-center gap-2 group"
-                        >
-                          <button
-                            onClick={() => {
-                              setQuery(search);
-                              handleSearch(search);
-                            }}
-                            className="flex-1 text-left px-3 py-2 text-sm text-slate-300 hover:bg-slate-700 rounded-lg transition-colors"
-                            data-testid={`button-recent-search-${index}`}
-                          >
-                            {search}
-                          </button>
-                          <button
-                            onClick={() => toggleSavedSearch(search)}
-                            className={`p-1.5 hover:bg-slate-700 rounded-lg ${
-                              savedSearches.includes(search)
-                                ? "text-yellow-500"
-                                : "text-slate-500 hover:text-yellow-500"
-                            }`}
-                            data-testid={`button-save-search-${index}`}
-                          >
-                            <Star className={`w-4 h-4 ${savedSearches.includes(search) ? "fill-current" : ""}`} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+            
+            <div className="flex items-center gap-6 text-sm text-gray-600 pt-4 border-t border-gray-200">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-gray-900">1B+</span> profiles
               </div>
-            )}
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-gray-900">50M</span> weekly updates
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-gray-900">92%</span> match rate
+              </div>
+              <div className="ml-auto text-sm">
+                <span className="text-gray-500">{subscription.searchesUsed}/{subscription.searchesLimit} searches</span>
+              </div>
+            </div>
           </div>
+          
+          {searchMode === "url" && (
+            <p className="text-sm text-gray-500 text-center mt-3">
+              Paste any LinkedIn, GitHub, or profile URL to discover similar candidates
+            </p>
+          )}
 
-          <div className="flex flex-wrap gap-2 mt-4 justify-center">
+          {showSearchDropdown && (autocompleteSuggestions.length > 0 || savedSearches.length > 0 || recentSearches.length > 0) && (
+            <div className="mt-2 bg-white border border-gray-200 rounded-xl shadow-xl z-20 overflow-hidden">
+              {autocompleteSuggestions.length > 0 && (
+                <div className="p-3 border-b border-gray-200">
+                  <div className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                    <Sparkles className="w-3 h-3" />
+                    Suggestions
+                  </div>
+                  <div className="space-y-1">
+                    {autocompleteSuggestions.map((suggestion, index) => (
+                      <button
+                        key={`suggestion-${index}`}
+                        onClick={() => {
+                          setQuery(suggestion);
+                          setAutocompleteSuggestions([]);
+                          handleSearch(suggestion);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                        data-testid={`button-suggestion-${index}`}
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {savedSearches.length > 0 && (
+                <div className="p-3 border-b border-gray-200">
+                  <div className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                    <Star className="w-3 h-3" />
+                    Saved Searches
+                  </div>
+                  <div className="space-y-1">
+                    {savedSearches.map((search, index) => (
+                      <div
+                        key={`saved-${index}`}
+                        className="flex items-center gap-2 group"
+                      >
+                        <button
+                          onClick={() => {
+                            setQuery(search);
+                            handleSearch(search);
+                          }}
+                          className="flex-1 text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          data-testid={`button-saved-search-${index}`}
+                        >
+                          {search}
+                        </button>
+                        <button
+                          onClick={() => toggleSavedSearch(search)}
+                          className="p-1.5 text-yellow-500 hover:bg-gray-100 rounded-lg"
+                          data-testid={`button-unsave-search-${index}`}
+                        >
+                          <Star className="w-4 h-4 fill-current" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {recentSearches.length > 0 && (
+                <div className="p-3">
+                  <div className="flex items-center gap-2 text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                    <History className="w-3 h-3" />
+                    Recent Searches
+                  </div>
+                  <div className="space-y-1">
+                    {recentSearches.map((search, index) => (
+                      <div
+                        key={`recent-${index}`}
+                        className="flex items-center gap-2 group"
+                      >
+                        <button
+                          onClick={() => {
+                            setQuery(search);
+                            handleSearch(search);
+                          }}
+                          className="flex-1 text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          data-testid={`button-recent-search-${index}`}
+                        >
+                          {search}
+                        </button>
+                        <button
+                          onClick={() => toggleSavedSearch(search)}
+                          className={`p-1.5 hover:bg-gray-100 rounded-lg ${
+                            savedSearches.includes(search)
+                              ? "text-yellow-500"
+                              : "text-gray-400 hover:text-yellow-500"
+                          }`}
+                          data-testid={`button-save-search-${index}`}
+                        >
+                          <Star className={`w-4 h-4 ${savedSearches.includes(search) ? "fill-current" : ""}`} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-2 mt-6">
             {exampleQueries.map((exampleQuery, index) => (
               <button
                 key={index}
@@ -695,7 +690,7 @@ export default function CandidateSearch() {
                   setQuery(exampleQuery);
                   handleSearch(exampleQuery);
                 }}
-                className="px-3 py-1.5 text-xs bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 rounded-full border border-slate-700 hover:border-slate-600 transition-colors"
+                className="text-left px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 data-testid={`chip-example-${index}`}
               >
                 {exampleQuery}
@@ -705,10 +700,10 @@ export default function CandidateSearch() {
         </div>
 
         {searchPerformed && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             <div className="lg:col-span-2">
               <div className="flex items-center justify-between gap-4 mb-4">
-                <h2 className="text-lg font-semibold text-slate-200">
+                <h2 className="text-lg font-semibold text-gray-900">
                   {loading ? "Searching..." : `${results.length} Results`}
                 </h2>
                 {results.length > 0 && (
@@ -716,7 +711,7 @@ export default function CandidateSearch() {
                     {compareList.length >= 2 && (
                       <button
                         onClick={() => setShowCompareModal(true)}
-                        className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 rounded-lg text-sm text-white font-medium flex items-center gap-2"
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm text-white font-medium flex items-center gap-2"
                         data-testid="button-compare"
                       >
                         <Users className="w-4 h-4" />
@@ -724,18 +719,18 @@ export default function CandidateSearch() {
                       </button>
                     )}
                     {compareList.length > 0 && compareList.length < 2 && (
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-gray-500">
                         Select {2 - compareList.length} more to compare
                       </span>
                     )}
                     {compareList.length === 0 && (
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-gray-500">
                         Check boxes to compare
                       </span>
                     )}
                     <button
                       onClick={exportToCSV}
-                      className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg text-sm text-slate-300 flex items-center gap-2"
+                      className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-2"
                       data-testid="button-export-csv"
                     >
                       <Download className="w-4 h-4" />
@@ -746,16 +741,16 @@ export default function CandidateSearch() {
               </div>
 
               {results.length > 0 && (
-                <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-4 mb-6">
+                <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
                   <div className="flex items-center gap-2 mb-3">
-                    <Filter className="w-4 h-4 text-slate-400" />
-                    <span className="text-sm font-medium text-slate-300">Filters</span>
+                    <Filter className="w-4 h-4 text-gray-500" />
+                    <span className="text-sm font-medium text-gray-700">Filters</span>
                   </div>
                   <div className="flex gap-3 flex-wrap items-center">
                     <select
                       value={filters.platform}
                       onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
-                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
                       data-testid="select-platform"
                     >
                       <option value="all">All Platforms</option>
@@ -766,7 +761,7 @@ export default function CandidateSearch() {
                     <select
                       value={filters.matchStatus}
                       onChange={(e) => setFilters({ ...filters, matchStatus: e.target.value })}
-                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
                       data-testid="select-match-status"
                     >
                       <option value="all">All Matches</option>
