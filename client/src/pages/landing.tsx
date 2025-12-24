@@ -72,7 +72,7 @@ export default function LandingPage() {
 
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
             Search 1+ billion profiles across LinkedIn, GitHub, personal sites, and the entire web using 
-            natural language. Powered by Exa's semantic AI. Find candidates others miss.
+            natural language. Powered by advanced semantic AI. Find candidates others miss.
           </p>
 
           <div className="flex items-center justify-center gap-4 mb-12 flex-wrap">
@@ -183,7 +183,7 @@ export default function LandingPage() {
             </div>
             <h4 className="text-xl font-bold text-white mb-3">Semantic Search</h4>
             <p className="text-gray-400 leading-relaxed">
-              Natural language queries powered by Exa AI. Understands context and intent, not just keywords.
+              Natural language queries powered by advanced AI. Understands context and intent, not just keywords.
             </p>
           </div>
 
@@ -379,7 +379,7 @@ export default function LandingPage() {
             Start Searching Now
           </button>
           <p className="text-gray-400 text-sm mt-6">
-            Access 1+ billion profiles - Powered by Exa's semantic AI
+            Access 1+ billion profiles - Powered by advanced semantic AI
           </p>
         </div>
       </div>
@@ -387,7 +387,7 @@ export default function LandingPage() {
       <div className="border-t border-white/10 py-8">
         <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
           <p>2024 Candidate Command Center. Search 1+ billion profiles across the entire web.</p>
-          <p className="mt-2">Powered by Exa's semantic AI technology.</p>
+          <p className="mt-2">Powered by advanced semantic AI technology.</p>
         </div>
       </div>
     </div>
