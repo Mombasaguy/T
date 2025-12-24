@@ -690,7 +690,7 @@ export default function CandidateSearch() {
                   setQuery(exampleQuery);
                   handleSearch(exampleQuery);
                 }}
-                className="text-left px-4 py-3 bg-white border border-gray-200 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                className="text-left px-4 py-3 bg-white border border-gray-200 border-l-4 border-l-blue-500 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                 data-testid={`chip-example-${index}`}
               >
                 {exampleQuery}
