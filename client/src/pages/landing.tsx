@@ -33,7 +33,7 @@ export default function LandingPage() {
           </p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-6">
           <input
             type="text"
             value={searchQuery}
@@ -50,6 +50,24 @@ export default function LandingPage() {
           >
             Search Now
           </button>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {[
+            "Senior software engineers in San Francisco",
+            "Product managers at fintech companies in NYC",
+            "Director of engineering based in Austin",
+            "Machine learning engineers in the Bay Area"
+          ].map((query, idx) => (
+            <button
+              key={idx}
+              onClick={() => handleExampleSearch(query)}
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              data-testid={`button-example-search-${idx}`}
+            >
+              {query}
+            </button>
+          ))}
         </div>
 
         <div className="flex flex-wrap justify-center gap-3">
