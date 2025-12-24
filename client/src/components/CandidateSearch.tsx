@@ -953,6 +953,153 @@ export default function CandidateSearch() {
         )}
       </div>
 
+      {selectedCandidate && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-end lg:hidden">
+          <div className="bg-white w-full max-h-[85vh] overflow-y-auto rounded-t-2xl shadow-2xl animate-in slide-in-from-bottom duration-300">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">Candidate Details</h3>
+              <button
+                onClick={() => setSelectedCandidate(null)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                data-testid="button-close-candidate-mobile"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            <div className="p-4">
+              <div className="flex items-center gap-3 mb-4">
+                <div className={`p-3 rounded-lg ${getPlatformColor(selectedCandidate.platform)}`}>
+                  {getPlatformIcon(selectedCandidate.platform)}
+                </div>
+                <div>
+                  <Badge className={getPlatformColor(selectedCandidate.platform)}>
+                    {selectedCandidate.platform}
+                  </Badge>
+                  {formatDate(selectedCandidate.publishedDate) && (
+                    <p className="text-xs text-gray-500 mt-1">
+                      {formatDate(selectedCandidate.publishedDate)}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {selectedCandidate.name || selectedCandidate.author || selectedCandidate.title}
+              </h3>
+              {selectedCandidate.subtitle && (
+                <p className="text-sm text-gray-500 mb-4">
+                  {selectedCandidate.subtitle}
+                </p>
+              )}
+
+              {selectedCandidate.text && (
+                <div className="mb-4">
+                  <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                    Preview
+                  </h4>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    {selectedCandidate.text.slice(0, 400)}
+                    {selectedCandidate.text.length > 400 && "..."}
+                  </p>
+                </div>
+              )}
+
+              {selectedCandidate.highlights && selectedCandidate.highlights.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                    Key Highlights
+                  </h4>
+                  <ul className="space-y-2">
+                    {selectedCandidate.highlights.slice(0, 3).map((highlight, i) => (
+                      <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Star className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Rating</span>
+                </div>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => updateCandidateData(selectedCandidate, { rating: getCandidateData(selectedCandidate).rating === star ? 0 : star })}
+                      className="p-1 transition-colors"
+                    >
+                      <Star
+                        className={`w-6 h-6 ${
+                          star <= getCandidateData(selectedCandidate).rating
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Tag className="w-4 h-4 text-gray-400" />
+                  <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Status</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {statusTags.map((tag) => {
+                    const isActive = getCandidateData(selectedCandidate).tags.includes(tag);
+                    const tagColors: Record<string, string> = {
+                      Contacted: isActive ? "bg-blue-100 text-blue-700 border-blue-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                      Interview: isActive ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                      Rejected: isActive ? "bg-red-100 text-red-700 border-red-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                      "Follow-up": isActive ? "bg-amber-100 text-amber-700 border-amber-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                    };
+                    return (
+                      <button
+                        key={tag}
+                        onClick={() => toggleTag(selectedCandidate, tag)}
+                        className={`px-3 py-1 text-sm font-medium rounded-full border transition-colors ${tagColors[tag]}`}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={generateEmail}
+                  disabled={generatingEmail}
+                  className="w-full px-4 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  {generatingEmail ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Mail className="w-4 h-4" />
+                  )}
+                  {generatingEmail ? "Generating..." : "Draft Outreach Email"}
+                </button>
+
+                <a
+                  href={selectedCandidate.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  View Full Profile
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showEmailModal && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-gray-200 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
