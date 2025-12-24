@@ -479,82 +479,68 @@ export default function CandidateSearch() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-20">
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-6">Find Your Next Hire</h1>
-          <p className="text-xl text-gray-600">Search 1+ billion profiles by name, description, or URL</p>
+          <h1 className="text-6xl font-bold text-gray-900 mb-6">Search 1+ Billion Profiles</h1>
+          <p className="text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+            Access LinkedIn, GitHub, personal sites, and 1+ billion profiles
+            updated with 50 million weekly refreshes. Use natural language AI
+            search to find candidates others miss.
+          </p>
         </div>
 
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
-            <div className="flex gap-3">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="Senior React developers in Austin"
-                className="flex-1 px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors"
-                data-testid="input-search"
-              />
-              <Button
-                onClick={() => handleSearch()}
-                disabled={loading || !query.trim()}
-                className="px-8 py-4 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600 transition-colors shadow-md h-auto"
-                data-testid="button-search"
-              >
-                {loading ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  "Search"
-                )}
-              </Button>
-            </div>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder="Senior React developers in Austin who contribute to open source"
+              className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors mb-4"
+              data-testid="input-search"
+            />
+            <Button
+              onClick={() => handleSearch()}
+              disabled={loading || !query.trim()}
+              className="w-full py-4 bg-blue-500 text-white text-lg font-semibold rounded-xl hover:bg-blue-600 transition-colors shadow-md h-auto"
+              data-testid="button-search"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                  Searching...
+                </>
+              ) : (
+                "Search Now"
+              )}
+            </Button>
           </div>
 
           {!searchPerformed && (
-            <div className="mb-12">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">
-                Try these searches:
-              </h3>
-              <div className="space-y-3">
-                {exampleQueries.map((exampleQuery, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setQuery(exampleQuery);
-                      handleSearch(exampleQuery);
-                    }}
-                    className="w-full text-left px-6 py-4 bg-white border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-gray-700"
-                    data-testid={`chip-example-${index}`}
-                  >
-                    {exampleQuery}
-                  </button>
-                ))}
+            <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+                <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <span className="text-sm font-medium text-gray-700">LinkedIn</span>
               </div>
-            </div>
-          )}
-          
-          {!searchPerformed && (
-            <div className="grid grid-cols-4 gap-6">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-900 mb-1">1B+</div>
-                <div className="text-sm text-gray-600">profiles</div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+                <Github className="w-5 h-5 text-gray-900" />
+                <span className="text-sm font-medium text-gray-700">GitHub</span>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-900 mb-1">50M</div>
-                <div className="text-sm text-gray-600">weekly updates</div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                </svg>
+                <span className="text-sm font-medium text-gray-700">Personal Sites</span>
               </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-900 mb-1">92%</div>
-                <div className="text-sm text-gray-600">match rate</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-gray-900 mb-1">{subscription.searchesUsed}/{subscription.searchesLimit}</div>
-                <div className="text-sm text-gray-600">searches</div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
+                <Mail className="w-5 h-5 text-white" />
+                <span className="text-sm font-medium text-white">AI Outreach</span>
               </div>
             </div>
           )}
