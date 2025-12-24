@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Loader2, Check, Sparkles, Zap, Users, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "wouter";
 
@@ -135,147 +133,163 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <header className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full px-4 py-1.5 mb-6">
-            <Sparkles className="h-4 w-4 text-blue-400" />
-            <span className="text-sm text-blue-300">LinkedIn Recruiter: $2,040/year</span>
-            <ArrowRight className="h-4 w-4 text-slate-400" />
-            <span className="text-sm font-medium text-green-400">We're $99/month</span>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-4">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Sparkles className="w-6 h-6 text-white" />
+            <span className="text-white font-medium">LinkedIn Recruiter: $2,040/year</span>
           </div>
-          
-          <h1 className="text-4xl md:text-5xl font-bold mb-4" data-testid="text-pricing-title">
-            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <div className="flex items-center gap-2">
+            <span className="text-green-300 font-bold text-lg">We're $99/month</span>
+            <ArrowRight className="w-5 h-5 text-green-300" />
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <header className="text-center mb-16">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6" data-testid="text-pricing-title">
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Find Better Candidates.
             </span>
             <br />
             <span className="text-white">Pay 10x Less.</span>
           </h1>
           
-          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
             Search 1 billion profiles across LinkedIn, GitHub, and personal sites.
             AI-powered outreach that gets responses.
           </p>
         </header>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-20">
+        <div className="grid md:grid-cols-3 gap-8 pb-24">
           {pricingTiers.map((tier) => (
-            <Card
+            <div
               key={tier.name}
-              className={`relative ${
+              className={`relative rounded-2xl p-8 ${
                 tier.featured
-                  ? "border-2 border-purple-500/50 bg-gradient-to-b from-purple-500/10 to-transparent"
-                  : "border-slate-700 bg-slate-800/50"
+                  ? "bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-300"
+                  : "bg-gray-800 border-2 border-gray-700"
               }`}
               data-testid={`card-pricing-${tier.name.toLowerCase()}`}
             >
               {tier.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
                     Most Popular
-                  </Badge>
+                  </span>
                 </div>
               )}
-              
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center gap-2">
-                  {tier.name === "Free" && <Zap className="h-5 w-5 text-slate-400" />}
-                  {tier.name === "Professional" && <Sparkles className="h-5 w-5 text-purple-400" />}
-                  {tier.name === "Team" && <Users className="h-5 w-5 text-blue-400" />}
-                  <span className="text-white">{tier.name}</span>
-                </CardTitle>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold text-white">{tier.price}</span>
-                  <span className="text-slate-400">{tier.priceNote}</span>
-                </div>
-                <p className="text-sm text-slate-400 mt-2">{tier.description}</p>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                <ul className="space-y-3">
-                  {tier.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
-                      <Check className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
+
+              <div className="flex items-center gap-3 mb-4">
+                {tier.name === "Free" && <Zap className={`w-8 h-8 ${tier.featured ? "text-purple-600" : "text-blue-400"}`} />}
+                {tier.name === "Professional" && <Sparkles className={`w-8 h-8 ${tier.featured ? "text-purple-600" : "text-blue-400"}`} />}
+                {tier.name === "Team" && <Users className={`w-8 h-8 ${tier.featured ? "text-purple-600" : "text-blue-400"}`} />}
+                <h3 className={`text-2xl font-bold ${tier.featured ? "text-gray-900" : "text-white"}`}>
+                  {tier.name}
+                </h3>
+              </div>
+
+              <div className="mb-4">
+                <span className={`text-5xl font-bold ${tier.featured ? "text-gray-900" : "text-white"}`}>
+                  {tier.price}
+                </span>
+                <span className={`text-lg ${tier.featured ? "text-gray-600" : "text-gray-400"}`}>
+                  {tier.priceNote}
+                </span>
+              </div>
+
+              <p className={`mb-6 ${tier.featured ? "text-gray-700" : "text-gray-300"}`}>
+                {tier.description}
+              </p>
+
+              <ul className="space-y-3 mb-8">
+                {tier.features.map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <Check className={`w-5 h-5 flex-shrink-0 mt-0.5 ${tier.featured ? "text-green-600" : "text-green-400"}`} />
+                    <span className={tier.featured ? "text-gray-700" : "text-gray-300"}>
                       {feature}
-                    </li>
-                  ))}
-                </ul>
+                    </span>
+                  </li>
+                ))}
+              </ul>
 
-                {tier.comparison && (
-                  <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
-                    <p className="text-xs text-green-400">{tier.comparison}</p>
-                  </div>
-                )}
+              {tier.comparison && (
+                <div className={`mb-6 p-3 rounded-lg ${
+                  tier.featured
+                    ? "bg-green-100 text-green-800"
+                    : "bg-green-900/30 text-green-300"
+                } text-sm font-medium text-center`}>
+                  {tier.comparison}
+                </div>
+              )}
 
-                {tier.plan ? (
-                  <Button
-                    onClick={() => handleSubscribe(tier.plan!)}
-                    disabled={loadingPlan === tier.plan}
-                    className={`w-full ${
+              {tier.plan ? (
+                <Button
+                  onClick={() => handleSubscribe(tier.plan!)}
+                  disabled={loadingPlan === tier.plan}
+                  className="w-full py-4 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg h-auto"
+                  data-testid={`button-subscribe-${tier.plan}`}
+                >
+                  {loadingPlan === tier.plan ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Redirecting...
+                    </>
+                  ) : (
+                    tier.buttonText
+                  )}
+                </Button>
+              ) : (
+                <Link href="/search">
+                  <Button 
+                    className={`w-full py-4 rounded-xl font-semibold h-auto ${
                       tier.featured
-                        ? "bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                        : ""
+                        ? "bg-gray-900 text-white hover:bg-gray-800"
+                        : "bg-gray-700 text-white hover:bg-gray-600"
                     }`}
-                    data-testid={`button-subscribe-${tier.plan}`}
+                    data-testid="button-start-free"
                   >
-                    {loadingPlan === tier.plan ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Redirecting...
-                      </>
-                    ) : (
-                      tier.buttonText
-                    )}
+                    {tier.buttonText}
                   </Button>
-                ) : (
-                  <Link href="/search">
-                    <Button variant="outline" className="w-full" data-testid="button-start-free">
-                      {tier.buttonText}
-                    </Button>
-                  </Link>
-                )}
-              </CardContent>
-            </Card>
+                </Link>
+              )}
+            </div>
           ))}
         </div>
 
-        <section className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-semibold text-white text-center mb-8">
+      </div>
+
+      <div className="bg-gray-800 py-16">
+        <div className="max-w-4xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-white text-center mb-12">
             Frequently Asked Questions
           </h2>
           
-          <div className="space-y-3">
+          <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <Card
+              <div
                 key={index}
-                className="border-slate-700 bg-slate-800/50 cursor-pointer"
+                className="bg-gray-700/50 rounded-xl p-6 cursor-pointer"
                 onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
                 data-testid={`card-faq-${index}`}
               >
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-white">{faq.question}</h3>
-                    {expandedFaq === index ? (
-                      <ChevronUp className="h-5 w-5 text-slate-400" />
-                    ) : (
-                      <ChevronDown className="h-5 w-5 text-slate-400" />
-                    )}
-                  </div>
-                  {expandedFaq === index && (
-                    <p className="mt-3 text-sm text-slate-400">{faq.answer}</p>
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="font-medium text-white">{faq.question}</h3>
+                  {expandedFaq === index ? (
+                    <ChevronUp className="h-5 w-5 text-gray-400 shrink-0" />
+                  ) : (
+                    <ChevronDown className="h-5 w-5 text-gray-400 shrink-0" />
                   )}
-                </CardContent>
-              </Card>
+                </div>
+                {expandedFaq === index && (
+                  <p className="mt-4 text-gray-300">{faq.answer}</p>
+                )}
+              </div>
             ))}
           </div>
-        </section>
-
-        <footer className="text-center mt-16 pt-8 border-t border-slate-800">
-          <p className="text-sm text-slate-500">
-            Need enterprise pricing? <a href="mailto:sales@example.com" className="text-blue-400 hover:underline">Contact our sales team</a>
-          </p>
-        </footer>
+        </div>
       </div>
     </div>
   );
