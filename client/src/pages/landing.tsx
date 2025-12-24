@@ -120,7 +120,7 @@ export default function LandingPage() {
                 <button
                   key={idx}
                   onClick={() => handleExampleSearch(search)}
-                  className="text-left px-4 py-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-gray-700 text-sm transition-colors"
+                  className="text-left px-4 py-3 bg-white hover:bg-gray-50 border border-gray-200 border-l-4 border-l-blue-500 rounded-lg text-gray-700 text-sm transition-colors"
                   data-testid={`button-example-search-${idx}`}
                 >
                   {search}
@@ -165,7 +165,7 @@ export default function LandingPage() {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
               <Brain className="w-6 h-6 text-blue-600" />
             </div>
@@ -175,7 +175,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-green-50 rounded-2xl p-8 border border-green-100 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
               <Zap className="w-6 h-6 text-green-600" />
             </div>
@@ -185,7 +185,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
               <Globe className="w-6 h-6 text-purple-600" />
             </div>
@@ -195,7 +195,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-green-50 rounded-2xl p-8 border border-green-100 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
               <Target className="w-6 h-6 text-green-600" />
             </div>
@@ -205,7 +205,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-orange-50 rounded-2xl p-8 border border-orange-100 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
               <Mail className="w-6 h-6 text-orange-600" />
             </div>
@@ -215,7 +215,7 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="bg-white rounded-2xl p-8 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-pink-50 rounded-2xl p-8 border border-pink-100 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mb-6">
               <Clock className="w-6 h-6 text-pink-600" />
             </div>
@@ -238,56 +238,58 @@ export default function LandingPage() {
             </p>
 
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-white rounded-2xl p-8 border-2 border-red-200">
-                <div className="text-red-600 font-bold text-lg mb-6 flex items-center gap-2">
-                  <span className="w-6 h-6 flex items-center justify-center bg-red-100 rounded-full text-sm">X</span> Traditional Recruiting
+              <div className="bg-white rounded-2xl p-8 border-2 border-red-300">
+                <div className="text-red-600 font-bold text-lg mb-6 flex items-center gap-3">
+                  <span className="text-2xl">X</span>
+                  <span>Traditional Recruiting</span>
                 </div>
                 <div className="space-y-4 text-gray-700">
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-red-500 mt-0.5">&bull;</span>
                     <span>30 min searching LinkedIn manually</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-red-500 mt-0.5">&bull;</span>
                     <span>30 min checking GitHub profiles</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-red-500 mt-0.5">&bull;</span>
                     <span>30 min finding personal websites</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-red-500 mt-0.5">&bull;</span>
                     <span>30 min writing personalized emails</span>
                   </div>
-                  <div className="pt-4 border-t border-gray-200 mt-6">
-                    <div className="text-3xl font-bold text-red-600">2 hours per candidate</div>
+                  <div className="pt-4 mt-4">
+                    <div className="text-2xl font-bold text-red-600">2 hours per candidate</div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-8 border-2 border-green-200">
-                <div className="text-green-600 font-bold text-lg mb-6 flex items-center gap-2">
-                  <CheckCircle className="w-6 h-6" /> Candidate Command Center
+              <div className="bg-white rounded-2xl p-8 border-2 border-green-300">
+                <div className="text-green-600 font-bold text-lg mb-6 flex items-center gap-3">
+                  <CheckCircle className="w-6 h-6" />
+                  <span>Candidate Command Center</span>
                 </div>
                 <div className="space-y-4 text-gray-700">
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-green-500 mt-0.5">&bull;</span>
                     <span>One search across all platforms</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-green-500 mt-0.5">&bull;</span>
                     <span>Semantic AI finds best matches</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-green-500 mt-0.5">&bull;</span>
                     <span>Includes GitHub, blogs, portfolios</span>
                   </div>
                   <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-1 font-bold">&bull;</span>
+                    <span className="text-green-500 mt-0.5">&bull;</span>
                     <span>AI-generated personalized outreach</span>
                   </div>
-                  <div className="pt-4 border-t border-gray-200 mt-6">
-                    <div className="text-3xl font-bold text-green-600">2 minutes per candidate</div>
+                  <div className="pt-4 mt-4">
+                    <div className="text-2xl font-bold text-green-600">2 minutes per candidate</div>
                   </div>
                 </div>
               </div>
@@ -326,18 +328,18 @@ export default function LandingPage() {
             ].map((example, idx) => (
               <div 
                 key={idx} 
-                className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                className="bg-white rounded-2xl p-6 border border-gray-200 border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => handleExampleSearch(example.query)}
                 data-testid={`card-use-case-${idx}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 font-bold text-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 font-bold text-lg">
                     {idx + 1}
                   </div>
                   <div className="flex-1">
                     <div className="text-gray-900 font-medium mb-2 text-base">"{example.query}"</div>
-                    <div className="text-green-600 text-sm flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4" />
+                    <div className="text-green-600 text-sm flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                       <span>{example.result}</span>
                     </div>
                   </div>
