@@ -59,19 +59,20 @@ export default function LandingPage() {
             <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
               <Sparkles className="w-8 h-8 text-white" />
             </div>
+            <h1 className="text-2xl font-bold text-white">Candidate Command Center</h1>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
             The Most Powerful Semantic Search
             <br />
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              for Technical Recruiting
+              for Recruiting
             </span>
           </h2>
 
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            The only tool that searches LinkedIn, GitHub, personal sites, and the entire web using natural language. 
-            Powered by Exa's semantic AI. Find candidates others miss.
+            Search 1+ billion profiles across LinkedIn, GitHub, personal sites, and the entire web using 
+            natural language. Powered by Exa's semantic AI. Find candidates others miss.
           </p>
 
           <div className="flex items-center justify-center gap-4 mb-12 flex-wrap">
@@ -125,8 +126,8 @@ export default function LandingPage() {
               {[
                 "Senior software engineers in San Francisco who blog about AI",
                 "Product managers at fintech companies in NYC with GitHub activity",
-                "Engineering directors based in Austin with conference talks",
-                "ML engineers in the Bay Area who write technical content"
+                "Marketing directors who speak at conferences and write about growth",
+                "Sales leaders at enterprise SaaS companies in Austin"
               ].map((search, idx) => (
                 <button
                   key={idx}
@@ -146,33 +147,32 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-scope">Entire Web</div>
-              <div className="text-gray-400 text-sm">Search Scope</div>
+              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-profiles">1B+</div>
+              <div className="text-gray-400 text-sm">Profiles Indexed</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-platforms">3+ Platforms</div>
-              <div className="text-gray-400 text-sm">Simultaneous Search</div>
+              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-roles">All Roles</div>
+              <div className="text-gray-400 text-sm">Not Just Tech</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-white mb-1" data-testid="stat-match">92%</div>
-              <div className="text-gray-400 text-sm">Match Rate*</div>
+              <div className="text-gray-400 text-sm">Match Rate</div>
             </div>
             <div className="text-center">
               <div className="text-3xl font-bold text-white mb-1" data-testid="stat-savings">95%</div>
-              <div className="text-gray-400 text-sm">Time Savings*</div>
+              <div className="text-gray-400 text-sm">Time Savings</div>
             </div>
           </div>
-          <p className="text-center text-gray-500 text-xs mt-4">*Based on semantic search capabilities and multi-platform coverage</p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-24">
         <div className="text-center mb-16">
           <h3 className="text-4xl font-bold text-white mb-4">
-            Why We're The Most Powerful
+            Why Candidate Command Center?
           </h3>
           <p className="text-xl text-gray-400">
-            Semantic AI + Multi-Platform Search + Entire Web Access = Unmatched Results
+            The only recruiting tool that searches 1 billion+ profiles across the entire internet
           </p>
         </div>
 
@@ -326,16 +326,16 @@ export default function LandingPage() {
                 result: "Shows developers from dev.to, Medium, personal blogs, with links to their technical writing"
               },
               {
-                query: "Find ML engineers who contributed to Hugging Face transformers library",
-                result: "Shows GitHub contributors with their LinkedIn profiles and contribution history"
+                query: "Find marketing directors who speak at conferences and have written about growth strategies",
+                result: "Finds speakers with conference videos, blog posts, and their professional marketing background"
               },
               {
-                query: "Find frontend developers who spoke at React conferences in 2024",
-                result: "Finds conference speakers with video links, slides, and their professional profiles"
+                query: "Find sales leaders at enterprise SaaS companies who post regularly on LinkedIn",
+                result: "Shows sales executives with their content, LinkedIn activity, and career progression"
               },
               {
-                query: "Find senior engineers who maintain popular open source TypeScript libraries",
-                result: "Identifies maintainers with download stats, GitHub stars, and professional background"
+                query: "Find product managers who contributed to open source projects and write about design",
+                result: "Identifies PMs with GitHub contributions, design blogs, and professional profiles"
               }
             ].map((example, idx) => (
               <div 
@@ -368,7 +368,7 @@ export default function LandingPage() {
             Experience The Most Powerful Recruiting Search
           </h3>
           <p className="text-xl text-gray-300 mb-8">
-            Join recruiters who search the entire internet with semantic AI, not just LinkedIn
+            Join recruiters searching 1+ billion profiles with semantic AI, not just LinkedIn
           </p>
           <button 
             onClick={() => setLocation('/search')}
@@ -379,15 +379,15 @@ export default function LandingPage() {
             Start Searching Now
           </button>
           <p className="text-gray-400 text-sm mt-6">
-            Powered by Exa's semantic AI - No credit card required
+            Access 1+ billion profiles - Powered by Exa's semantic AI
           </p>
         </div>
       </div>
 
       <div className="border-t border-white/10 py-8">
         <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
-          <p>2024 Candidate Command Center. The most powerful semantic search for technical recruiting.</p>
-          <p className="mt-2">Powered by Exa's AI technology.</p>
+          <p>2024 Candidate Command Center. Search 1+ billion profiles across the entire web.</p>
+          <p className="mt-2">Powered by Exa's semantic AI technology.</p>
         </div>
       </div>
     </div>
