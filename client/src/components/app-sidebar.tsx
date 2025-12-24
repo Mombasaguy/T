@@ -26,8 +26,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const navigationItems = [
   {
-    title: "Dashboard",
+    title: "Search",
     url: "/",
+    icon: Search,
+  },
+  {
+    title: "Dashboard",
+    url: "/dashboard",
     icon: LayoutDashboard,
   },
   {
@@ -39,11 +44,6 @@ const navigationItems = [
     title: "Pipeline",
     url: "/pipeline",
     icon: Kanban,
-  },
-  {
-    title: "Search",
-    url: "/search",
-    icon: Search,
   },
   {
     title: "Stats",

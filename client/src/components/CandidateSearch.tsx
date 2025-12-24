@@ -496,38 +496,6 @@ export default function CandidateSearch() {
           </p>
         </header>
 
-        <div className="max-w-3xl mx-auto mb-6">
-          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg px-4 py-3 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="text-sm text-slate-300">
-                <span className="font-semibold text-blue-400">
-                  {subscription.searchesUsed}
-                </span>
-                {" / "}
-                {subscription.searchesLimit}
-                {" searches used this month"}
-              </div>
-              <div className="h-2 w-32 bg-slate-700 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
-                  style={{ 
-                    width: `${Math.min((subscription.searchesUsed / subscription.searchesLimit) * 100, 100)}%` 
-                  }}
-                />
-              </div>
-            </div>
-            {subscription.plan === 'free' && (
-              <a 
-                href="/pricing" 
-                className="text-sm text-blue-400 hover:text-blue-300 font-medium"
-                data-testid="link-upgrade"
-              >
-                Upgrade
-              </a>
-            )}
-          </div>
-        </div>
-
         <div className="max-w-2xl mx-auto mb-8 animate-fadeInUp" ref={searchContainerRef}>
           <div className="relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-30 group-hover:opacity-50 transition duration-300" />
