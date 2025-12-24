@@ -482,7 +482,7 @@ export default function CandidateSearch() {
       <div className="max-w-4xl mx-auto px-4 py-20">
         <div className="text-center mb-12">
           <h1 className="text-6xl font-bold text-gray-900 mb-6">Search 1+ Billion Profiles</h1>
-          <p className="text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
             Access LinkedIn, GitHub, personal sites, and 1+ billion profiles
             updated with 50 million weekly refreshes. Use natural language AI
             search to find candidates others miss.
