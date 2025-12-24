@@ -24,6 +24,7 @@ export interface IStorage {
   
   // Subscription methods
   getSubscription(userId: string): Promise<Subscription | null>;
+  getSubscriptionByStripeId(stripeSubscriptionId: string): Promise<Subscription | null>;
   createSubscription(data: InsertSubscription): Promise<Subscription>;
   updateSubscription(userId: string, data: Partial<InsertSubscription>): Promise<Subscription | null>;
   incrementSearchUsage(userId: string): Promise<void>;
@@ -327,6 +328,10 @@ export class MemStorage implements IStorage {
   // Subscription methods
   async getSubscription(userId: string): Promise<Subscription | null> {
     return Array.from(this.subscriptions.values()).find(s => s.userId === userId) || null;
+  }
+
+  async getSubscriptionByStripeId(stripeSubscriptionId: string): Promise<Subscription | null> {
+    return Array.from(this.subscriptions.values()).find(s => s.stripeSubscriptionId === stripeSubscriptionId) || null;
   }
 
   async createSubscription(data: InsertSubscription): Promise<Subscription> {

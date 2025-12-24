@@ -30,6 +30,7 @@ export class StripeService {
       cancel_url: params.cancelUrl,
       allow_promotion_codes: true,
       metadata: params.metadata,
+      client_reference_id: params.metadata?.userId,
     };
 
     if (params.customerId) {
@@ -38,10 +39,13 @@ export class StripeService {
       sessionParams.customer_email = params.customerEmail;
     }
 
+    // Pass metadata to subscription so webhooks can identify the user
+    sessionParams.subscription_data = {
+      metadata: params.metadata,
+    };
+    
     if (params.trialDays) {
-      sessionParams.subscription_data = {
-        trial_period_days: params.trialDays,
-      };
+      sessionParams.subscription_data.trial_period_days = params.trialDays;
     }
 
     return await stripe.checkout.sessions.create(sessionParams);

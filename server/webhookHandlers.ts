@@ -73,7 +73,11 @@ export async function handleSubscriptionUpdated(
   
   console.log("Subscription updated:", subscription.id);
   
-  const existingSub = await storage.getSubscription(subscription.metadata?.userId || '');
+  // Look up by stripeSubscriptionId first, then fall back to userId in metadata
+  let existingSub = await storage.getSubscriptionByStripeId(subscription.id);
+  if (!existingSub && subscription.metadata?.userId) {
+    existingSub = await storage.getSubscription(subscription.metadata.userId);
+  }
   
   if (!existingSub) {
     console.error("Subscription not found for:", subscription.id);
@@ -99,7 +103,11 @@ export async function handleSubscriptionDeleted(
   
   console.log("Subscription cancelled:", subscription.id);
   
-  const existingSub = await storage.getSubscription(subscription.metadata?.userId || '');
+  // Look up by stripeSubscriptionId first, then fall back to userId in metadata
+  let existingSub = await storage.getSubscriptionByStripeId(subscription.id);
+  if (!existingSub && subscription.metadata?.userId) {
+    existingSub = await storage.getSubscription(subscription.metadata.userId);
+  }
   
   if (!existingSub) {
     console.error("Subscription not found for:", subscription.id);
