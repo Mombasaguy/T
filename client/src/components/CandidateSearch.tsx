@@ -568,36 +568,14 @@ export default function CandidateSearch() {
                   {loading ? "Searching..." : `${results.length} Results`}
                 </h2>
                 {results.length > 0 && (
-                  <div className="flex items-center gap-3">
-                    {compareList.length >= 2 && (
-                      <button
-                        onClick={() => setShowCompareModal(true)}
-                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-sm text-white font-medium flex items-center gap-2"
-                        data-testid="button-compare"
-                      >
-                        <Users className="w-4 h-4" />
-                        Compare ({compareList.length})
-                      </button>
-                    )}
-                    {compareList.length > 0 && compareList.length < 2 && (
-                      <span className="text-xs text-gray-500">
-                        Select {2 - compareList.length} more to compare
-                      </span>
-                    )}
-                    {compareList.length === 0 && (
-                      <span className="text-xs text-gray-500">
-                        Check boxes to compare
-                      </span>
-                    )}
-                    <button
-                      onClick={exportToCSV}
-                      className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-2"
-                      data-testid="button-export-csv"
-                    >
-                      <Download className="w-4 h-4" />
-                      Export CSV
-                    </button>
-                  </div>
+                  <button
+                    onClick={exportToCSV}
+                    className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-2"
+                    data-testid="button-export-csv"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export CSV
+                  </button>
                 )}
               </div>
 
@@ -766,20 +744,6 @@ export default function CandidateSearch() {
                         data-testid={`card-result-${index}`}
                       >
                         <div className="flex items-start gap-3 group">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleCompareCandidate(result);
-                            }}
-                            className="mt-1 text-gray-400 hover:text-blue-500 transition-colors"
-                            data-testid={`checkbox-compare-${index}`}
-                          >
-                            {compareList.some((c) => c.url === result.url) ? (
-                              <CheckSquare className="w-5 h-5 text-blue-500" />
-                            ) : (
-                              <Square className="w-5 h-5" />
-                            )}
-                          </button>
                           <div className={`p-2 rounded-lg ${getPlatformColor(result.platform)}`}>
                             {getPlatformIcon(result.platform)}
                           </div>
