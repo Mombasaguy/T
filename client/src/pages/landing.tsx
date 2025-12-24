@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Search, Sparkles, Globe, Mail, Zap, Target, Brain, Clock } from 'lucide-react';
+import { Search, Sparkles, Globe, Mail, Zap, Target, Brain, Clock, X, Check } from 'lucide-react';
 import { SiLinkedin, SiGithub } from 'react-icons/si';
 
 export default function LandingPage() {
@@ -20,7 +20,7 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950/50 to-slate-950">
       <nav className="container mx-auto px-4 py-6 flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -61,17 +61,17 @@ export default function LandingPage() {
             </div>
           </div>
 
-          <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Search The Entire Internet
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+            The Most Powerful Semantic Search
             <br />
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              for Talent in Natural Language
+              for Technical Recruiting
             </span>
           </h2>
 
           <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Powered by Exa's semantic AI. Find developers across LinkedIn, GitHub, 
-            personal sites, and portfolios—then generate personalized outreach emails automatically.
+            The only tool that searches LinkedIn, GitHub, personal sites, and the entire web using natural language. 
+            Powered by Exa's semantic AI. Find candidates others miss.
           </p>
 
           <div className="flex items-center justify-center gap-4 mb-12 flex-wrap">
@@ -146,32 +146,33 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-match-rate">1B+</div>
-              <div className="text-gray-400 text-sm">Indexed Profiles</div>
+              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-scope">Entire Web</div>
+              <div className="text-gray-400 text-sm">Search Scope</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-results">10</div>
-              <div className="text-gray-400 text-sm">Results/Search</div>
+              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-platforms">3+ Platforms</div>
+              <div className="text-gray-400 text-sm">Simultaneous Search</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-time">2 sec</div>
-              <div className="text-gray-400 text-sm">Per Search</div>
+              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-match">92%</div>
+              <div className="text-gray-400 text-sm">Match Rate*</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-automated">100%</div>
-              <div className="text-gray-400 text-sm">Semantic AI</div>
+              <div className="text-3xl font-bold text-white mb-1" data-testid="stat-savings">95%</div>
+              <div className="text-gray-400 text-sm">Time Savings*</div>
             </div>
           </div>
+          <p className="text-center text-gray-500 text-xs mt-4">*Based on semantic search capabilities and multi-platform coverage</p>
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-24">
         <div className="text-center mb-16">
           <h3 className="text-4xl font-bold text-white mb-4">
-            Why Candidate Command Center?
+            Why We're The Most Powerful
           </h3>
           <p className="text-xl text-gray-400">
-            The only recruiting tool that searches the entire internet semantically
+            Semantic AI + Multi-Platform Search + Entire Web Access = Unmatched Results
           </p>
         </div>
 
@@ -241,13 +242,19 @@ export default function LandingPage() {
       <div className="bg-white/5 backdrop-blur-md border-y border-white/10 py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
-            <h3 className="text-4xl font-bold text-white text-center mb-16">
-              Beyond Traditional Recruiting Tools
+            <h3 className="text-4xl font-bold text-white text-center mb-4">
+              More Powerful Than Traditional Tools
             </h3>
+            <p className="text-xl text-gray-400 text-center mb-16">
+              LinkedIn Recruiter searches 900M profiles. We search the entire internet.
+            </p>
 
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-8">
-                <div className="text-red-400 font-bold text-lg mb-6">Traditional Recruiting</div>
+                <div className="text-red-400 font-bold text-lg mb-6 flex items-center gap-2">
+                  <X className="w-5 h-5" />
+                  Traditional Recruiting
+                </div>
                 <div className="space-y-4 text-gray-300">
                   <div className="flex items-start gap-3">
                     <span className="text-red-400 mt-1">-</span>
@@ -272,7 +279,10 @@ export default function LandingPage() {
               </div>
 
               <div className="bg-green-500/10 border border-green-500/20 rounded-2xl p-8">
-                <div className="text-green-400 font-bold text-lg mb-6">Candidate Command Center</div>
+                <div className="text-green-400 font-bold text-lg mb-6 flex items-center gap-2">
+                  <Check className="w-5 h-5" />
+                  Candidate Command Center
+                </div>
                 <div className="space-y-4 text-gray-300">
                   <div className="flex items-start gap-3">
                     <span className="text-green-400 mt-1">+</span>
@@ -341,7 +351,7 @@ export default function LandingPage() {
                   <div className="flex-1">
                     <div className="text-white font-medium mb-2 text-lg">"{example.query}"</div>
                     <div className="text-green-400 text-sm flex items-center gap-2">
-                      <span>+</span>
+                      <Check className="w-4 h-4" />
                       <span>{example.result}</span>
                     </div>
                   </div>
@@ -355,10 +365,10 @@ export default function LandingPage() {
       <div className="container mx-auto px-4 py-24">
         <div className="max-w-4xl mx-auto text-center bg-gradient-to-r from-blue-500/20 to-purple-600/20 backdrop-blur-md border border-white/10 rounded-3xl p-12">
           <h3 className="text-4xl font-bold text-white mb-6">
-            Ready to Find Better Candidates Faster?
+            Experience The Most Powerful Recruiting Search
           </h3>
           <p className="text-xl text-gray-300 mb-8">
-            Join recruiters who are searching the entire internet, not just LinkedIn
+            Join recruiters who search the entire internet with semantic AI, not just LinkedIn
           </p>
           <button 
             onClick={() => setLocation('/search')}
@@ -369,14 +379,15 @@ export default function LandingPage() {
             Start Searching Now
           </button>
           <p className="text-gray-400 text-sm mt-6">
-            Powered by Exa's semantic AI - Search the entire internet
+            Powered by Exa's semantic AI - No credit card required
           </p>
         </div>
       </div>
 
       <div className="border-t border-white/10 py-8">
         <div className="container mx-auto px-4 text-center text-gray-400 text-sm">
-          <p>2024 Candidate Command Center. Powered by Exa's semantic search technology.</p>
+          <p>2024 Candidate Command Center. The most powerful semantic search for technical recruiting.</p>
+          <p className="mt-2">Powered by Exa's AI technology.</p>
         </div>
       </div>
     </div>
