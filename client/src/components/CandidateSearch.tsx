@@ -143,7 +143,7 @@ function getPlatformColor(platform: string) {
     case "Reddit":
       return "bg-orange-600 text-white";
     default:
-      return "bg-slate-600 text-white";
+      return "bg-gray-200 text-gray-700";
   }
 }
 
@@ -772,7 +772,7 @@ export default function CandidateSearch() {
                     <select
                       value={filters.dateRange}
                       onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
-                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
                       data-testid="select-date-range"
                     >
                       <option value="all">Any Date</option>
@@ -784,7 +784,7 @@ export default function CandidateSearch() {
                     <select
                       value={filters.location}
                       onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                      className="px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-sm text-slate-300"
+                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
                       data-testid="select-location"
                     >
                       <option value="all">All Locations</option>
@@ -805,8 +805,8 @@ export default function CandidateSearch() {
                       })()}
                     </select>
 
-                    <div className="flex items-center gap-2 bg-slate-900 border border-slate-600 rounded-lg px-3 py-2">
-                      <label className="text-sm text-slate-400 whitespace-nowrap">Score:</label>
+                    <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
+                      <label className="text-sm text-gray-600 whitespace-nowrap">Score:</label>
                       <input
                         type="range"
                         min="0"
@@ -816,13 +816,13 @@ export default function CandidateSearch() {
                         className="w-24 accent-blue-500"
                         data-testid="slider-min-score"
                       />
-                      <span className="text-sm text-slate-300 w-10">{filters.minScore}%</span>
+                      <span className="text-sm text-gray-700 w-10">{filters.minScore}%</span>
                     </div>
 
                     {(filters.platform !== "all" || filters.matchStatus !== "all" || filters.dateRange !== "all" || filters.location !== "all" || filters.minScore > 0) && (
                       <button
                         onClick={() => setFilters({ platform: "all", matchStatus: "all", minScore: 0, dateRange: "all", location: "all" })}
-                        className="px-3 py-2 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+                        className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
                         data-testid="button-clear-filters"
                       >
                         Clear all
@@ -833,17 +833,17 @@ export default function CandidateSearch() {
               )}
 
               {searchMode === "url" && sourceProfile && (
-                <div className="mb-4 p-4 bg-slate-800/50 rounded-lg border border-slate-700/50">
+                <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center">
                       <Users className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm text-slate-400">Finding candidates similar to:</p>
-                      <h3 className="text-lg font-semibold text-slate-100">
+                      <p className="text-sm text-gray-500">Finding candidates similar to:</p>
+                      <h3 className="text-lg font-semibold text-gray-900">
                         {sourceProfile.name}
                       </h3>
-                      <p className="text-sm text-slate-400">{sourceProfile.title}</p>
+                      <p className="text-sm text-gray-600">{sourceProfile.title}</p>
                     </div>
                   </div>
                 </div>
@@ -885,7 +885,7 @@ export default function CandidateSearch() {
                     
                     if (filteredResults.length === 0) {
                       return (
-                        <div className="text-center py-12 text-slate-400">
+                        <div className="text-center py-12 text-gray-500">
                           <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
                           <p>No results found. Try adjusting filters or a different query.</p>
                         </div>
@@ -896,10 +896,10 @@ export default function CandidateSearch() {
                       <Card
                         key={result.id + index}
                         onClick={() => setSelectedCandidate(result)}
-                        className={`p-4 cursor-pointer transition-all duration-200 animate-slideInLeft ${
+                        className={`p-4 cursor-pointer transition-all duration-200 ${
                           selectedCandidate?.id === result.id
-                            ? "bg-slate-700/50 border-blue-500/50"
-                            : "bg-slate-800/50 border-slate-700 hover:bg-slate-700/30 hover:border-slate-600"
+                            ? "bg-blue-50 border-blue-300"
+                            : "bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300"
                         }`}
                         style={{ animationDelay: `${index * 0.05}s` }}
                         data-testid={`card-result-${index}`}
@@ -910,11 +910,11 @@ export default function CandidateSearch() {
                               e.stopPropagation();
                               toggleCompareCandidate(result);
                             }}
-                            className="mt-1 text-slate-500 hover:text-blue-400 transition-colors"
+                            className="mt-1 text-gray-400 hover:text-blue-500 transition-colors"
                             data-testid={`checkbox-compare-${index}`}
                           >
                             {compareList.some((c) => c.url === result.url) ? (
-                              <CheckSquare className="w-5 h-5 text-blue-400" />
+                              <CheckSquare className="w-5 h-5 text-blue-500" />
                             ) : (
                               <Square className="w-5 h-5" />
                             )}
@@ -924,7 +924,7 @@ export default function CandidateSearch() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
-                              <h3 className="font-semibold text-slate-100 truncate group-hover:text-blue-400 transition-colors">
+                              <h3 className="font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
                                 {result.name || result.author || "Unknown"}
                               </h3>
                               <div className="flex items-center gap-2 shrink-0">
@@ -941,23 +941,23 @@ export default function CandidateSearch() {
                                 ) : null}
                               </div>
                             </div>
-                            <p className="text-xs text-slate-400 mt-1 line-clamp-1">
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-1">
                               {result.role || result.subtitle || result.title}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
-                              <Calendar className="w-3 h-3 text-slate-500" />
-                              <span className="text-xs text-slate-400">
+                              <Calendar className="w-3 h-3 text-gray-400" />
+                              <span className="text-xs text-gray-500">
                                 {result.publishedDate ? new Date(result.publishedDate).toLocaleDateString() : "Recent"}
                               </span>
                               {result.score !== undefined && result.score !== null && result.score > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-slate-400 ml-2">
+                                <span className="flex items-center gap-1 text-xs text-gray-500 ml-2">
                                   <TrendingUp className="h-3 w-3" />
                                   {Math.round(result.score * 100)}%
                                 </span>
                               )}
                             </div>
                             {result.highlights && result.highlights.length > 0 && (
-                              <p className="text-sm text-slate-300 mt-2 line-clamp-2">
+                              <p className="text-sm text-gray-600 mt-2 line-clamp-2">
                                 {result.highlights[0]}
                               </p>
                             )}
@@ -970,9 +970,9 @@ export default function CandidateSearch() {
               </ScrollArea>
             </div>
 
-            <div className="hidden lg:block animate-slideInRight">
+            <div className="hidden lg:block">
               <div className="sticky top-6">
-                <Card className="bg-slate-800/50 border-slate-700 backdrop-blur-xl overflow-hidden">
+                <Card className="bg-white border-gray-200 overflow-hidden">
                   {selectedCandidate ? (
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-4">
@@ -984,28 +984,28 @@ export default function CandidateSearch() {
                             {selectedCandidate.platform}
                           </Badge>
                           {formatDate(selectedCandidate.publishedDate) && (
-                            <p className="text-xs text-slate-400 mt-1">
+                            <p className="text-xs text-gray-500 mt-1">
                               {formatDate(selectedCandidate.publishedDate)}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <h3 className="text-lg font-semibold text-slate-100 mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
                         {selectedCandidate.name || selectedCandidate.author || selectedCandidate.title}
                       </h3>
                       {selectedCandidate.subtitle && (
-                        <p className="text-sm text-slate-400 mb-4 line-clamp-2">
+                        <p className="text-sm text-gray-500 mb-4 line-clamp-2">
                           {selectedCandidate.subtitle}
                         </p>
                       )}
 
                       {selectedCandidate.text && (
                         <div className="mb-4">
-                          <h4 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                          <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                             Preview
                           </h4>
-                          <p className="text-sm text-slate-300 leading-relaxed">
+                          <p className="text-sm text-gray-700 leading-relaxed">
                             {selectedCandidate.text.slice(0, 300)}
                             {selectedCandidate.text.length > 300 && "..."}
                           </p>
@@ -1014,13 +1014,13 @@ export default function CandidateSearch() {
 
                       {selectedCandidate.highlights && selectedCandidate.highlights.length > 0 && (
                         <div className="mb-4">
-                          <h4 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                          <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                             Key Highlights
                           </h4>
                           <ul className="space-y-2">
                             {selectedCandidate.highlights.slice(0, 3).map((highlight, i) => (
-                              <li key={i} className="text-sm text-slate-300 flex items-start gap-2">
-                                <span className="text-purple-400 mt-1">•</span>
+                              <li key={i} className="text-sm text-gray-700 flex items-start gap-2">
+                                <span className="text-blue-500 mt-1">•</span>
                                 <span>{highlight}</span>
                               </li>
                             ))}
@@ -1030,8 +1030,8 @@ export default function CandidateSearch() {
 
                       <div className="mb-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <Star className="w-4 h-4 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Rating</span>
+                          <Star className="w-4 h-4 text-gray-400" />
+                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Rating</span>
                         </div>
                         <div className="flex gap-1">
                           {[1, 2, 3, 4, 5].map((star) => (
@@ -1045,7 +1045,7 @@ export default function CandidateSearch() {
                                 className={`w-5 h-5 ${
                                   star <= getCandidateData(selectedCandidate).rating
                                     ? "text-yellow-400 fill-yellow-400"
-                                    : "text-slate-600"
+                                    : "text-gray-300"
                                 }`}
                               />
                             </button>
@@ -1055,17 +1055,17 @@ export default function CandidateSearch() {
 
                       <div className="mb-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <Tag className="w-4 h-4 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Status</span>
+                          <Tag className="w-4 h-4 text-gray-400" />
+                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Status</span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {statusTags.map((tag) => {
                             const isActive = getCandidateData(selectedCandidate).tags.includes(tag);
                             const tagColors: Record<string, string> = {
-                              Contacted: isActive ? "bg-blue-500/20 text-blue-400 border-blue-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
-                              Interview: isActive ? "bg-purple-500/20 text-purple-400 border-purple-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
-                              Rejected: isActive ? "bg-red-500/20 text-red-400 border-red-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
-                              "Follow-up": isActive ? "bg-amber-500/20 text-amber-400 border-amber-500/30" : "bg-slate-700/50 text-slate-400 border-slate-600",
+                              Contacted: isActive ? "bg-blue-100 text-blue-700 border-blue-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                              Interview: isActive ? "bg-purple-100 text-purple-700 border-purple-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                              Rejected: isActive ? "bg-red-100 text-red-700 border-red-200" : "bg-gray-100 text-gray-500 border-gray-200",
+                              "Follow-up": isActive ? "bg-amber-100 text-amber-700 border-amber-200" : "bg-gray-100 text-gray-500 border-gray-200",
                             };
                             return (
                               <button
@@ -1083,14 +1083,14 @@ export default function CandidateSearch() {
 
                       <div className="mb-4">
                         <div className="flex items-center gap-2 mb-2">
-                          <MessageSquare className="w-4 h-4 text-slate-400" />
-                          <span className="text-xs font-medium text-slate-400 uppercase tracking-wide">Notes</span>
+                          <MessageSquare className="w-4 h-4 text-gray-400" />
+                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Notes</span>
                         </div>
                         <Textarea
                           placeholder="Add notes about this candidate..."
                           value={getCandidateData(selectedCandidate).notes}
                           onChange={(e) => updateCandidateData(selectedCandidate, { notes: e.target.value })}
-                          className="bg-slate-900 border-slate-600 text-slate-300 placeholder:text-slate-500 text-sm resize-none"
+                          className="bg-white border-gray-200 text-gray-900 placeholder:text-gray-400 text-sm resize-none"
                           rows={3}
                           data-testid="textarea-notes"
                         />
@@ -1099,7 +1099,7 @@ export default function CandidateSearch() {
                       <button
                         onClick={generateEmail}
                         disabled={generatingEmail}
-                        className="w-full px-4 py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:opacity-50 text-white rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 mb-3"
+                        className="w-full px-4 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white rounded-lg font-semibold transition-all duration-200 flex items-center justify-center gap-2 mb-3"
                         data-testid="button-draft-email"
                       >
                         {generatingEmail ? (
@@ -1112,7 +1112,7 @@ export default function CandidateSearch() {
 
                       <Button
                         asChild
-                        className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                        className="w-full bg-blue-600 hover:bg-blue-700"
                       >
                         <a
                           href={selectedCandidate.url}
@@ -1127,10 +1127,10 @@ export default function CandidateSearch() {
                     </div>
                   ) : (
                     <div className="p-8 text-center">
-                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-slate-700/50 flex items-center justify-center">
-                        <FileText className="h-8 w-8 text-slate-500" />
+                      <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                        <FileText className="h-8 w-8 text-gray-400" />
                       </div>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-gray-500 text-sm">
                         Select a candidate to view their digital footprint
                       </p>
                     </div>
@@ -1143,27 +1143,27 @@ export default function CandidateSearch() {
       </div>
 
       {showEmailModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden animate-fadeIn">
-            <div className="flex items-center justify-between p-4 border-b border-slate-700">
-              <h3 className="text-lg font-semibold text-slate-100">Draft Outreach Email</h3>
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-xl max-w-2xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">Draft Outreach Email</h3>
               <button
                 onClick={() => setShowEmailModal(false)}
-                className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 data-testid="button-close-modal"
               >
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
             <div className="p-4 overflow-y-auto max-h-[50vh]">
-              <pre className="whitespace-pre-wrap text-sm text-slate-300 font-sans leading-relaxed">
+              <pre className="whitespace-pre-wrap text-sm text-gray-700 font-sans leading-relaxed">
                 {emailDraft}
               </pre>
             </div>
-            <div className="p-4 border-t border-slate-700 flex gap-3">
+            <div className="p-4 border-t border-gray-200 flex gap-3">
               <button
                 onClick={copyEmail}
-                className="flex-1 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2"
                 data-testid="button-copy-email"
               >
                 {copied ? (
@@ -1180,7 +1180,7 @@ export default function CandidateSearch() {
               </button>
               <button
                 onClick={() => setShowEmailModal(false)}
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg font-medium transition-colors"
+                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
                 data-testid="button-close-email"
               >
                 Close
@@ -1191,34 +1191,34 @@ export default function CandidateSearch() {
       )}
 
       {showCompareModal && compareList.length >= 2 && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-5xl w-full max-h-[90vh] overflow-hidden animate-fadeIn">
-            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <div className="flex items-center gap-3">
-                <Users className="w-5 h-5 text-purple-400" />
-                <h3 className="text-lg font-semibold text-slate-100">Compare Candidates</h3>
+                <Users className="w-5 h-5 text-blue-600" />
+                <h3 className="text-lg font-semibold text-gray-900">Compare Candidates</h3>
               </div>
               <button
                 onClick={() => setShowCompareModal(false)}
-                className="p-2 hover:bg-slate-700 rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                 data-testid="button-close-compare"
               >
-                <X className="w-5 h-5 text-slate-400" />
+                <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
             <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
               <div className={`grid gap-4 ${compareList.length === 2 ? "grid-cols-2" : "grid-cols-3"}`}>
                 {compareList.map((candidate, index) => (
-                  <div key={candidate.url} className="bg-slate-900 rounded-xl p-4 border border-slate-700">
-                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-700">
+                  <div key={candidate.url} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-200">
                       <div className={`p-2 rounded-lg ${getPlatformColor(candidate.platform)}`}>
                         {getPlatformIcon(candidate.platform)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-slate-100 truncate">
+                        <h4 className="font-semibold text-gray-900 truncate">
                           {candidate.name || candidate.author || "Unknown"}
                         </h4>
-                        <p className="text-xs text-slate-400 truncate">
+                        <p className="text-xs text-gray-500 truncate">
                           {candidate.role || candidate.subtitle || candidate.platform}
                         </p>
                       </div>
@@ -1226,55 +1226,55 @@ export default function CandidateSearch() {
 
                     <div className="space-y-4">
                       <div>
-                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-2">
+                        <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
                           <TrendingUp className="w-3 h-3" />
                           Match Score
                         </h5>
                         <div className="flex items-center gap-2">
-                          <div className="flex-1 h-2 bg-slate-700 rounded-full overflow-hidden">
+                          <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-gradient-to-r from-blue-500 to-purple-500"
+                              className="h-full bg-blue-500"
                               style={{ width: `${Math.round((candidate.score || 0) * 100)}%` }}
                             />
                           </div>
-                          <span className="text-sm font-medium text-slate-300">
+                          <span className="text-sm font-medium text-gray-700">
                             {Math.round((candidate.score || 0) * 100)}%
                           </span>
                         </div>
                       </div>
 
                       <div>
-                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                        <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                           Experience Level
                         </h5>
-                        <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                        <Badge className="bg-blue-100 text-blue-700 border-blue-200">
                           {extractExperienceLevel(candidate)}
                         </Badge>
                       </div>
 
                       <div>
-                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                        <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                           Skills Detected
                         </h5>
                         <div className="flex flex-wrap gap-1">
                           {extractSkills(candidate).length > 0 ? (
                             extractSkills(candidate).map((skill) => (
-                              <Badge key={skill} variant="outline" className="text-xs border-slate-600 text-slate-300">
+                              <Badge key={skill} variant="outline" className="text-xs border-gray-300 text-gray-700">
                                 {skill}
                               </Badge>
                             ))
                           ) : (
-                            <span className="text-xs text-slate-500">No skills detected</span>
+                            <span className="text-xs text-gray-400">No skills detected</span>
                           )}
                         </div>
                       </div>
 
                       <div>
-                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2 flex items-center gap-2">
+                        <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-2">
                           <Calendar className="w-3 h-3" />
                           Recent Activity
                         </h5>
-                        <span className="text-sm text-slate-300">
+                        <span className="text-sm text-gray-700">
                           {candidate.publishedDate
                             ? new Date(candidate.publishedDate).toLocaleDateString("en-US", {
                                 month: "short",
@@ -1286,33 +1286,33 @@ export default function CandidateSearch() {
                       </div>
 
                       <div>
-                        <h5 className="text-xs font-medium text-slate-400 uppercase tracking-wide mb-2">
+                        <h5 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
                           Match Status
                         </h5>
                         {candidate.matchStatus === "match" ? (
-                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+                          <Badge className="bg-emerald-100 text-emerald-700 border-emerald-200">
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             Match
                           </Badge>
                         ) : candidate.matchStatus === "miss" ? (
-                          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+                          <Badge className="bg-red-100 text-red-700 border-red-200">
                             <XCircle className="h-3 w-3 mr-1" />
                             Miss
                           </Badge>
                         ) : (
-                          <Badge className="bg-slate-600/20 text-slate-400 border-slate-500/30">
+                          <Badge className="bg-gray-100 text-gray-500 border-gray-200">
                             Unknown
                           </Badge>
                         )}
                       </div>
                     </div>
 
-                    <div className="mt-4 pt-4 border-t border-slate-700">
+                    <div className="mt-4 pt-4 border-t border-gray-200">
                       <a
                         href={candidate.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                        className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
                         data-testid={`link-compare-source-${index}`}
                       >
                         <ExternalLink className="w-3 h-3" />
@@ -1323,20 +1323,20 @@ export default function CandidateSearch() {
                 ))}
               </div>
             </div>
-            <div className="p-4 border-t border-slate-700 flex justify-end gap-3">
+            <div className="p-4 border-t border-gray-200 flex justify-end gap-3">
               <button
                 onClick={() => {
                   setCompareList([]);
                   setShowCompareModal(false);
                 }}
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg font-medium transition-colors"
+                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
                 data-testid="button-clear-compare"
               >
                 Clear Selection
               </button>
               <button
                 onClick={() => setShowCompareModal(false)}
-                className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all"
                 data-testid="button-done-compare"
               >
                 Done
