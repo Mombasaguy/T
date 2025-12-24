@@ -1,0 +1,234 @@
+# Instructions for Updating Landing Page in Replit
+
+## Step 1: Locate Your Current Landing Page
+
+Your current landing page is likely at one of these locations:
+
+- `src/pages/index.tsx` or `src/pages/Index.tsx`
+- `src/components/LandingPage.tsx`
+- `app/page.tsx` (if using Next.js App Router)
+- `pages/index.tsx` (if using Next.js Pages Router)
+
+## Step 2: Install Required Icons (if not already installed)
+
+In your Replit Shell, run:
+
+```bash
+npm install lucide-react
+```
+
+## Step 3: Replace Your Current Landing Page
+
+1. Open your main landing page file (likely `src/pages/index.tsx` or similar)
+1. Delete the current content
+1. Copy the entire content from `landing-page-new.tsx`
+1. Paste it into your landing page file
+
+## Step 4: Update Routing/Navigation
+
+Make sure your main route (`/`) points to this new landing page component.
+
+**If using React Router:**
+
+```tsx
+// In your App.tsx or main router file
+import LandingPage from './pages/LandingPage';
+
+<Route path="/" element={<LandingPage />} />
+```
+
+**If using Next.js:**
+The file should already be at `pages/index.tsx` or `app/page.tsx`
+
+## Step 5: Connect the Search Button
+
+Update the “Search Now” button to navigate to your search page:
+
+Find this line (around line 86 in the new code):
+
+```tsx
+<button className="mt-4 px-12 py-4 bg-gradient-to-r...">
+```
+
+Replace it with:
+
+```tsx
+<button 
+  onClick={() => window.location.href = '/dashboard'} // Or your search route
+  className="mt-4 px-12 py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-lg font-semibold rounded-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 flex items-center gap-3 mx-auto"
+>
+  <Sparkles className="w-5 h-5" />
+  Search Now
+</button>
+```
+
+Or if using React Router:
+
+```tsx
+import { useNavigate } from 'react-router-dom';
+
+// Inside your component:
+const navigate = useNavigate();
+
+<button 
+  onClick={() => navigate('/dashboard')}
+  className="..."
+>
+  <Sparkles className="w-5 h-5" />
+  Search Now
+</button>
+```
+
+## Step 6: Connect Example Search Buttons
+
+Find the example searches section (around line 97) and make them functional:
+
+```tsx
+{[
+  "Senior software engineers in San Francisco who blog about AI",
+  "Product managers at fintech companies in NYC with GitHub activity",
+  "Engineering directors based in Austin with conference talks",
+  "ML engineers in the Bay Area who write technical content"
+].map((search, idx) => (
+  <button
+    key={idx}
+    onClick={() => {
+      // Navigate to search page with pre-filled query
+      window.location.href = `/dashboard?query=${encodeURIComponent(search)}`;
+      // Or using React Router: navigate(`/dashboard?query=${encodeURIComponent(search)}`);
+    }}
+    className="text-left px-4 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-gray-300 text-sm transition-all duration-200 cursor-pointer"
+  >
+    {search}
+  </button>
+))}
+```
+
+## Step 7: Update Stats with Your Real Data
+
+Find the stats section (around line 114) and update with your actual numbers:
+
+```tsx
+<div className="text-center">
+  <div className="text-3xl font-bold text-white mb-1">92%</div>
+  <div className="text-gray-400 text-sm">Match Rate</div>
+</div>
+<div className="text-center">
+  <div className="text-3xl font-bold text-white mb-1">12</div>
+  <div className="text-gray-400 text-sm">Avg Results/Search</div>
+</div>
+// Update these with your actual analytics data
+```
+
+## Step 8: Connect the Bottom CTA Button
+
+Find the bottom “Start Searching Now” button (around line 370) and connect it:
+
+```tsx
+<button 
+  onClick={() => window.location.href = '/dashboard'}
+  className="px-12 py-5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-xl font-bold rounded-xl hover:shadow-2xl hover:shadow-purple-500/50 transition-all duration-300 inline-flex items-center gap-3"
+>
+  <Sparkles className="w-6 h-6" />
+  Start Searching Now
+</button>
+```
+
+## Step 9: Add Navigation (if needed)
+
+If you want to add a navigation bar with links to Dashboard, Pricing, etc., add this at the top of the component:
+
+```tsx
+export default function LandingPage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Navigation Bar */}
+      <nav className="container mx-auto px-4 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+            <Sparkles className="w-6 h-6 text-white" />
+          </div>
+          <span className="text-white font-bold text-xl">Candidate Command Center</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <a href="/dashboard" className="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+          <a href="/pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
+          <button 
+            onClick={() => window.location.href = '/dashboard'}
+            className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-300"
+          >
+            Get Started
+          </button>
+        </div>
+      </nav>
+
+      {/* Rest of your landing page... */}
+```
+
+## Step 10: Test in Replit
+
+1. Save all files
+1. Click the “Run” button in Replit
+1. Open the preview in a new tab
+1. Test all buttons and links
+1. Check mobile responsiveness by resizing browser
+
+## Step 11: Update Example Queries (Optional)
+
+Replace the example search queries with ones that match your actual use cases:
+
+Find this section (around line 97) and customize:
+
+```tsx
+{[
+  "Your custom search example 1",
+  "Your custom search example 2",
+  "Your custom search example 3",
+  "Your custom search example 4"
+].map((search, idx) => (
+  // ...
+))}
+```
+
+## Troubleshooting
+
+**If icons don’t show:**
+
+- Make sure `lucide-react` is installed: `npm install lucide-react`
+- Check that imports are correct at the top of the file
+
+**If Tailwind styles don’t work:**
+
+- Make sure your `tailwind.config.js` includes this file’s path
+- Restart the Replit dev server
+
+**If navigation doesn’t work:**
+
+- Check your routing setup in `App.tsx` or `main.tsx`
+- Verify the routes match your actual page paths
+
+**If the gradient background doesn’t show:**
+
+- Make sure Tailwind’s gradient utilities are enabled in your config
+- Try refreshing the page hard (Ctrl+Shift+R)
+
+## Final Checklist
+
+- [ ] Landing page displays correctly
+- [ ] Search button navigates to search/dashboard page
+- [ ] Example searches are clickable and work
+- [ ] Stats show your real data
+- [ ] All icons render properly
+- [ ] Mobile responsive (test by resizing browser)
+- [ ] Bottom CTA button works
+- [ ] Page loads quickly (check network tab)
+
+## Need Help?
+
+If something doesn’t work:
+
+1. Check the browser console for errors (F12 → Console tab)
+1. Verify all imports are correct
+1. Make sure `lucide-react` is installed
+1. Check that your routing is set up correctly
+1. Try clearing cache and hard refresh (Ctrl+Shift+R)
