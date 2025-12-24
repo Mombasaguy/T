@@ -52,7 +52,7 @@ export default function LandingPage() {
           </button>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
           <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
             <SiLinkedin className="w-5 h-5 text-blue-600" />
             <span className="text-sm font-medium text-gray-700">LinkedIn</span>
@@ -68,6 +68,27 @@ export default function LandingPage() {
           <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
             <Mail className="w-5 h-5 text-white" />
             <span className="text-sm font-medium text-white">AI Outreach</span>
+          </div>
+        </div>
+
+        <div className="text-left max-w-xl mx-auto">
+          <p className="text-gray-500 text-sm mb-3 font-medium">Try these searches:</p>
+          <div className="flex flex-col gap-2">
+            {[
+              "Senior software engineers in San Francisco",
+              "Product managers at fintech companies in NYC",
+              "Director of engineering based in Austin",
+              "Machine learning engineers in the Bay Area"
+            ].map((search, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleExampleSearch(search)}
+                className="text-left px-4 py-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-gray-700 text-sm transition-colors"
+                data-testid={`button-example-search-${idx}`}
+              >
+                {search}
+              </button>
+            ))}
           </div>
         </div>
       </div>
