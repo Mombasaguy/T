@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Search, Sparkles, Globe, Mail, Zap, Target, Brain, Clock, CheckCircle } from 'lucide-react';
+import { Globe, Mail, Zap, Target, Brain, Clock, CheckCircle, Sparkles } from 'lucide-react';
 import { SiLinkedin, SiGithub } from 'react-icons/si';
 
 export default function LandingPage() {
@@ -20,113 +20,54 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white border-b border-gray-200">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-gray-900 font-semibold text-lg">Candidate Command Center</span>
-          </div>
-          <div className="flex items-center gap-8 flex-wrap">
-            <a href="#features" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">Features</a>
-            <button 
-              onClick={() => setLocation('/pricing')}
-              className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
-              data-testid="link-pricing"
-            >
-              Pricing
-            </button>
-            <button 
-              onClick={() => setLocation('/search')}
-              className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-              data-testid="button-get-started"
-            >
-              Get Started
-            </button>
-          </div>
-        </div>
-      </nav>
-
-      <div className="container mx-auto px-6 pt-20 pb-24">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight tracking-tight">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-4xl mx-auto px-4 py-20">
+        <div className="text-center mb-12">
+          <h1 className="text-6xl font-bold text-gray-900 mb-6">
             Search 1+ Billion Profiles
-            <br />
-            <span className="text-blue-600">Across the Entire Internet</span>
           </h1>
-
-          <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Access LinkedIn, GitHub, personal sites, and 1+ billion profiles updated with 50 million weekly refreshes. 
-            Use natural language AI search to find candidates others miss.
+          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+            Access LinkedIn, GitHub, personal sites, and 1+ billion profiles
+            updated with 50 million weekly refreshes. Use natural language AI
+            search to find candidates others miss.
           </p>
+        </div>
 
-          <div className="flex items-center justify-center gap-3 mb-12 flex-wrap">
-            <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full border border-gray-200 shadow-sm">
-              <SiLinkedin className="w-5 h-5 text-blue-600" />
-              <span className="text-gray-700 font-medium text-sm">LinkedIn</span>
-            </div>
-            <span className="text-gray-400 text-xl">+</span>
-            <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full border border-gray-200 shadow-sm">
-              <SiGithub className="w-5 h-5 text-gray-900" />
-              <span className="text-gray-700 font-medium text-sm">GitHub</span>
-            </div>
-            <span className="text-gray-400 text-xl">+</span>
-            <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-full border border-gray-200 shadow-sm">
-              <Globe className="w-5 h-5 text-green-600" />
-              <span className="text-gray-700 font-medium text-sm">Web</span>
-            </div>
-            <span className="text-gray-400 text-2xl hidden sm:inline">→</span>
-            <div className="flex items-center gap-2 bg-blue-600 px-5 py-3 rounded-full shadow-sm">
-              <Mail className="w-5 h-5 text-white" />
-              <span className="text-white font-medium text-sm">AI Outreach</span>
-            </div>
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-8">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            placeholder="Senior React developers in Austin who contribute to open source"
+            className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors mb-4"
+            data-testid="input-hero-search"
+          />
+          <button 
+            onClick={handleSearch}
+            className="w-full py-4 bg-blue-500 text-white text-lg font-semibold rounded-xl hover:bg-blue-600 transition-colors shadow-md"
+            data-testid="button-hero-search"
+          >
+            Search Now
+          </button>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+            <SiLinkedin className="w-5 h-5 text-blue-600" />
+            <span className="text-sm font-medium text-gray-700">LinkedIn</span>
           </div>
-
-          <div className="max-w-2xl mx-auto mb-8">
-            <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="flex items-center px-6 py-4">
-                <Search className="w-5 h-5 text-gray-400 mr-3" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                  placeholder="Senior React developers in Austin who contribute to open source"
-                  className="flex-1 text-base text-gray-900 placeholder-gray-400 focus:outline-none"
-                  data-testid="input-hero-search"
-                />
-              </div>
-            </div>
-            <button 
-              onClick={handleSearch}
-              className="mt-5 px-10 py-3.5 bg-blue-600 text-white text-base font-semibold rounded-xl hover:bg-blue-700 transition-colors shadow-md"
-              data-testid="button-hero-search"
-            >
-              Search Now
-            </button>
+          <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+            <SiGithub className="w-5 h-5 text-gray-900" />
+            <span className="text-sm font-medium text-gray-700">GitHub</span>
           </div>
-
-          <div className="text-left max-w-xl mx-auto">
-            <p className="text-gray-500 text-sm mb-3 font-medium">Try these searches:</p>
-            <div className="flex flex-col gap-2">
-              {[
-                "Senior software engineers in San Francisco who blog about AI",
-                "Product managers at fintech companies in NYC with GitHub activity",
-                "Marketing directors who speak at conferences and write about growth",
-                "Sales leaders at enterprise SaaS companies in Austin"
-              ].map((search, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => handleExampleSearch(search)}
-                  className="text-left px-4 py-3 bg-white hover:bg-gray-50 border border-gray-200 border-l-4 border-l-blue-500 rounded-lg text-gray-700 text-sm transition-colors"
-                  data-testid={`button-example-search-${idx}`}
-                >
-                  {search}
-                </button>
-              ))}
-            </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+            <Globe className="w-5 h-5 text-green-600" />
+            <span className="text-sm font-medium text-gray-700">Personal Sites</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
+            <Mail className="w-5 h-5 text-white" />
+            <span className="text-sm font-medium text-white">AI Outreach</span>
           </div>
         </div>
       </div>
