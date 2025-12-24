@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,12 +15,13 @@ import Positions from "./pages/positions";
 import Settings from "./pages/settings";
 import Pricing from "./pages/pricing";
 import Welcome from "./pages/welcome";
+import Landing from "./pages/landing";
 import NotFound from "./pages/not-found";
 
-function Router() {
+function InternalRouter() {
   return (
     <Switch>
-      <Route path="/" component={CandidateSearch} />
+      <Route path="/search" component={CandidateSearch} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/candidates" component={Candidates} />
       <Route path="/pipeline" component={Pipeline} />
@@ -34,28 +35,40 @@ function Router() {
   );
 }
 
-function App() {
+function AppContent() {
+  const [location] = useLocation();
+  
   const style = {
     "--sidebar-width": "16rem",
     "--sidebar-width-icon": "3rem",
   };
 
+  if (location === "/") {
+    return <Landing />;
+  }
+
+  return (
+    <SidebarProvider style={style as React.CSSProperties}>
+      <div className="flex h-screen w-full">
+        <AppSidebar />
+        <div className="flex flex-col flex-1 overflow-hidden">
+          <header className="flex items-center h-14 px-4 border-b border-border bg-background">
+            <SidebarTrigger data-testid="button-sidebar-toggle" />
+          </header>
+          <main className="flex-1 overflow-auto">
+            <InternalRouter />
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  );
+}
+
+function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <SidebarProvider style={style as React.CSSProperties}>
-          <div className="flex h-screen w-full">
-            <AppSidebar />
-            <div className="flex flex-col flex-1 overflow-hidden">
-              <header className="flex items-center h-14 px-4 border-b border-border bg-background">
-                <SidebarTrigger data-testid="button-sidebar-toggle" />
-              </header>
-              <main className="flex-1 overflow-auto">
-                <Router />
-              </main>
-            </div>
-          </div>
-        </SidebarProvider>
+        <AppContent />
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>

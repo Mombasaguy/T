@@ -27,7 +27,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 const navigationItems = [
   {
     title: "Search",
-    url: "/",
+    url: "/search",
     icon: Search,
   },
   {
