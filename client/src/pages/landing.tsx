@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { Globe, Mail, Zap, Target, Brain, Clock, CheckCircle, Sparkles } from 'lucide-react';
+import { Globe, Zap, Brain, ArrowRight, CheckCircle } from 'lucide-react';
 import { SiLinkedin, SiGithub } from 'react-icons/si';
 
 export default function LandingPage() {
@@ -20,285 +20,150 @@ export default function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-20">
-        <div className="text-center mb-12">
-          <h1 className="text-6xl font-bold text-gray-900 mb-6">
-            Search 1+ Billion Profiles
+    <div className="min-h-screen bg-white">
+      <section className="min-h-screen flex flex-col justify-center px-4 md:px-6 py-16">
+        <div className="max-w-3xl mx-auto w-full">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+            From the entire internet to interview-ready candidates in under 2 minutes.
           </h1>
-          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            Access LinkedIn, GitHub, personal sites, and 1+ billion profiles
-            updated with 50 million weekly refreshes. Use natural language AI
-            search to find candidates others miss.
+          
+          <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-10 max-w-2xl">
+            Candidate Command Center transforms internet-scale professional signal into ranked, explainable matches—without manual sourcing.
           </p>
-        </div>
 
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 mb-6">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="Senior React developers in Austin who contribute to open source"
-            className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 transition-colors mb-4"
-            data-testid="input-hero-search"
-          />
+          <div className="mb-4">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Describe the person you need, not keywords."
+              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-gray-900 transition-colors bg-gray-50"
+              data-testid="input-hero-search"
+            />
+          </div>
+
           <button 
             onClick={handleSearch}
-            className="w-full py-4 bg-blue-500 text-white text-lg font-semibold rounded-xl hover:bg-blue-600 transition-colors shadow-md"
+            className="w-full md:w-auto px-10 py-4 bg-gray-900 text-white text-lg font-semibold rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-3"
             data-testid="button-hero-search"
           >
-            Search Now
+            Find Candidates Now
+            <ArrowRight className="w-5 h-5" />
           </button>
-        </div>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {[
-            "Senior software engineers in San Francisco",
-            "Product managers at fintech companies in NYC",
-            "Director of engineering based in Austin",
-            "Machine learning engineers in the Bay Area"
-          ].map((query, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleExampleSearch(query)}
-              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
-              data-testid={`button-example-search-${idx}`}
-            >
-              {query}
-            </button>
-          ))}
-        </div>
+          <p className="text-sm text-gray-500 mt-4">
+            Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+          </p>
 
-        <div className="flex flex-wrap justify-center gap-3">
-          <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-            <SiLinkedin className="w-5 h-5 text-blue-600" />
-            <span className="text-sm font-medium text-gray-700">LinkedIn</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-            <SiGithub className="w-5 h-5 text-gray-900" />
-            <span className="text-sm font-medium text-gray-700">GitHub</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-            <Globe className="w-5 h-5 text-green-600" />
-            <span className="text-sm font-medium text-gray-700">Personal Sites</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
-            <Mail className="w-5 h-5 text-white" />
-            <span className="text-sm font-medium text-white">AI Outreach</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-white border-y border-gray-200 py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2" data-testid="stat-profiles">1B+</div>
-              <div className="text-gray-600 text-sm font-medium">Profiles</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2" data-testid="stat-updates">50M</div>
-              <div className="text-gray-600 text-sm font-medium">Weekly Updates</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2" data-testid="stat-match">92%</div>
-              <div className="text-gray-600 text-sm font-medium">Match Rate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2" data-testid="stat-time">2 min</div>
-              <div className="text-gray-600 text-sm font-medium">Per Search</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-6 py-24" id="features">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Why Candidate Command Center?
-          </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            The only recruiting tool that searches 1 billion+ profiles across the entire internet
+          <p className="text-xs text-gray-400 mt-8">
+            Built for recruiters who need confidence under time pressure.
           </p>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          <div className="bg-blue-50 rounded-2xl p-8 border border-blue-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
-              <Brain className="w-6 h-6 text-blue-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">AI-Powered Search</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Natural language queries that understand what you're looking for, not just keyword matching.
-            </p>
-          </div>
-
-          <div className="bg-green-50 rounded-2xl p-8 border border-green-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-              <Zap className="w-6 h-6 text-green-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Always Fresh Data</h3>
-            <p className="text-gray-600 leading-relaxed">
-              50 million profile updates every week. Never miss a job change, new skill, or career move.
-            </p>
-          </div>
-
-          <div className="bg-purple-50 rounded-2xl p-8 border border-purple-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-              <Globe className="w-6 h-6 text-purple-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Multi-Platform Search</h3>
-            <p className="text-gray-600 leading-relaxed">
-              LinkedIn, GitHub, personal sites, portfolios, blogs, and more—all in one search.
-            </p>
-          </div>
-
-          <div className="bg-green-50 rounded-2xl p-8 border border-green-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-              <Target className="w-6 h-6 text-green-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Intelligent Matching</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Finds candidates based on their actual work, contributions, and online presence.
-            </p>
-          </div>
-
-          <div className="bg-orange-50 rounded-2xl p-8 border border-orange-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-6">
-              <Mail className="w-6 h-6 text-orange-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">AI Outreach</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Personalized emails generated automatically for each candidate based on their profile.
-            </p>
-          </div>
-
-          <div className="bg-pink-50 rounded-2xl p-8 border border-pink-100 hover:shadow-md transition-shadow">
-            <div className="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center mb-6">
-              <Clock className="w-6 h-6 text-pink-600" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-3">Instant Results</h3>
-            <p className="text-gray-600 leading-relaxed">
-              Find qualified candidates in 2 minutes instead of 2 hours. Cut sourcing time by 95%.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-gray-100 py-24">
-        <div className="container mx-auto px-6">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4">
-              More Powerful Than Traditional Tools
+      <section className="py-24 px-4 md:px-6 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-6">
+              Recruiting is not a search problem.<br />
+              <span className="text-gray-600">It is a synthesis problem.</span>
             </h2>
-            <p className="text-lg text-gray-600 text-center mb-16">
-              LinkedIn Recruiter searches 900M profiles. We search the entire internet.
+            
+            <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">
+              Most recruiting tools stop at retrieval. Candidate Command Center goes further by synthesizing fragmented professional signal into actionable judgment—so you know who to contact, why they matter, and what to do next.
             </p>
+          </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-white rounded-2xl p-8 border-2 border-red-300">
-                <div className="text-red-600 font-bold text-lg mb-6 flex items-center gap-3">
-                  <span className="text-2xl">X</span>
-                  <span>Traditional Recruiting</span>
-                </div>
-                <div className="space-y-4 text-gray-700">
-                  <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-0.5">&bull;</span>
-                    <span>30 min searching LinkedIn manually</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-0.5">&bull;</span>
-                    <span>30 min checking GitHub profiles</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-0.5">&bull;</span>
-                    <span>30 min finding personal websites</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-red-500 mt-0.5">&bull;</span>
-                    <span>30 min writing personalized emails</span>
-                  </div>
-                  <div className="pt-4 mt-4">
-                    <div className="text-2xl font-bold text-red-600">2 hours per candidate</div>
-                  </div>
-                </div>
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="space-y-4">
+              <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                <Globe className="w-5 h-5 text-white" />
               </div>
+              <h3 className="text-xl font-semibold text-gray-900">Signal Coverage</h3>
+              <p className="text-gray-600 leading-relaxed">
+                We ingest real professional signal across the open web. LinkedIn profiles, GitHub repositories, blog posts, conference talks, personal sites, and ongoing activity—continuously refreshed and unified into a single candidate view.
+              </p>
+            </div>
 
-              <div className="bg-white rounded-2xl p-8 border-2 border-green-300">
-                <div className="text-green-600 font-bold text-lg mb-6 flex items-center gap-3">
-                  <CheckCircle className="w-6 h-6" />
-                  <span>Candidate Command Center</span>
-                </div>
-                <div className="space-y-4 text-gray-700">
-                  <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-0.5">&bull;</span>
-                    <span>One search across all platforms</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-0.5">&bull;</span>
-                    <span>Semantic AI finds best matches</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-0.5">&bull;</span>
-                    <span>Includes GitHub, blogs, portfolios</span>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="text-green-500 mt-0.5">&bull;</span>
-                    <span>AI-generated personalized outreach</span>
-                  </div>
-                  <div className="pt-4 mt-4">
-                    <div className="text-2xl font-bold text-green-600">2 minutes per candidate</div>
-                  </div>
-                </div>
+            <div className="space-y-4">
+              <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-white" />
               </div>
+              <h3 className="text-xl font-semibold text-gray-900">Intent Resolution</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Semantic AI understands who you mean—not what you type. Search using natural language and operational questions. The system interprets role context, experience depth, recency, and momentum—without boolean filters or keyword tuning.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+                <Zap className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900">Action Compression</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Discovery, evaluation, and outreach collapse into one motion. Candidates arrive ranked, explained, and ready for outreach—reducing sourcing from hours to minutes.
+              </p>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="container mx-auto px-6 py-24">
+      <section className="py-16 px-4 md:px-6 bg-gray-900">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-4">
+            <span className="text-2xl md:text-4xl font-bold text-gray-400 line-through">2 hours per candidate</span>
+            <ArrowRight className="w-6 h-6 text-white hidden md:block" />
+            <span className="text-2xl md:text-4xl font-bold text-white">2 minutes per candidate</span>
+          </div>
+          <p className="text-gray-400 text-sm">
+            The bottleneck is no longer data access. It is human synthesis.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 md:px-6">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4">
-            Find Candidates Others Miss
+            Searches That Only Work Here
           </h2>
           <p className="text-lg text-gray-600 text-center mb-16">
-            Searches that only work with Candidate Command Center
+            Natural language queries that find candidates others miss
           </p>
 
           <div className="space-y-4">
             {[
               {
-                query: "Find React developers who wrote blog posts about Next.js 14 in the last 6 months",
-                result: "Shows developers from dev.to, Medium, personal blogs, with links to their technical writing"
+                query: "Senior engineers in SF who've spoken at React conferences",
+                result: "Finds engineers with conference talks, GitHub activity, and LinkedIn presence"
               },
               {
-                query: "Find marketing directors who speak at conferences and have written about growth strategies",
-                result: "Finds speakers with conference videos, blog posts, and their professional marketing background"
+                query: "Product managers at fintech companies who write about design systems",
+                result: "Shows PMs with blog posts, portfolio work, and career progression"
               },
               {
-                query: "Find sales leaders at enterprise SaaS companies who post regularly on LinkedIn",
-                result: "Shows sales executives with their content, LinkedIn activity, and career progression"
+                query: "Directors of engineering who contribute to open source projects",
+                result: "Identifies leaders with GitHub contributions and professional profiles"
               },
               {
-                query: "Find product managers who contributed to open source projects and write about design",
-                result: "Identifies PMs with GitHub contributions, design blogs, and professional profiles"
+                query: "ML engineers who've published papers or write technical blogs",
+                result: "Surfaces researchers with publications, blog posts, and professional background"
               }
             ].map((example, idx) => (
               <div 
                 key={idx} 
-                className="bg-white rounded-2xl p-6 border border-gray-200 border-l-4 border-l-green-500 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                className="bg-white rounded-xl p-6 border border-gray-200 hover:border-gray-300 transition-colors cursor-pointer"
                 onClick={() => handleExampleSearch(example.query)}
                 data-testid={`card-use-case-${idx}`}
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 font-bold text-lg">
+                  <div className="flex-shrink-0 w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-600 font-medium text-sm">
                     {idx + 1}
                   </div>
                   <div className="flex-1">
-                    <div className="text-gray-900 font-medium mb-2 text-base">"{example.query}"</div>
-                    <div className="text-green-600 text-sm flex items-start gap-2">
-                      <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <div className="text-gray-900 font-medium mb-2">"{example.query}"</div>
+                    <div className="text-gray-500 text-sm flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-gray-400" />
                       <span>{example.result}</span>
                     </div>
                   </div>
@@ -307,36 +172,58 @@ export default function LandingPage() {
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="container mx-auto px-6 py-24">
-        <div className="max-w-3xl mx-auto text-center bg-blue-600 rounded-3xl p-12 shadow-xl">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
-            Ready to Find Better Candidates Faster?
+      <section className="py-16 px-4 md:px-6 bg-gray-50 border-t border-gray-200">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-6 mb-8">
+            <div className="flex items-center gap-2 text-gray-600">
+              <SiLinkedin className="w-5 h-5 text-[#0A66C2]" />
+              <span className="text-sm font-medium">LinkedIn</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <SiGithub className="w-5 h-5 text-gray-900" />
+              <span className="text-sm font-medium">GitHub</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Globe className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-medium">Personal Sites</span>
+            </div>
+            <div className="flex items-center gap-2 text-gray-600">
+              <Zap className="w-5 h-5 text-gray-600" />
+              <span className="text-sm font-medium">Conference Talks</span>
+            </div>
+          </div>
+          <p className="text-center text-xs text-gray-400">
+            Based on aggregated search sessions across internet-scale professional data.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 md:px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            Start finding candidates now
           </h2>
-          <p className="text-lg text-blue-100 mb-8">
-            Join recruiters accessing 1+ billion profiles with 50 million weekly updates
+          <p className="text-lg text-gray-600 mb-8">
+            Describe the person you need. Get ranked, explainable matches in minutes.
           </p>
           <button 
             onClick={() => setLocation('/search')}
-            className="px-12 py-4 bg-white text-blue-600 text-lg font-bold rounded-xl hover:bg-gray-50 transition-colors shadow-lg inline-flex items-center gap-3"
+            className="px-12 py-4 bg-gray-900 text-white text-lg font-semibold rounded-xl hover:bg-gray-800 transition-colors inline-flex items-center gap-3"
             data-testid="button-cta-search"
           >
-            <Sparkles className="w-6 h-6" />
-            Start Searching Now
+            Find Candidates Now
+            <ArrowRight className="w-5 h-5" />
           </button>
-          <p className="text-blue-200 text-sm mt-6">
-            1+ billion profiles - 50M weekly updates - AI-powered search
-          </p>
         </div>
-      </div>
+      </section>
 
-      <div className="border-t border-gray-200 py-8 bg-white">
-        <div className="container mx-auto px-6 text-center text-gray-600 text-sm">
-          <p>2024 Candidate Command Center. Search 1+ billion profiles across the entire web.</p>
-          <p className="mt-2">Powered by advanced semantic AI technology.</p>
+      <footer className="border-t border-gray-200 py-8 px-4 md:px-6">
+        <div className="max-w-4xl mx-auto text-center text-gray-500 text-sm">
+          <p>Candidate Command Center</p>
         </div>
-      </div>
+      </footer>
     </div>
   );
 }

@@ -1,0 +1,58 @@
+1. HERO SECTION (Above the Fold)
+Headline
+From the entire internet to interview-ready candidates in under 2 minutes.
+Subheadline
+Candidate Command Center transforms internet-scale professional signal into ranked, explainable matches—without manual sourcing.
+Primary Action (Search Input)
+Input placeholder text:
+Describe the person you need, not keywords.
+Primary CTA
+Button:
+Find Candidates Now
+Secondary Trust Line (small, directly under CTA)
+Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+Optional Reinforcement (one line, muted)
+Built for recruiters who need confidence under time pressure.
+Hero Layout Intent (for Replit)
+One column on mobile, two on desktop
+Headline max width ~640px
+CTA visually dominant
+No feature cards here
+No stats yet
+This section should feel decisive, not explanatory
+2. FIRST SCROLL — VALUE CLARITY LAYER
+This section answers:
+“Why is this fundamentally different?”
+Section Header
+Recruiting is not a search problem.
+It is a synthesis problem.
+Supporting Paragraph
+Most recruiting tools stop at retrieval. Candidate Command Center goes further by synthesizing fragmented professional signal into actionable judgment—so you know who to contact, why they matter, and what to do next.
+Three-Pillar Value Stack (Do NOT label as “features”)
+Pillar 1 — Signal Coverage
+We ingest real professional signal across the open web.
+LinkedIn profiles, GitHub repositories, blog posts, conference talks, personal sites, and ongoing activity—continuously refreshed and unified into a single candidate view.
+Pillar 2 — Intent Resolution
+Semantic AI understands who you mean—not what you type.
+Search using natural language and operational questions. The system interprets role context, experience depth, recency, and momentum—without boolean filters or keyword tuning.
+Pillar 3 — Action Compression
+Discovery, evaluation, and outreach collapse into one motion.
+Candidates arrive ranked, explained, and ready for outreach—reducing sourcing from hours to minutes.
+Visual Divider (Strong, High Contrast)
+2 hours per candidate → 2 minutes per candidate
+Subtext (small, centered):
+The bottleneck is no longer data access. It is human synthesis.
+First Scroll Layout Intent
+Stack pillars vertically on mobile, horizontally on desktop
+Use one dominant color for headers
+No pastel cards; clean blocks
+This section should feel like a thesis, not a brochure
+Optional Micro-Copy for Credibility (Small, Bottom of First Scroll)
+Based on aggregated search sessions across internet-scale professional data.
+This line quietly answers skepticism without opening technical debate.
+What This Achieves (Important)
+You stop competing with Exa on infrastructure
+You own decision velocity, not retrieval quality
+You establish authority immediately
+You reduce cognitive load
+You set up the next sections (examples, comparisons, candidate view) cleanly
