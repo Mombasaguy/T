@@ -1,0 +1,120 @@
+/**
+ * Replit instructions (copy/paste checklist)
+ *
+ * Goal: Place example queries directly under the search box (Hero), as clickable chips
+ * that auto-fill the input. Keep it clean on mobile and conversion-focused.
+ *
+ * 1) Files to touch
+ *    - src/App.jsx (or src/pages/Home.jsx) where your Hero lives
+ *    - src/components/Hero.jsx (if you split components)
+ *
+ * 2) Add state for the input (if you don’t already have it)
+ *    - Create: const [query, setQuery] = useState("")
+ *    - Bind: value={query} on the input, onChange={e => setQuery(e.target.value)}
+ *
+ * 3) Insert the Example Query chips immediately under the input
+ *    - Put this block directly after the <input ... />
+ *    - Keep 3–4 examples max
+ *    - Clicking a chip should call setQuery(exampleString)
+ *
+ * 4) Optional but recommended: Auto-focus the input on desktop
+ *    - Add autoFocus on the input (fine to omit on mobile)
+ *
+ * 5) Styling guidance (Tailwind)
+ *    - Micro-label: text-xs, muted (text-slate-500)
+ *    - Chips: rounded-full, subtle border, hover border darkens
+ *    - Spacing: mt-3 under input; gap-2 for chips; wrap enabled for mobile
+ *
+ * 6) Placement rules (do not violate these)
+ *    - Examples sit under input, above the CTA helper text
+ *    - Do not add explanations per chip
+ *    - Do not show more than 4
+ *    - Do not use quotes around chip text
+ *
+ * 7) Behavior rules
+ *    - Chip click: fills input only (no auto-search unless you explicitly want it)
+ *    - Input still editable after chip fill
+ *
+ * 8) (Optional) If you want click to also trigger search:
+ *    - After setQuery(q), call handleSearch(q) with a slight delay
+ *      setQuery(q); setTimeout(() => handleSearch(q), 0);
+ *
+ * 9) Drop-in Hero JSX scaffold (works in Replit React + Tailwind)
+ */
+
+import React, { useMemo, useState } from "react";
+
+export default function Hero() {
+  const [query, setQuery] = useState("");
+
+  const examples = useMemo(
+    () => [
+      "Senior engineers in SF who’ve spoken at React conferences",
+      "Product managers at fintech companies who write about design systems",
+      "Directors of engineering who contribute to open source",
+      "ML engineers who publish papers or technical blogs",
+    ],
+    []
+  );
+
+  const handleSearch = (q = query) => {
+    // TODO: Wire this to your search route / API call.
+    // Example: navigate(`/search?q=${encodeURIComponent(q)}`);
+    // or: runSearch(q);
+    console.log("Search:", q);
+  };
+
+  return (
+    <section className="mx-auto max-w-3xl px-5 pb-14 pt-10">
+      <h1 className="text-4xl font-semibold leading-tight tracking-tight text-slate-900">
+        From the entire internet to interview-ready candidates in under 2 minutes.
+      </h1>
+
+      <p className="mt-4 text-lg leading-relaxed text-slate-600">
+        Candidate Command Center transforms internet-scale professional signal into ranked,
+        explainable matches—without manual sourcing.
+      </p>
+
+      <div className="mt-7">
+        <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Describe the person you need, not keywords"
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-slate-900 focus:outline-none"
+          />
+
+          {/* Example queries: directly under the input */}
+          <div className="mt-3">
+            <p className="mb-2 text-xs font-medium text-slate-500">Try one of these:</p>
+
+            <div className="flex flex-wrap gap-2">
+              {examples.map((q) => (
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => setQuery(q)}
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 hover:border-slate-900"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => handleSearch()}
+            className="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+          >
+            Find Candidates Now →
+          </button>
+
+          <p className="mt-3 text-center text-xs text-slate-500">
+            Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}

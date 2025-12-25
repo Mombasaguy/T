@@ -19,47 +19,72 @@ export default function LandingPage() {
     setLocation(`/search?query=${encodeURIComponent(query)}`);
   };
 
+  const examples = [
+    "Senior engineers in SF who've spoken at React conferences",
+    "Product managers at fintech companies who write about design systems",
+    "Directors of engineering who contribute to open source",
+    "ML engineers who publish papers or technical blogs",
+  ];
+
   return (
     <div className="min-h-screen bg-white">
-      <section className="min-h-screen flex flex-col justify-center px-4 md:px-6 py-16">
-        <div className="max-w-3xl mx-auto w-full">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-            From the entire internet to interview-ready candidates in under 2 minutes.
-          </h1>
-          
-          <p className="text-lg md:text-xl text-gray-600 leading-relaxed mb-10 max-w-2xl">
-            Candidate Command Center transforms internet-scale professional signal into ranked, explainable matches—without manual sourcing.
-          </p>
+      <section className="mx-auto max-w-3xl px-5 pb-14 pt-20 md:pt-28">
+        <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900">
+          From the entire internet to interview-ready candidates in under 2 minutes.
+        </h1>
 
-          <div className="mb-4">
+        <p className="mt-4 text-lg leading-relaxed text-gray-600">
+          Candidate Command Center transforms internet-scale professional signal into ranked,
+          explainable matches—without manual sourcing.
+        </p>
+
+        <div className="mt-7">
+          <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              placeholder="Describe the person you need, not keywords."
-              className="w-full px-5 py-4 text-lg border-2 border-gray-200 rounded-xl focus:outline-none focus:border-gray-900 transition-colors bg-gray-50"
+              placeholder="Describe the person you need, not keywords"
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none"
               data-testid="input-hero-search"
             />
+
+            <div className="mt-3">
+              <p className="mb-2 text-xs font-medium text-gray-500">Try one of these:</p>
+              <div className="flex flex-wrap gap-2">
+                {examples.map((q, idx) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => setSearchQuery(q)}
+                    className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-700 hover:border-gray-900 transition-colors"
+                    data-testid={`button-example-${idx}`}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleSearch}
+              className="mt-4 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+              data-testid="button-hero-search"
+            >
+              Find Candidates Now
+            </button>
+
+            <p className="mt-3 text-center text-xs text-gray-500">
+              Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+            </p>
           </div>
-
-          <button 
-            onClick={handleSearch}
-            className="w-full md:w-auto px-10 py-4 bg-gray-900 text-white text-lg font-semibold rounded-xl hover:bg-gray-800 transition-colors flex items-center justify-center gap-3"
-            data-testid="button-hero-search"
-          >
-            Find Candidates Now
-            <ArrowRight className="w-5 h-5" />
-          </button>
-
-          <p className="text-sm text-gray-500 mt-4">
-            Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
-          </p>
-
-          <p className="text-xs text-gray-400 mt-8">
-            Built for recruiters who need confidence under time pressure.
-          </p>
         </div>
+
+        <p className="text-xs text-gray-400 mt-8">
+          Built for recruiters who need confidence under time pressure.
+        </p>
       </section>
 
       <section className="py-24 px-4 md:px-6 bg-gray-50">
