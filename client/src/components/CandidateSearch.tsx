@@ -306,6 +306,17 @@ export default function CandidateSearch() {
       }
     };
     fetchSubscription();
+    
+    // Auto-search if query parameter is present in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlQuery = urlParams.get('query');
+    if (urlQuery) {
+      setQuery(urlQuery);
+      // Trigger search after setting query
+      setTimeout(() => {
+        handleSearch(urlQuery);
+      }, 100);
+    }
   }, []);
 
   const getCandidateKey = (candidate: SearchResult) => candidate.url || candidate.id;
