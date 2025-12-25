@@ -451,16 +451,31 @@ export default function CandidateSearch() {
       ),
     ].join("\n");
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
     const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, "");
-    link.href = url;
-    link.download = `candidates-${timestamp}.csv`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const filename = `candidates-${timestamp}.csv`;
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile) {
+      const dataUri = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
+      const newWindow = window.open(dataUri, "_blank");
+      if (!newWindow) {
+        const link = document.createElement("a");
+        link.href = dataUri;
+        link.download = filename;
+        link.click();
+      }
+    } else {
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
   };
 
   const generateEmail = async () => {
