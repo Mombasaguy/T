@@ -431,7 +431,7 @@ export default function CandidateSearch() {
     }
   };
 
-  const exportToCSV = () => {
+  const exportToCSV = async () => {
     if (results.length === 0) return;
 
     const headers = ["Name", "Role", "Platform", "URL", "Match Status", "Score"];
@@ -453,29 +453,36 @@ export default function CandidateSearch() {
 
     const timestamp = new Date().toISOString().slice(0, 19).replace(/[:-]/g, "");
     const filename = `candidates-${timestamp}.csv`;
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
-    if (isMobile) {
-      const dataUri = "data:text/csv;charset=utf-8," + encodeURIComponent(csvContent);
-      const newWindow = window.open(dataUri, "_blank");
-      if (!newWindow) {
-        const link = document.createElement("a");
-        link.href = dataUri;
-        link.download = filename;
-        link.click();
+    if (isMobile && navigator.share && navigator.canShare) {
+      const file = new File([blob], filename, { type: "text/csv" });
+      if (navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: "Candidate Export",
+          });
+          return;
+        } catch (err) {
+          console.log("Share cancelled or failed, trying fallback");
+        }
       }
-    } else {
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = filename;
-      document.body.appendChild(link);
-      link.click();
+    }
+    
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-    }
+    }, 100);
   };
 
   const generateEmail = async () => {
