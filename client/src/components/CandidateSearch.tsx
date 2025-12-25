@@ -389,6 +389,13 @@ export default function CandidateSearch() {
         return;
       }
       
+      if (!response.ok) {
+        console.error('Search API error:', data);
+        alert(data.error || 'Search failed. Please try again.');
+        setResults([]);
+        return;
+      }
+      
       const searchResults = data.results || [];
       setResults(searchResults);
 

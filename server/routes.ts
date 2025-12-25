@@ -179,11 +179,14 @@ export async function registerRoutes(
 
       const apiKey = process.env.EXA_API_KEY;
       if (!apiKey) {
+        console.error("EXA_API_KEY is not set in environment");
         return res.status(500).json({ error: "EXA_API_KEY not configured" });
       }
 
       const userQuery = parsed.data.query;
       const userId = req.userId || 'guest';
+      
+      console.log(`[Search] Query: "${userQuery}" by user: ${userId}`);
 
       const exa = new Exa(apiKey);
       const result = await exa.searchAndContents(userQuery, {
@@ -194,6 +197,8 @@ export async function registerRoutes(
         text: { maxCharacters: 1000 },
         highlights: { numSentences: 3, highlightsPerUrl: 3 },
       });
+      
+      console.log(`[Search] Found ${result.results?.length || 0} results`);
 
       const queryLower = userQuery.toLowerCase();
       const queryTerms = queryLower.split(/\s+/).filter(t => t.length > 2);
@@ -343,9 +348,9 @@ export async function registerRoutes(
         results: transformedResults,
         usage
       });
-    } catch (error) {
-      console.error("Exa search error:", error);
-      res.status(500).json({ error: "Search failed" });
+    } catch (error: any) {
+      console.error("Exa search error:", error?.message || error);
+      res.status(500).json({ error: error?.message || "Search failed" });
     }
   });
 
