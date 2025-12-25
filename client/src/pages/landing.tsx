@@ -30,11 +30,11 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white">
       <section className="mx-auto max-w-3xl px-5 pb-14 pt-20 md:pt-28">
         <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900">
-          Get ranked, interview-ready candidates in minutes.
+          Search 1+ Billion Profiles Instantly
         </h1>
 
         <p className="mt-4 text-sm text-gray-600">
-          Powered by a new generation of internet-scale people search, now applied to recruiting.
+          Powered by a new, unique technology that looks across LinkedIn, GitHub, personal sites, and public work — then surfaces candidates others never find.
         </p>
 
         <div className="mt-7">
