@@ -1,0 +1,85 @@
+Candidate Command Center
+Writer Instructions (Final, Locked)
+These instructions govern language, section naming, tone, and claims across the site.
+1. GLOBAL WRITING PRINCIPLES (NON-NEGOTIABLE)
+Write for recruiters, not engineers.
+Every line should answer one of these questions immediately:
+What does this do for me?
+What do I get out of it?
+Why is this better than what I already use?
+Do NOT use:
+signal
+synthesis
+retrieval
+semantic
+embeddings
+compression (as a concept, not a verb)
+DO use:
+looks across
+finds
+shows you
+explains why
+public professional profiles
+public work
+ranked candidates
+If a sentence would sound strange said out loud to a recruiter, rewrite it.
+2. HERO SECTION (FIX REQUIRED)
+❌ REMOVE THIS LANGUAGE ENTIRELY
+Recruiting is not a search problem.
+It is a synthesis problem.
+Most recruiting tools stop at retrieval…
+This language is abstract and breaks momentum.
+✅ REPLACE WITH THIS (LOCKED COPY)
+Headline
+Recruiting isn’t about finding people.
+It’s about knowing who to contact.
+Supporting paragraph
+Most recruiting tools give you long lists and leave the judgment to you.
+Candidate Command Center shows you who matters, why they’re a fit, and what to do next.
+No explanation of how. Focus on outcome only.
+3. FEATURE SECTION — RENAME + REWRITE (FIX REQUIRED)
+❌ OLD SECTION TITLES (REMOVE)
+Signal Coverage
+Intent Resolution
+Action Compression
+These are internal product concepts and confuse users.
+✅ NEW SECTION TITLES + COPY (LOCKED)
+See the whole candidate
+Looks beyond a single platform to understand what someone has actually done — across profiles, projects, writing, and talks.
+Ask real recruiting questions
+Describe the person you want in plain language — not keywords — and get results that match the role, experience level, and context you care about.
+Go from search to outreach
+Candidates arrive ranked and explained, so you know exactly who to contact and why — without manual screening.
+4. SCALE & WOW CLAIM (LOCKED LANGUAGE)
+This sentence is approved and final. Do not modify wording.
+Searches across more than a billion public professional profiles — then surfaces candidates others never find.
+Placement rules:
+Use once
+Best locations:
+Under “Search 1+ Billion Profiles”, or
+In the “2 minutes” performance section
+Do not repeat elsewhere
+Do NOT add technical qualifiers or numbers after this line.
+5. “SEARCH 1+ BILLION PROFILES” SECTION (KEEP + PAIR)
+Headline (keep as is)
+Search 1+ Billion Profiles
+Supporting line (LOCKED)
+Looks across LinkedIn, GitHub, personal sites, and public work from over a billion professionals — then surfaces candidates others never find.
+This pairing is intentional:
+Scale → Coverage → Advantage
+6. SEARCH BOX AREA (REMINDER — DO NOT CHANGE INPUT)
+Input placeholder (LOCKED)
+Describe the person you need, not keywords
+Input helper text (LOCKED)
+Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+Do not rewrite or expand this.
+7. EXAMPLE QUERIES (PLACEMENT REMINDER)
+Example queries appear below the CTA
+Label them as optional
+Label:
+Or try searches like:
+Keep examples concrete and human. No jargon.
+8. TONE CHECK (FINAL TEST)
+Before shipping any copy, ask:
+Can a recruiter understand this in one read without translating product language?
+If the answer is no, rewrite until the answer is yes.

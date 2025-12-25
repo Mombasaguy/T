@@ -90,12 +90,12 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto">
           <div className="mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-6">
-              Recruiting is not a search problem.<br />
-              <span className="text-gray-600">It is a synthesis problem.</span>
+              Recruiting isn't about finding people.<br />
+              <span className="text-gray-600">It's about knowing who to contact.</span>
             </h2>
             
             <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">
-              Most recruiting tools stop at retrieval. Candidate Command Center goes further by synthesizing fragmented professional signal into actionable judgment—so you know who to contact, why they matter, and what to do next.
+              Most recruiting tools give you long lists and leave the judgment to you. Candidate Command Center shows you who matters, why they're a fit, and what to do next.
             </p>
           </div>
 
@@ -104,9 +104,9 @@ export default function LandingPage() {
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Globe className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Signal Coverage</h3>
+              <h3 className="text-xl font-semibold text-gray-900">See the whole candidate</h3>
               <p className="text-gray-600">
-                See the full picture, not just one platform.
+                Looks beyond a single platform to understand what someone has actually done — across profiles, projects, writing, and talks.
               </p>
             </div>
 
@@ -114,9 +114,9 @@ export default function LandingPage() {
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Intent Resolution</h3>
+              <h3 className="text-xl font-semibold text-gray-900">Ask real recruiting questions</h3>
               <p className="text-gray-600">
-                Ask the question the way recruiters think.
+                Describe the person you want in plain language — not keywords — and get results that match the role, experience level, and context you care about.
               </p>
             </div>
 
@@ -124,9 +124,9 @@ export default function LandingPage() {
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900">Action Compression</h3>
+              <h3 className="text-xl font-semibold text-gray-900">Go from search to outreach</h3>
               <p className="text-gray-600">
-                From search to outreach in one motion.
+                Candidates arrive ranked and explained, so you know exactly who to contact and why — without manual screening.
               </p>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function LandingPage() {
             2 minutes per candidate
           </p>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Searches across more than a billion public professional profiles — then delivers ranked, interview-ready candidates in minutes.
+            Searches across more than a billion public professional profiles — then surfaces candidates others never find.
           </p>
         </div>
       </section>
