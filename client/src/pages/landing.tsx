@@ -33,11 +33,7 @@ export default function LandingPage() {
           Get ranked, interview-ready candidates in minutes.
         </h1>
 
-        <p className="mt-4 text-lg leading-relaxed text-gray-600">
-          Each result includes why they match — so you know who to contact and what to do next.
-        </p>
-
-        <p className="mt-2 text-sm text-gray-600">
+        <p className="mt-4 text-sm text-gray-600">
           Powered by a new generation of internet-scale people search, now applied to recruiting.
         </p>
 
