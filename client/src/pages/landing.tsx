@@ -34,8 +34,11 @@ export default function LandingPage() {
         </h1>
 
         <p className="mt-4 text-lg leading-relaxed text-gray-600">
-          Candidate Command Center transforms internet-scale professional signal into ranked,
-          explainable matches—without manual sourcing.
+          Get ranked, interview-ready candidates with a clear reason for every match.
+        </p>
+
+        <p className="mt-2 text-sm font-medium text-gray-600">
+          Powered by a new generation of internet-scale people search, now applied to recruiting.
         </p>
 
         <div className="mt-7">
@@ -51,7 +54,7 @@ export default function LandingPage() {
             />
 
             <div className="mt-3">
-              <p className="mb-2 text-xs font-medium text-gray-500">Try one of these:</p>
+              <p className="mb-2 text-xs font-medium text-gray-500">Try searches like:</p>
               <div className="flex flex-wrap gap-2">
                 {examples.map((q, idx) => (
                   <button
