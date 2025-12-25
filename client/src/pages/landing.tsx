@@ -30,15 +30,11 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white">
       <section className="mx-auto max-w-3xl px-5 pb-14 pt-20 md:pt-28">
         <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900">
-          From the entire internet to interview-ready candidates in under 2 minutes.
+          Get ranked, interview-ready candidates in minutes.
         </h1>
 
         <p className="mt-4 text-lg leading-relaxed text-gray-600">
-          Get ranked, interview-ready candidates with a clear reason for every match.
-        </p>
-
-        <p className="mt-2 text-sm font-medium text-gray-600">
-          Powered by a new generation of internet-scale people search, now applied to recruiting.
+          Each result includes why they match — so you know who to contact and what to do next.
         </p>
 
         <div className="mt-7">
@@ -104,33 +100,33 @@ export default function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Globe className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Signal Coverage</h3>
-              <p className="text-gray-600 leading-relaxed">
-                We ingest real professional signal across the open web. LinkedIn profiles, GitHub repositories, blog posts, conference talks, personal sites, and ongoing activity—continuously refreshed and unified into a single candidate view.
+              <p className="text-gray-600">
+                See the full picture, not just one platform.
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Intent Resolution</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Semantic AI understands who you mean—not what you type. Search using natural language and operational questions. The system interprets role context, experience depth, recency, and momentum—without boolean filters or keyword tuning.
+              <p className="text-gray-600">
+                Ask the question the way recruiters think.
               </p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
                 <Zap className="w-5 h-5 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900">Action Compression</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Discovery, evaluation, and outreach collapse into one motion. Candidates arrive ranked, explained, and ready for outreach—reducing sourcing from hours to minutes.
+              <p className="text-gray-600">
+                From search to outreach in one motion.
               </p>
             </div>
           </div>
@@ -139,13 +135,11 @@ export default function LandingPage() {
 
       <section className="py-16 px-4 md:px-6 bg-gray-900">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-4">
-            <span className="text-2xl md:text-4xl font-bold text-gray-400 line-through">2 hours per candidate</span>
-            <ArrowRight className="w-6 h-6 text-white hidden md:block" />
-            <span className="text-2xl md:text-4xl font-bold text-white">2 minutes per candidate</span>
-          </div>
-          <p className="text-gray-400 text-sm">
-            The bottleneck is no longer data access. It is human synthesis.
+          <p className="text-2xl md:text-4xl font-bold text-white mb-4">
+            2 minutes per candidate
+          </p>
+          <p className="text-gray-400">
+            Ranked candidates. Clear rationale. Ready for outreach.
           </p>
         </div>
       </section>
