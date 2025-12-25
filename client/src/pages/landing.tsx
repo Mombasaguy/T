@@ -58,10 +58,6 @@ export default function LandingPage() {
               Find Candidates Now
             </button>
 
-            <p className="mt-3 text-center text-xs text-gray-500">
-              Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
-            </p>
-
             <div className="mt-4 pt-4 border-t border-gray-100">
               <p className="mb-2 text-xs font-medium text-gray-500">Or try searches like:</p>
               <div className="flex flex-wrap gap-2">
