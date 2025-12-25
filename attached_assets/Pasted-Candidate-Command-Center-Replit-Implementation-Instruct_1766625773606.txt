@@ -1,0 +1,99 @@
+Candidate Command Center
+Replit Implementation Instructions (Final, Locked)
+This document defines all approved copy, layout, and behavior changes.
+Anything not listed here should remain unchanged.
+1. HERO GOAL (North Star)
+The hero must answer, in under 5 seconds:
+What do I get if I use this?
+The answer users should immediately understand:
+I describe a person → I get ranked, interview-ready candidates with a reason why.
+2. HERO COPY (LOCKED)
+Headline (unchanged from current)
+Get ranked, interview-ready candidates in minutes.
+Subline (unchanged from current)
+Each result includes why they match — so you know who to contact and what to do next.
+Novelty / Power Line (Option A — REQUIRED)
+Place directly under the subline, above the search box.
+Powered by a new generation of internet-scale people search, now applied to recruiting.
+Rules:
+One sentence only
+No icon
+No emphasis styling
+Do not repeat this claim anywhere else on the page
+3. SEARCH BOX AREA (MOST IMPORTANT CHANGE)
+Input placeholder (unchanged)
+Describe the person you need, not keywords
+PRIMARY CTA PLACEMENT (CHANGE REQUIRED)
+The Find Candidates Now button must appear immediately after the input, before example queries.
+Reason:
+On mobile, examples were competing with the input and confusing users.
+CTA restores a clear action hierarchy.
+4. “WOW” SCALE CLAIM (NEW, LOCKED LANGUAGE)
+This is the approved language to convey scale and capability without jargon.
+Approved sentence (use exactly this wording):
+Searches across more than a billion public professional profiles — then delivers ranked, interview-ready candidates in minutes.
+Placement rules:
+Use once
+Best location:
+Either directly under the CTA helper text, or
+In the dark “2 minutes” section
+Do not put in the headline
+Do not repeat elsewhere
+Important:
+Do not use the word signal
+Do not say “reviews every profile”
+Do not reference Exa or benchmarks
+5. INPUT HELPER (LOCKED — DO NOT CHANGE)
+This line stays exactly as written:
+Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+Purpose:
+Establishes credibility
+Names concrete sources
+Should remain human and specific
+6. EXAMPLE QUERIES (PLACEMENT + BEHAVIOR CHANGE)
+Placement (REQUIRED)
+Example queries must appear:
+Below the CTA
+Visually separated (divider or spacing)
+Clearly labeled as optional
+Suggested label:
+Or try searches like:
+Example queries (LOCKED SET)
+Limit to 3–4 only. Use these:
+Senior engineers in SF who’ve spoken at React conferences
+Product managers at fintech companies who write about design systems
+Directors of engineering who contribute to open source
+ML engineers who publish papers or technical blogs
+Behavior rules:
+Clicking a query fills the input
+Does not auto-search (unless you explicitly choose to)
+Examples should look like chips, not input fields
+7. LANGUAGE RULES (GLOBAL)
+Words to AVOID everywhere:
+signal
+retrieval
+embeddings
+synthesis (outside founder narrative)
+semantic layer
+Preferred language:
+looks at
+finds
+understands
+shows you
+explains why
+work and activity
+public professional profiles
+If a sentence wouldn’t sound natural spoken out loud to a recruiter, rewrite it.
+8. DARK “2 MINUTES” SECTION (OPTIONAL BUT RECOMMENDED)
+If you keep this section, the supporting line should reinforce output + scale.
+Recommended pairing:
+Header
+2 minutes per candidate
+Subline
+Searches across more than a billion public professional profiles — then delivers ranked, interview-ready candidates in minutes.
+This creates the “how is this even possible?” moment — cleanly.
+9. FINAL UX PRINCIPLE (DO NOT VIOLATE)
+The page should assert results, not explain technology
+Novelty should feel obvious, not marketed
+Output > process > architecture
+If something feels wordy, cut explanation before cutting clarity.

@@ -37,6 +37,10 @@ export default function LandingPage() {
           Each result includes why they match — so you know who to contact and what to do next.
         </p>
 
+        <p className="mt-2 text-sm text-gray-600">
+          Powered by a new generation of internet-scale people search, now applied to recruiting.
+        </p>
+
         <div className="mt-7">
           <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
             <input
@@ -49,8 +53,21 @@ export default function LandingPage() {
               data-testid="input-hero-search"
             />
 
-            <div className="mt-3">
-              <p className="mb-2 text-xs font-medium text-gray-500">Try searches like:</p>
+            <button
+              type="button"
+              onClick={handleSearch}
+              className="mt-3 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+              data-testid="button-hero-search"
+            >
+              Find Candidates Now
+            </button>
+
+            <p className="mt-3 text-center text-xs text-gray-500">
+              Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
+            </p>
+
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="mb-2 text-xs font-medium text-gray-500">Or try searches like:</p>
               <div className="flex flex-wrap gap-2">
                 {examples.map((q, idx) => (
                   <button
@@ -65,19 +82,6 @@ export default function LandingPage() {
                 ))}
               </div>
             </div>
-
-            <button
-              type="button"
-              onClick={handleSearch}
-              className="mt-4 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
-              data-testid="button-hero-search"
-            >
-              Find Candidates Now
-            </button>
-
-            <p className="mt-3 text-center text-xs text-gray-500">
-              Searches across LinkedIn, GitHub, blogs, portfolios, and live professional activity.
-            </p>
           </div>
         </div>
 
@@ -138,8 +142,8 @@ export default function LandingPage() {
           <p className="text-2xl md:text-4xl font-bold text-white mb-4">
             2 minutes per candidate
           </p>
-          <p className="text-gray-400">
-            Ranked candidates. Clear rationale. Ready for outreach.
+          <p className="text-gray-400 max-w-2xl mx-auto">
+            Searches across more than a billion public professional profiles — then delivers ranked, interview-ready candidates in minutes.
           </p>
         </div>
       </section>
