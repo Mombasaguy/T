@@ -206,6 +206,7 @@ export default function CandidateSearch() {
   const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<string[]>([]);
   const [compareList, setCompareList] = useState<SearchResult[]>([]);
   const [showCompareModal, setShowCompareModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [searchMode, setSearchMode] = useState<"description" | "url">("description");
   const [sourceProfile, setSourceProfile] = useState<{ name: string; title: string; url: string } | null>(null);
   const [subscription, setSubscription] = useState<SubscriptionInfo>({
@@ -569,92 +570,104 @@ export default function CandidateSearch() {
 
               {results.length > 0 && (
                 <div className="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Filter className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm font-medium text-gray-700">Filters</span>
-                  </div>
-                  <div className="flex gap-3 flex-wrap items-center">
-                    <select
-                      value={filters.platform}
-                      onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
-                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
-                      data-testid="select-platform"
-                    >
-                      <option value="all">All Platforms</option>
-                      <option value="LinkedIn">LinkedIn</option>
-                      <option value="Blog">Personal Sites</option>
-                    </select>
-
-                    <select
-                      value={filters.matchStatus}
-                      onChange={(e) => setFilters({ ...filters, matchStatus: e.target.value })}
-                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
-                      data-testid="select-match-status"
-                    >
-                      <option value="all">All Matches</option>
-                      <option value="match">Match Only</option>
-                      <option value="miss">Miss Only</option>
-                    </select>
-
-                    <select
-                      value={filters.dateRange}
-                      onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
-                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
-                      data-testid="select-date-range"
-                    >
-                      <option value="all">Any Date</option>
-                      <option value="week">Last Week</option>
-                      <option value="month">Last Month</option>
-                      <option value="year">Last Year</option>
-                    </select>
-
-                    <select
-                      value={filters.location}
-                      onChange={(e) => setFilters({ ...filters, location: e.target.value })}
-                      className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
-                      data-testid="select-location"
-                    >
-                      <option value="all">All Locations</option>
-                      {(() => {
-                        const locations = new Set<string>();
-                        const knownLocations = ["San Francisco", "New York", "Los Angeles", "Seattle", "Austin", "Boston", "Chicago", "Denver", "Atlanta", "Miami", "London", "Berlin", "Toronto", "Singapore", "Remote", "Bay Area", "NYC", "SF"];
-                        results.forEach((r) => {
-                          const text = `${r.title || ""} ${r.text || ""} ${r.role || ""}`;
-                          knownLocations.forEach((loc) => {
-                            if (text.toLowerCase().includes(loc.toLowerCase())) {
-                              locations.add(loc);
-                            }
-                          });
-                        });
-                        return Array.from(locations).slice(0, 10).map((loc) => (
-                          <option key={loc} value={loc}>{loc}</option>
-                        ));
-                      })()}
-                    </select>
-
-                    <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
-                      <label className="text-sm text-gray-600 whitespace-nowrap">Score:</label>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={filters.minScore}
-                        onChange={(e) => setFilters({ ...filters, minScore: parseInt(e.target.value) })}
-                        className="w-24 accent-blue-500"
-                        data-testid="slider-min-score"
-                      />
-                      <span className="text-sm text-gray-700 w-10">{filters.minScore}%</span>
+                  <button
+                    onClick={() => setShowFilters(!showFilters)}
+                    className="flex items-center justify-between w-full md:cursor-default"
+                    data-testid="button-toggle-filters"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Filter className="w-4 h-4 text-gray-500" />
+                      <span className="text-sm font-medium text-gray-700">Filters</span>
+                      {(filters.platform !== "all" || filters.matchStatus !== "all" || filters.dateRange !== "all" || filters.location !== "all" || filters.minScore > 0) && (
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Active</span>
+                      )}
                     </div>
-
-                    {(filters.platform !== "all" || filters.matchStatus !== "all" || filters.dateRange !== "all" || filters.location !== "all" || filters.minScore > 0) && (
-                      <button
-                        onClick={() => setFilters({ platform: "all", matchStatus: "all", minScore: 0, dateRange: "all", location: "all" })}
-                        className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-                        data-testid="button-clear-filters"
+                    <ChevronDown className={`w-4 h-4 text-gray-500 md:hidden transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+                  </button>
+                  <div className={`${showFilters ? 'block' : 'hidden'} md:block mt-3`}>
+                    <div className="flex gap-3 flex-wrap items-center">
+                      <select
+                        value={filters.platform}
+                        onChange={(e) => setFilters({ ...filters, platform: e.target.value })}
+                        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
+                        data-testid="select-platform"
                       >
-                        Clear all
-                      </button>
-                    )}
+                        <option value="all">All Platforms</option>
+                        <option value="LinkedIn">LinkedIn</option>
+                        <option value="Blog">Personal Sites</option>
+                      </select>
+
+                      <select
+                        value={filters.matchStatus}
+                        onChange={(e) => setFilters({ ...filters, matchStatus: e.target.value })}
+                        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
+                        data-testid="select-match-status"
+                      >
+                        <option value="all">All Matches</option>
+                        <option value="match">Match Only</option>
+                        <option value="miss">Miss Only</option>
+                      </select>
+
+                      <select
+                        value={filters.dateRange}
+                        onChange={(e) => setFilters({ ...filters, dateRange: e.target.value })}
+                        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
+                        data-testid="select-date-range"
+                      >
+                        <option value="all">Any Date</option>
+                        <option value="week">Last Week</option>
+                        <option value="month">Last Month</option>
+                        <option value="year">Last Year</option>
+                      </select>
+
+                      <select
+                        value={filters.location}
+                        onChange={(e) => setFilters({ ...filters, location: e.target.value })}
+                        className="px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-700"
+                        data-testid="select-location"
+                      >
+                        <option value="all">All Locations</option>
+                        {(() => {
+                          const locations = new Set<string>();
+                          const knownLocations = ["San Francisco", "New York", "Los Angeles", "Seattle", "Austin", "Boston", "Chicago", "Denver", "Atlanta", "Miami", "London", "Berlin", "Toronto", "Singapore", "Remote", "Bay Area", "NYC", "SF"];
+                          results.forEach((r) => {
+                            const text = `${r.title || ""} ${r.text || ""} ${r.role || ""}`;
+                            knownLocations.forEach((loc) => {
+                              if (text.toLowerCase().includes(loc.toLowerCase())) {
+                                locations.add(loc);
+                              }
+                            });
+                          });
+                          return Array.from(locations).slice(0, 10).map((loc) => (
+                            <option key={loc} value={loc}>{loc}</option>
+                          ));
+                        })()}
+                      </select>
+
+                      <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-2">
+                        <label className="text-sm text-gray-600 whitespace-nowrap">Score:</label>
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={filters.minScore}
+                          onChange={(e) => setFilters({ ...filters, minScore: parseInt(e.target.value) })}
+                          className="w-24 accent-blue-500"
+                          data-testid="slider-min-score"
+                        />
+                        <span className="text-sm text-gray-700 w-10">{filters.minScore}%</span>
+                      </div>
+
+                      {(filters.platform !== "all" || filters.matchStatus !== "all" || filters.dateRange !== "all" || filters.location !== "all" || filters.minScore > 0) && (
+                        <button
+                          onClick={() => setFilters({ platform: "all", matchStatus: "all", minScore: 0, dateRange: "all", location: "all" })}
+                          className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+                          data-testid="button-clear-filters"
+                        >
+                          Clear all
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               )}
