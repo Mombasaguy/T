@@ -130,8 +130,8 @@ export default function LandingPage() {
 
       <section className="py-16 px-4 md:px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4">
-            Searches That Only Work Here
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-4">
+            Examples of searches you can't run anywhere else
           </h2>
           <p className="text-lg text-gray-600 text-center mb-12">
             Ask for people the way you naturally think about them.

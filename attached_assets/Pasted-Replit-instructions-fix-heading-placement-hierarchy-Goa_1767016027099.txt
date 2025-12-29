@@ -1,0 +1,59 @@
+Replit instructions (fix heading placement + hierarchy)
+
+Goal
+Remove the duplicate “Searches that only work here” headline and make the second section a proof headline:
+- Hero stays as the single primary headline (H1)
+- The next section becomes “Examples of searches you can’t run anywhere else” (H2)
+- Do NOT make the hero headline bigger to match the second one; the second must be smaller
+
+1) HERO (keep as the only H1 on the page)
+Hero heading text (H1):
+Searches that only work here
+
+Hero subheading:
+Describe the person you need — not keywords — and see who actually fits and why.
+
+Keep the search input + CTA exactly where they are.
+
+2) Keep the SOURCE BANNER under the search input (no change)
+Row:
+LinkedIn · GitHub · Personal Sites · Conference Talks
+Caption:
+Looks across public profiles, writing, talks, and real work—not just résumés.
+
+3) Update the NEXT SECTION headline (this is the main fix)
+Find the section currently titled:
+“Searches That Only Work Here”
+
+Replace it with (H2):
+Examples of searches you can’t run anywhere else
+
+Keep the subheading under it:
+Ask for people the way you naturally think about them.
+
+Leave the query cards below this section unchanged.
+
+4) Heading sizes (do not equalize them)
+Make sure the hero heading is visually dominant:
+- Hero = H1 (largest text on page)
+- Next section = H2 (clearly smaller than hero)
+
+If you’re using Tailwind, a safe default is:
+- H1: text-4xl or text-5xl
+- H2: text-2xl or text-3xl
+
+Do NOT increase the hero just to match the second heading. The second heading must look like supporting proof, not a second hero.
+
+5) Quick Replit steps
+- Open the landing page file (commonly app/page.tsx, pages/index.tsx, or components/LandingPage.tsx).
+- Search for the second heading string “Searches That Only Work Here”.
+- Change that heading element to:
+  - text: “Examples of searches you can’t run anywhere else”
+  - tag/style: H2 or equivalent section heading style
+- Verify there is only one H1 on the page (the hero).
+
+Done check
+On the page, you should see:
+- Top: H1 “Searches that only work here”
+- A little lower: H2 “Examples of searches you can’t run anywhere else”
+No repeated “Searches that only work here” headline.
