@@ -56,11 +56,11 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white">
       <section className="mx-auto max-w-3xl px-5 pb-10 pt-20 md:pt-28">
         <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900">
-          Describe the person you need. Not keywords.
+          Searches that only work here
         </h1>
 
         <p className="mt-4 text-sm text-gray-600">
-          Search across 1+ billion public professional profiles and see who actually fits—and why.
+          Describe the person you need — not keywords — and see who actually fits and why.
         </p>
 
         <div className="mt-7">
