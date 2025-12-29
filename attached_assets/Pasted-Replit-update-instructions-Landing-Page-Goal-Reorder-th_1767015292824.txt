@@ -1,0 +1,129 @@
+Replit update instructions (Landing Page)
+
+Goal
+Reorder the landing page so visitors see the value immediately:
+1) Search bar + CTA stays at the top.
+2) Add the “source banner” directly under the search bar.
+3) Move “Searches that only work here” directly under the banner (above the “Recruiting isn’t…” section).
+4) Remove the “2 minutes per candidate” section and replace it with plain-language outcome copy.
+
+What to change (exact copy + placement)
+
+1) HERO (keep the layout, update the copy)
+Headline:
+Describe the person you need. Not keywords.
+
+Subheadline:
+Search across 1+ billion public professional profiles and see who actually fits—and why.
+
+Search placeholder (if needed):
+Describe the person you need…
+
+CTA button text (keep):
+Find Candidates Now
+
+2) ADD: SOURCE BANNER directly under the hero input + CTA (tight spacing)
+Row content (icons optional, text is fine):
+LinkedIn · GitHub · Personal Sites · Conference Talks
+
+Caption beneath the row:
+Looks across public profiles, writing, talks, and real work—not just résumés.
+
+Implementation note:
+- Place this banner inside the hero container so it appears before the user scrolls.
+- Keep it visually subtle: smaller font than the hero, muted color, no heavy borders.
+
+3) MOVE UP: “Searches that only work here” section to immediately below the source banner
+Section title:
+Searches that only work here
+
+Section subtitle:
+Ask for people the way you naturally think about them.
+
+Replace the examples list with this mixed-industry set (keep your current “query card” UI):
+1. "Senior engineers in SF who’ve spoken at React conferences"
+   Helper text: Finds engineers who show up in talks, code, and professional profiles.
+
+2. "Product managers at fintech companies who write about design systems"
+   Helper text: Surfaces PMs with real writing, portfolio work, and relevant experience.
+
+3. "Healthcare operations leaders who’ve led EHR rollouts across multiple hospitals"
+   Helper text: Identifies operators with hands-on delivery experience—not just titles.
+
+4. "Policy analysts who’ve helped write federal guidance on privacy or cybersecurity"
+   Helper text: Finds people with published work, government experience, and real influence.
+
+5. "Design leaders who’ve built and scaled design systems in regulated industries"
+   Helper text: Surfaces designers with proven systems work and leadership history.
+
+6. "Clinical researchers who’ve published outcomes studies in oncology"
+   Helper text: Finds researchers with peer-reviewed publications and institutional credibility.
+
+Implementation note:
+- If your component currently expects 4 examples, expand it to 6 (or keep 4 and rotate these).
+- The key is that this section is visible very early (ideally within the first scroll).
+
+4) KEEP: “Recruiting isn’t about finding people…” section, but it now comes AFTER the queries
+Headline:
+Recruiting isn’t about finding people.
+It’s about knowing who to contact.
+
+Paragraph:
+Most recruiting tools give you long lists and leave the judgment to you.
+Candidate Command Center shows you who stands out, why they’re a fit, and what to do next.
+
+5) KEEP: The three feature cards (rewrite the copy to plain language)
+Card 1 title:
+See the whole person
+Body:
+Get a clear picture of what someone has actually done—across their work, writing, talks, and career.
+
+Card 2 title:
+Ask better questions
+Body:
+Search in plain language instead of guessing keywords or building filters.
+
+Card 3 title:
+Know who to reach out to
+Body:
+Candidates come back ranked and explained, so you’re not guessing or manually screening.
+
+6) REMOVE: “2 minutes per candidate”
+Delete that entire band/section.
+
+Replace it with this section (can be the same band background if you like, just new copy):
+Title:
+From question to shortlist—without the busywork
+
+Body:
+Instead of jumping between tools, tabs, and profiles, you get a focused list of people who clearly match what you’re looking for.
+
+7) FINAL CTA (keep, but ensure it matches the plain language)
+Headline:
+Start finding candidates now
+
+Subheadline:
+Describe the person you need. Get clear, explainable matches in minutes.
+
+Button:
+Find Candidates Now →
+
+Where to edit in Replit (practical steps)
+- Open your landing page component (commonly one of: app/page.tsx, pages/index.tsx, or components/LandingPage.tsx).
+- Find the current section order. You should see something like:
+  Hero → “Recruiting isn’t…” → Feature cards → “2 minutes per candidate” → “Searches That Only Work Here” → Final CTA
+- Change it to:
+  Hero → SourceBanner → SearchesThatOnlyWorkHere → “Recruiting isn’t…” → Feature cards → Outcome section (replacing 2 minutes) → Final CTA
+
+Quick implementation checklist
+- Ensure the “Searches that only work here” section is above the fold or near it.
+- Make sure the banner is directly beneath the search bar.
+- Remove all mentions of “2 minutes per candidate.”
+- Keep typography consistent: hero largest, section titles medium, helper text smaller.
+- Test on mobile: the banner should wrap cleanly and the queries should stack vertically.
+
+Done definition
+When someone lands on the page, within the first screen + a small scroll they should see:
+- The search box
+- The “where we look” banner
+- Real example searches across multiple industries
