@@ -162,13 +162,12 @@ function formatDate(dateStr?: string) {
 
 function SkeletonCard() {
   return (
-    <Card className="p-4 bg-white border-gray-200 animate-pulse">
-      <div className="flex items-start gap-3">
-        <div className="w-8 h-8 rounded-full bg-gray-200" />
-        <div className="flex-1 space-y-2">
+    <Card className="p-3 bg-white border-gray-200 animate-pulse">
+      <div className="flex items-center gap-2">
+        <div className="w-7 h-7 rounded bg-gray-200" />
+        <div className="flex-1 space-y-1.5">
           <div className="h-4 bg-gray-200 rounded w-3/4" />
           <div className="h-3 bg-gray-200 rounded w-1/2" />
-          <div className="h-3 bg-gray-200 rounded w-full" />
         </div>
       </div>
     </Card>
@@ -520,7 +519,7 @@ export default function CandidateSearch() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="max-w-4xl mx-auto px-4 py-4">
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
             <div className="flex gap-3">
@@ -715,8 +714,8 @@ export default function CandidateSearch() {
                 </div>
               )}
 
-              <ScrollArea className="h-[calc(100vh-480px)]">
-                <div className="space-y-3 pr-4">
+              <ScrollArea className="h-[calc(100vh-280px)]">
+                <div className="space-y-2 pr-4">
                   {loading ? (
                     <>
                       <SkeletonCard />
@@ -762,7 +761,7 @@ export default function CandidateSearch() {
                       <Card
                         key={result.id + index}
                         onClick={() => setSelectedCandidate(result)}
-                        className={`p-4 cursor-pointer transition-all duration-200 ${
+                        className={`p-3 cursor-pointer transition-all duration-200 ${
                           selectedCandidate?.id === result.id
                             ? "bg-blue-50 border-blue-300"
                             : "bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300"
@@ -770,49 +769,35 @@ export default function CandidateSearch() {
                         style={{ animationDelay: `${index * 0.05}s` }}
                         data-testid={`card-result-${index}`}
                       >
-                        <div className="flex items-start gap-3 group">
-                          <div className={`p-2 rounded-lg ${getPlatformColor(result.platform)}`}>
+                        <div className="flex items-center gap-2 group">
+                          <div className={`p-1.5 rounded ${getPlatformColor(result.platform)}`}>
                             {getPlatformIcon(result.platform)}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-2">
-                              <h3 className="font-semibold text-gray-900 truncate group-hover:text-blue-600 transition-colors">
+                            <div className="flex items-center justify-between gap-2">
+                              <h3 className="font-medium text-sm text-gray-900 truncate group-hover:text-blue-600 transition-colors">
                                 {result.name || result.author || "Unknown"}
                               </h3>
-                              <div className="flex items-center gap-2 shrink-0">
+                              <div className="flex items-center gap-1.5 shrink-0">
+                                {result.score !== undefined && result.score !== null && result.score > 0 && (
+                                  <span className="text-xs text-gray-500">
+                                    {Math.round(result.score * 100)}%
+                                  </span>
+                                )}
                                 {result.matchStatus === "match" ? (
-                                  <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                                    <CheckCircle2 className="h-3 w-3 mr-1" />
+                                  <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-xs px-1.5 py-0">
                                     Match
                                   </Badge>
                                 ) : result.matchStatus === "miss" ? (
-                                  <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
-                                    <XCircle className="h-3 w-3 mr-1" />
+                                  <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-xs px-1.5 py-0">
                                     Miss
                                   </Badge>
                                 ) : null}
                               </div>
                             </div>
-                            <p className="text-xs text-gray-500 mt-1 line-clamp-1">
+                            <p className="text-xs text-gray-500 truncate">
                               {result.role || result.subtitle || result.title}
                             </p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Calendar className="w-3 h-3 text-gray-400" />
-                              <span className="text-xs text-gray-500">
-                                {result.publishedDate ? new Date(result.publishedDate).toLocaleDateString() : "Recent"}
-                              </span>
-                              {result.score !== undefined && result.score !== null && result.score > 0 && (
-                                <span className="flex items-center gap-1 text-xs text-gray-500 ml-2">
-                                  <TrendingUp className="h-3 w-3" />
-                                  {Math.round(result.score * 100)}%
-                                </span>
-                              )}
-                            </div>
-                            {result.highlights && result.highlights.length > 0 && (
-                              <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                                {result.highlights[0]}
-                              </p>
-                            )}
                           </div>
                         </div>
                       </Card>
