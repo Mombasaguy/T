@@ -1,0 +1,255 @@
+# TalentPilot Onboarding – Replit Implementation Instructions
+Mobile-first onboarding for recruiters. No demo data. Blank slate per user.
+
+## Goal
+New users should complete this loop in < 2 minutes:
+Search → Click candidate → Understand “why surfaced” → Save candidate
+
+Success metrics:
+- first_search_completed
+- candidate_opened
+- candidate_saved
+
+---
+
+# 1) ROUTES (Wouter)
+Add/confirm routes:
+
+- `/onboarding` → Welcome screen (first time only)
+- `/search` → Search screen (guided first search for new users)
+- `/candidate/:id` → Candidate details (show “Why this candidate surfaced” card first time)
+
+Routing behavior:
+- If user is new AND has not completed onboarding → redirect to `/onboarding`
+- After clicking “Run Your First Search” → redirect to `/search?onboarding=1`
+
+---
+
+# 2) STATE STORAGE (Local + Server)
+We need two sources of truth:
+
+### A) Local (instant UX)
+Use localStorage keys:
+- `tp_onboarding_completed` (boolean)
+- `tp_first_search_completed` (boolean)
+- `tp_first_candidate_opened` (boolean)
+- `tp_first_candidate_saved` (boolean)
+
+### B) Server (optional, best practice)
+If you have user accounts, store onboarding flags per user:
+- onboarding_completed_at
+- first_search_at
+- first_save_at
+
+Start with localStorage to ship fast, then add server sync later.
+
+---
+
+# 3) COMPONENTS TO BUILD (Exact UI)
+Create these files:
+
+## (1) `src/components/onboarding/OnboardingWelcome.tsx`
+Full-screen on mobile, centered modal on desktop.
+
+Copy:
+Title: "Welcome to TalentPilot"
+Body: "TalentPilot helps recruiters find qualified candidates beyond job boards by searching across public professional work. Start by describing the person you’re looking for."
+Button: "Run Your First Search"
+
+On click:
+- set localStorage `tp_onboarding_completed=true`
+- navigate to `/search?onboarding=1`
+
+## (2) `src/components/onboarding/GuidedSearchInput.tsx`
+A wrapper around your existing search input that:
+- Pre-fills a query if `?onboarding=1` and `tp_first_search_completed` is false
+- Autfocuses input
+- Shows helper text
+- Has a sticky “Search Candidates” button on mobile
+
+Pre-filled query:
+"Senior backend engineer with fintech experience who’s worked on payments systems"
+
+Helper text:
+"Write this the way you’d explain the role to a colleague. You can edit this at any time."
+
+## (3) `src/components/onboarding/SearchLoadingOverlay.tsx`
+Overlay shown while a search request is in-flight.
+
+Copy:
+"Searching public professional profiles…"
+"Looking at experience, work, and relevant professional signals."
+
+## (4) `src/components/onboarding/MatchExplanationTooltip.tsx`
+Tap/hover on “Match” badge shows explanation.
+
+Copy:
+"Indicates how closely this candidate matches your search based on experience and demonstrated work."
+
+Mobile: bottom sheet dialog
+Desktop: tooltip
+
+## (5) `src/components/onboarding/CandidateWhyCard.tsx`
+Shown on candidate details page *first time only*.
+
+Title:
+"Why this candidate surfaced"
+
+Body bullets (dynamic from backend if available; otherwise generic):
+- "Relevant experience aligned to your search"
+- "Demonstrated work in public professional sources"
+- "Recent and relevant signals"
+
+Dismiss:
+- set `tp_first_candidate_opened=true`
+
+## (6) `src/components/onboarding/FirstSavePrompt.tsx`
+Sticky bottom bar on mobile after user views a candidate for 10 seconds (first time only).
+
+Copy:
+"Save this candidate to review later?"
+Buttons:
+Primary: "Save Candidate"
+Secondary: "Not now"
+
+On save:
+- set `tp_first_candidate_saved=true`
+
+## (7) Empty States
+Create simple components:
+
+`src/components/empty/EmptyCandidatesState.tsx`
+Copy:
+"No saved candidates yet"
+"Saved candidates will appear here as you review search results."
+
+`src/components/empty/EmptyPipeline.tsx`
+Copy:
+"Your hiring pipeline is ready"
+"Move candidates through stages as you review and contact them."
+
+## (8) `src/components/billing/UsageNudgeBanner.tsx`
+Banner shown at top of search results / dashboard.
+
+Rules:
+- After 4 searches:
+"You’ve used 4 of your 10 free searches. Most recruiters refine searches a few times before finding strong matches."
+- After 8 searches:
+"Recruiting teams usually upgrade once they’ve identified candidates they want to follow up with."
+- After 10:
+"You’ve used your free searches. Upgrade to continue sourcing, saving, and managing candidates."
+Button: "View Plans"
+
+---
+
+# 4) MOBILE-FIRST LAYOUT RULES
+Implement these layout behaviors during onboarding:
+
+### Search screen
+- Keep search input at top
+- Sticky “Search Candidates” button at bottom on mobile
+- Avoid sidebars during onboarding
+
+### Results screen
+- Vertical card list (single column)
+- Candidate click opens candidate page full-screen on mobile
+
+### Candidate screen
+- Show CandidateWhyCard at top (first time only)
+- Sticky “Save Candidate” on mobile (or show FirstSavePrompt)
+
+---
+
+# 5) EVENT TRACKING (Optional but Recommended)
+Track events (console or analytics):
+
+- `onboarding_started`
+- `onboarding_completed`
+- `first_search_completed`
+- `candidate_opened`
+- `candidate_saved`
+- `paywall_shown`
+
+Even if you don’t have analytics, log to console for now.
+
+---
+
+# 6) INTEGRATION POINTS (Where to plug into your existing app)
+
+### A) In your main app route guard
+If user not onboarded:
+- redirect `/onboarding`
+
+### B) In Search page
+Use `<GuidedSearchInput />` when:
+- `location.search` contains onboarding=1 AND first search not completed
+
+When a search completes successfully:
+- set `tp_first_search_completed=true`
+
+Show `<SearchLoadingOverlay />` while fetching results.
+
+### C) In Results list
+Add Match badge tooltip using `<MatchExplanationTooltip />`.
+
+### D) In Candidate page
+At top, render `<CandidateWhyCard />` when:
+- `tp_first_candidate_opened` is false
+
+After candidate is displayed for 10 seconds:
+- render `<FirstSavePrompt />` if `tp_first_candidate_saved` is false
+
+---
+
+# 7) BLANK SLATE RULE (IMPORTANT)
+Do NOT seed candidates, pipeline items, or stats.
+All lists and numbers must be derived from the user’s activity only.
+
+If zero:
+- show structured empty states (table headers/pipeline columns)
+- show guidance copy
+- do not show fake data
+
+---
+
+# 8) BUILD ORDER (Fastest path)
+1) OnboardingWelcome route + guard
+2) GuidedSearchInput on search page
+3) CandidateWhyCard on candidate page
+4) FirstSavePrompt timer prompt
+5) Empty states
+6) Usage nudge banner
+
+---
+
+# 9) COPY (Recruiter-Friendly)
+Use exactly this text in UI:
+
+Welcome:
+"TalentPilot helps recruiters find qualified candidates beyond job boards by searching across public professional work."
+
+Search helper:
+"Write this the way you’d explain the role to a colleague. You can edit this at any time."
+
+Loading:
+"Searching public professional profiles…"
+"Looking at experience, work, and relevant professional signals."
+
+Match tooltip:
+"Indicates how closely this candidate matches your search based on experience and demonstrated work."
+
+Why card:
+"Why this candidate surfaced"
+
+Save prompt:
+"Save this candidate to review later?"
+
+Usage nudges:
+4: "You’ve used 4 of your 10 free searches. Most recruiters refine searches a few times before finding strong matches."
+8: "Recruiting teams usually upgrade once they’ve identified candidates they want to follow up with."
+10: "You’ve used your free searches. Upgrade to continue sourcing, saving, and managing candidates."
+
+---
+
+# End
+Once these pieces are wired, onboarding will be mobile-first, recruiter-friendly, and conversion-optimized.

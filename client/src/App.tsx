@@ -1,10 +1,11 @@
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route, useLocation, Redirect } from "wouter";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { getOnboardingState } from "@/lib/onboarding";
 
 import Dashboard from "./pages/dashboard";
 import Candidates from "./pages/candidates";
@@ -20,22 +21,38 @@ import Compliance from "./pages/compliance";
 import Onboarding from "./pages/onboarding";
 import NotFound from "./pages/not-found";
 
+function OnboardingGuard({ children }: { children: React.ReactNode }) {
+  const [location] = useLocation();
+  const state = getOnboardingState();
+  
+  const publicRoutes = ["/", "/pricing", "/compliance", "/onboarding", "/welcome"];
+  const isPublicRoute = publicRoutes.includes(location);
+  
+  if (!state.onboardingCompleted && !isPublicRoute) {
+    return <Redirect to="/onboarding" />;
+  }
+  
+  return <>{children}</>;
+}
+
 function InternalRouter() {
   return (
-    <Switch>
-      <Route path="/search" component={CandidateSearch} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/candidates" component={Candidates} />
-      <Route path="/pipeline" component={Pipeline} />
-      <Route path="/stats" component={Stats} />
-      <Route path="/positions" component={Positions} />
-      <Route path="/settings" component={Settings} />
-      <Route path="/pricing" component={Pricing} />
-      <Route path="/welcome" component={Welcome} />
-      <Route path="/compliance" component={Compliance} />
-      <Route path="/onboarding" component={Onboarding} />
-      <Route component={NotFound} />
-    </Switch>
+    <OnboardingGuard>
+      <Switch>
+        <Route path="/search" component={CandidateSearch} />
+        <Route path="/dashboard" component={Dashboard} />
+        <Route path="/candidates" component={Candidates} />
+        <Route path="/pipeline" component={Pipeline} />
+        <Route path="/stats" component={Stats} />
+        <Route path="/positions" component={Positions} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/pricing" component={Pricing} />
+        <Route path="/welcome" component={Welcome} />
+        <Route path="/compliance" component={Compliance} />
+        <Route path="/onboarding" component={Onboarding} />
+        <Route component={NotFound} />
+      </Switch>
+    </OnboardingGuard>
   );
 }
 
@@ -49,6 +66,10 @@ function AppContent() {
 
   if (location === "/") {
     return <Landing />;
+  }
+
+  if (location === "/onboarding") {
+    return <Onboarding />;
   }
 
   return (

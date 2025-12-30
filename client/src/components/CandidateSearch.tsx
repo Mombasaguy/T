@@ -36,6 +36,16 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { apiRequest } from "@/lib/queryClient";
+import { 
+  getOnboardingState, 
+  setFirstSearchCompleted, 
+  incrementSearchCount,
+  PREFILLED_SEARCH_QUERY,
+  trackEvent
+} from "@/lib/onboarding";
+import { SearchLoadingOverlay } from "@/components/onboarding/SearchLoadingOverlay";
+import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
+import { UsageNudgeBanner } from "@/components/onboarding/UsageNudgeBanner";
 
 interface SearchResult {
   id: string;
@@ -220,8 +230,6 @@ export default function CandidateSearch() {
   const [showUsageNudge, setShowUsageNudge] = useState<string | null>(null);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
-  
-  const ONBOARDING_QUERY = "Senior backend engineer with fintech experience who's worked on payments systems";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -316,10 +324,11 @@ export default function CandidateSearch() {
     const urlParams = new URLSearchParams(window.location.search);
     const onboardingParam = urlParams.get('onboarding');
     const urlQuery = urlParams.get('query');
+    const state = getOnboardingState();
     
-    if (onboardingParam === 'true') {
+    if (onboardingParam === '1' && !state.firstSearchCompleted) {
       setIsOnboarding(true);
-      setQuery(ONBOARDING_QUERY);
+      setQuery(PREFILLED_SEARCH_QUERY);
     } else if (urlQuery) {
       setQuery(urlQuery);
       setTimeout(() => {
@@ -430,8 +439,12 @@ export default function CandidateSearch() {
       // Clear onboarding state after first search
       if (isOnboarding) {
         setIsOnboarding(false);
-        localStorage.setItem("onboardingComplete", "true");
+        setFirstSearchCompleted();
       }
+      
+      // Track search count for usage nudges
+      incrementSearchCount();
+      trackEvent('search_completed', { query: q, resultCount: searchResults.length });
 
       if (searchMode === "url" && data.sourceProfile) {
         setSourceProfile(data.sourceProfile);
@@ -549,7 +562,9 @@ export default function CandidateSearch() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <SearchLoadingOverlay isVisible={loading && isOnboarding} />
       <div className="max-w-4xl mx-auto px-4 py-4">
+        <UsageNudgeBanner maxFreeSearches={subscription.searchesLimit} />
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
             <div className="flex gap-3">
@@ -909,13 +924,7 @@ export default function CandidateSearch() {
                         </p>
                       )}
 
-                      {selectedCandidate.matchStatus === "match" && (
-                        <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
-                          <p className="text-sm text-emerald-800">
-                            This candidate surfaced because of relevant experience matching your search criteria.
-                          </p>
-                        </div>
-                      )}
+                      <CandidateWhyCard />
 
                       {selectedCandidate.text && (
                         <div className="mb-4">
