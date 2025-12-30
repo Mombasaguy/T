@@ -531,14 +531,31 @@ export default function CandidateSearch() {
     setCopied(false);
     
     try {
-      const response = await apiRequest("POST", "/api/generate-email", {
-        candidate: selectedCandidate,
+      const response = await fetch("/api/generate-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ candidate: selectedCandidate }),
       });
       const data = await response.json();
+      
+      if (response.status === 403) {
+        // User needs to upgrade
+        if (confirm("AI email generation requires a Professional plan or higher. Would you like to upgrade?")) {
+          window.location.href = "/pricing";
+        }
+        return;
+      }
+      
+      if (!response.ok) {
+        alert(data.error || "Failed to generate email. Please try again.");
+        return;
+      }
+      
       setEmailDraft(data.email);
       setShowEmailModal(true);
     } catch (error) {
       console.error("Failed to generate email:", error);
+      alert("Failed to generate email. Please try again.");
     } finally {
       setGeneratingEmail(false);
     }
