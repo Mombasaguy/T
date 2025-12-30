@@ -1,26 +1,30 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { getOnboardingState, getUsageNudgeMessage, trackEvent, ONBOARDING_EVENTS } from "@/lib/onboarding";
+import { getUsageNudgeMessage, trackEvent, ONBOARDING_EVENTS } from "@/lib/onboarding";
 import { AlertCircle, X } from "lucide-react";
 
 interface UsageNudgeBannerProps {
   maxFreeSearches?: number;
+  searchCount?: number;
 }
 
-export function UsageNudgeBanner({ maxFreeSearches = 10 }: UsageNudgeBannerProps) {
+export function UsageNudgeBanner({ maxFreeSearches = 10, searchCount = 0 }: UsageNudgeBannerProps) {
   const [nudge, setNudge] = useState<{ message: string; showUpgrade: boolean } | null>(null);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    const state = getOnboardingState();
-    const nudgeMessage = getUsageNudgeMessage(state.searchCount, maxFreeSearches);
+    const nudgeMessage = getUsageNudgeMessage(searchCount, maxFreeSearches);
     setNudge(nudgeMessage);
     
-    if (nudgeMessage?.showUpgrade && state.searchCount >= maxFreeSearches) {
+    if (nudgeMessage?.showUpgrade && searchCount >= maxFreeSearches) {
       trackEvent(ONBOARDING_EVENTS.PAYWALL_SHOWN);
     }
-  }, [maxFreeSearches]);
+    
+    if (nudgeMessage) {
+      setDismissed(false);
+    }
+  }, [searchCount, maxFreeSearches]);
 
   if (!nudge || dismissed) return null;
 

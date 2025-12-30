@@ -46,6 +46,7 @@ import {
 import { SearchLoadingOverlay } from "@/components/onboarding/SearchLoadingOverlay";
 import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
 import { UsageNudgeBanner } from "@/components/onboarding/UsageNudgeBanner";
+import { FirstSavePrompt } from "@/components/onboarding/FirstSavePrompt";
 
 interface SearchResult {
   id: string;
@@ -227,7 +228,7 @@ export default function CandidateSearch() {
   });
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const [isOnboarding, setIsOnboarding] = useState(false);
-  const [showUsageNudge, setShowUsageNudge] = useState<string | null>(null);
+  const [localSearchCount, setLocalSearchCount] = useState(0);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
 
@@ -326,6 +327,8 @@ export default function CandidateSearch() {
     const urlQuery = urlParams.get('query');
     const state = getOnboardingState();
     
+    setLocalSearchCount(state.searchCount);
+    
     if (onboardingParam === '1' && !state.firstSearchCompleted) {
       setIsOnboarding(true);
       setQuery(PREFILLED_SEARCH_QUERY);
@@ -416,24 +419,9 @@ export default function CandidateSearch() {
       const searchResults = data.results || [];
       setResults(searchResults);
 
-      // Update subscription usage and show nudges
+      // Update subscription usage
       if (data.usage) {
         setSubscription(prev => ({ ...prev, ...data.usage }));
-        const used = data.usage.searchesUsed || 0;
-        const limit = data.usage.searchesLimit || 10;
-        
-        // Show usage nudges at specific thresholds (free plan only)
-        if (data.usage.plan === 'free') {
-          if (used === 4) {
-            setShowUsageNudge("You've used 4 of your 10 free searches. Most recruiters refine their searches a few times before finding strong matches.");
-          } else if (used === 8) {
-            setShowUsageNudge("Recruiting teams usually upgrade once they've identified candidates they want to follow up with.");
-          } else if (used >= limit) {
-            setShowUsageNudge("You've used your free searches. Upgrade to continue sourcing, saving, and managing candidates.");
-          } else {
-            setShowUsageNudge(null);
-          }
-        }
       }
       
       // Clear onboarding state after first search
@@ -443,7 +431,8 @@ export default function CandidateSearch() {
       }
       
       // Track search count for usage nudges
-      incrementSearchCount();
+      const newCount = incrementSearchCount();
+      setLocalSearchCount(newCount);
       trackEvent('search_completed', { query: q, resultCount: searchResults.length });
 
       if (searchMode === "url" && data.sourceProfile) {
@@ -564,7 +553,7 @@ export default function CandidateSearch() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <SearchLoadingOverlay isVisible={loading && isOnboarding} />
       <div className="max-w-4xl mx-auto px-4 py-4">
-        <UsageNudgeBanner maxFreeSearches={subscription.searchesLimit} />
+        <UsageNudgeBanner maxFreeSearches={subscription.searchesLimit} searchCount={localSearchCount} />
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
             <div className="flex gap-3">
@@ -773,17 +762,6 @@ export default function CandidateSearch() {
                       <p className="text-sm text-gray-600">{sourceProfile.title}</p>
                     </div>
                   </div>
-                </div>
-              )}
-
-              {showUsageNudge && (
-                <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <p className="text-sm text-amber-800">{showUsageNudge}</p>
-                  {subscription.searchesUsed >= subscription.searchesLimit && (
-                    <a href="/pricing" className="inline-block mt-2 text-sm font-medium text-amber-700 hover:text-amber-900 underline" data-testid="link-view-plans">
-                      View Plans
-                    </a>
-                  )}
                 </div>
               )}
 
@@ -1114,6 +1092,8 @@ export default function CandidateSearch() {
                 </p>
               )}
 
+              <CandidateWhyCard />
+
               {selectedCandidate.text && (
                 <div className="mb-4">
                   <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
@@ -1423,6 +1403,34 @@ export default function CandidateSearch() {
               </button>
             </div>
           </div>
+        </div>
+      )}
+
+      {selectedCandidate && (
+        <FirstSavePrompt
+          onSave={() => {
+            updateCandidateData(selectedCandidate, { 
+              tags: [...getCandidateData(selectedCandidate).tags, "Saved"]
+            });
+          }}
+        />
+      )}
+
+      {isOnboarding && !searchPerformed && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-40">
+          <Button
+            onClick={() => handleSearch()}
+            disabled={loading || !query.trim()}
+            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium"
+            data-testid="button-search-mobile"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <Search className="h-4 w-4 mr-2" />
+            )}
+            Search Candidates
+          </Button>
         </div>
       )}
     </div>
