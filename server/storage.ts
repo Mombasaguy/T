@@ -32,6 +32,11 @@ export interface IStorage {
   incrementEmailGenerated(userId: string): Promise<void>;
   upgradeSubscription(userId: string, plan: string, stripeSubscriptionId: string, stripePriceId: string, currentPeriodEnd: string): Promise<Subscription | null>;
   cancelSubscription(userId: string): Promise<Subscription | null>;
+  
+  // Demo data methods
+  isDemoDataLoaded(): boolean;
+  loadDemoData(): void;
+  clearAllData(): void;
 }
 
 export class MemStorage implements IStorage {
@@ -40,13 +45,30 @@ export class MemStorage implements IStorage {
   private positions: Map<string, Position>;
   private subscriptions: Map<string, Subscription>;
 
+  private demoDataLoaded: boolean = false;
+
   constructor() {
     this.users = new Map();
     this.candidates = new Map();
     this.positions = new Map();
     this.subscriptions = new Map();
+  }
+
+  isDemoDataLoaded(): boolean {
+    return this.demoDataLoaded;
+  }
+
+  loadDemoData(): void {
+    if (this.demoDataLoaded) return;
     this.seedPositions();
     this.seedCandidates();
+    this.demoDataLoaded = true;
+  }
+
+  clearAllData(): void {
+    this.candidates.clear();
+    this.positions.clear();
+    this.demoDataLoaded = false;
   }
 
   private seedPositions() {
@@ -371,6 +393,16 @@ export class MemStorage implements IStorage {
     if (existing) {
       const updated = { ...existing, searchesUsed: existing.searchesUsed + 1, updatedAt: new Date().toISOString() };
       this.subscriptions.set(existing.id, updated);
+    } else {
+      // Create a free subscription with 1 search used for new users
+      await this.createSubscription({
+        userId,
+        plan: SubscriptionPlan.FREE,
+        status: "active",
+        searchesUsed: 1,
+        searchesLimit: 10,
+        emailsGenerated: 0,
+      });
     }
   }
 

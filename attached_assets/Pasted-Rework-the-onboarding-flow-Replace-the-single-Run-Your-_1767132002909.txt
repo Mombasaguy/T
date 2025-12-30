@@ -1,0 +1,41 @@
+Rework the onboarding flow
+
+Replace the single “Run Your First Search” card with a multi‑step wizard that gathers basic context before users hit the search page.
+
+Steps should include:
+
+Role selection – ask if the user is a recruiter, hiring manager, agency, etc. Use this to tailor language in the app.
+
+Company and hiring details – capture company name and typical hiring volume/goals.
+
+Primary use case – let users pick whether they will primarily source candidates, manage pipelines, run outreach, or something else.
+
+First success action – prompt them to “Create your first search” or “Add a new position” once the context is captured.
+
+Add a progress indicator (e.g., “Step 1 of 4”) so the user knows how far along they are.
+
+Ensure a blank slate for new workspaces
+
+When a user finishes onboarding, start them with zero candidates, zero job positions and no pipeline stats.
+
+Seeded data (like sample candidates and job positions) should only appear if the user explicitly chooses to “Load demo data” or accesses a demo workspace. Add a toggle or separate demo environment for this.
+
+Update the dashboard, candidates list, pipeline and job positions pages to respect the blank‑state; show placeholder text like “No candidates yet – run your first search” rather than sample names.
+
+Clarify search limits in the free plan
+
+The pricing page states “10 candidate searches per month” for the free tier. Define what counts as a “search” (e.g., every time a query is run).
+
+In the UI, add a counter or progress bar showing remaining searches for the month and an upgrade prompt when the limit is reached instead of an unexplained break in functionality.
+
+Keep recruiter‑centric language and remove vendor references
+
+Continue to avoid “EXA” or any other third‑party vendor names in copy, code comments, or metadata.
+
+Emphasize recruiting outcomes and workflow benefits (“find qualified candidates, manage pipeline, track outreach”) rather than technical jargon.
+
+Post‑payment cleanup
+
+After a user upgrades from free to paid, ensure their workspace remains empty until they create positions or candidates themselves.
+
+Do not auto‑populate pipeline stats or candidate lists after payment; only show data the user has generated.

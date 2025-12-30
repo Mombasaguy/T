@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Plus, Search, Filter, LayoutGrid, List, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -198,17 +199,21 @@ export default function Candidates() {
           <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
             <Search className="h-6 w-6 text-muted-foreground" />
           </div>
-          <h3 className="text-lg font-medium">No candidates found</h3>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h3 className="text-lg font-medium">
+            {candidates.length === 0 ? "No candidates yet" : "No candidates found"}
+          </h3>
+          <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
             {searchQuery || stageFilter !== "all"
               ? "Try adjusting your search or filters"
-              : "Add your first candidate to get started"}
+              : "Run your first search to find qualified candidates, then save the ones you want to track here."}
           </p>
-          {!searchQuery && stageFilter === "all" && (
-            <Button onClick={() => setDialogOpen(true)} className="mt-4" data-testid="button-add-first">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Candidate
-            </Button>
+          {!searchQuery && stageFilter === "all" && candidates.length === 0 && (
+            <Link href="/search">
+              <Button className="mt-4" data-testid="button-search-candidates">
+                <Search className="h-4 w-4 mr-2" />
+                Find Candidates
+              </Button>
+            </Link>
           )}
         </div>
       ) : (

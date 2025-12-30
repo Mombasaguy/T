@@ -720,5 +720,20 @@ Do not include [brackets] or placeholders. Write a complete email ready to send.
     }
   });
 
+  // Demo data management
+  app.get("/api/demo-data/status", (_req, res) => {
+    res.json({ loaded: storage.isDemoDataLoaded() });
+  });
+
+  app.post("/api/demo-data/load", (_req, res) => {
+    storage.loadDemoData();
+    res.json({ success: true, message: "Demo data loaded" });
+  });
+
+  app.post("/api/demo-data/clear", (_req, res) => {
+    storage.clearAllData();
+    res.json({ success: true, message: "All data cleared" });
+  });
+
   return httpServer;
 }

@@ -4,7 +4,23 @@ export const ONBOARDING_KEYS = {
   FIRST_CANDIDATE_OPENED: 'tp_first_candidate_opened',
   FIRST_CANDIDATE_SAVED: 'tp_first_candidate_saved',
   SEARCH_COUNT: 'tp_search_count',
+  USER_CONTEXT: 'tp_user_context',
+  DEMO_MODE: 'tp_demo_mode',
 } as const;
+
+export interface UserContext {
+  role: 'recruiter' | 'hiring_manager' | 'agency' | 'founder' | 'hr_lead' | '';
+  companyName: string;
+  hiringVolume: 'low' | 'medium' | 'high' | '';
+  primaryUseCase: 'source' | 'pipeline' | 'outreach' | 'all' | '';
+}
+
+export const DEFAULT_USER_CONTEXT: UserContext = {
+  role: '',
+  companyName: '',
+  hiringVolume: '',
+  primaryUseCase: '',
+};
 
 export const ONBOARDING_EVENTS = {
   ONBOARDING_STARTED: 'onboarding_started',
@@ -60,6 +76,43 @@ export function resetOnboarding() {
   Object.values(ONBOARDING_KEYS).forEach(key => {
     localStorage.removeItem(key);
   });
+}
+
+export function getUserContext(): UserContext {
+  try {
+    const stored = localStorage.getItem(ONBOARDING_KEYS.USER_CONTEXT);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+  } catch (e) {
+    console.error('Failed to parse user context', e);
+  }
+  return DEFAULT_USER_CONTEXT;
+}
+
+export function setUserContext(context: UserContext) {
+  localStorage.setItem(ONBOARDING_KEYS.USER_CONTEXT, JSON.stringify(context));
+  trackEvent('user_context_saved', context as unknown as Record<string, unknown>);
+}
+
+export function isDemoMode(): boolean {
+  return localStorage.getItem(ONBOARDING_KEYS.DEMO_MODE) === 'true';
+}
+
+export function setDemoMode(enabled: boolean) {
+  localStorage.setItem(ONBOARDING_KEYS.DEMO_MODE, enabled ? 'true' : 'false');
+  trackEvent('demo_mode_toggled', { enabled });
+}
+
+export function getRoleLabel(role: UserContext['role']): string {
+  const labels: Record<string, string> = {
+    recruiter: 'Recruiter',
+    hiring_manager: 'Hiring Manager',
+    agency: 'Recruiting Agency',
+    founder: 'Founder / Executive',
+    hr_lead: 'HR Lead',
+  };
+  return labels[role] || 'User';
 }
 
 export const PREFILLED_SEARCH_QUERY = "Senior backend engineer with fintech experience who's worked on payments systems";

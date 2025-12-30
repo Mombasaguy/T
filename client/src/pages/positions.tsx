@@ -576,10 +576,10 @@ export default function Positions() {
               <CardContent className="py-12 text-center">
                 <Briefcase className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                 <h3 className="text-lg font-medium mb-2">No positions yet</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Create your first job position to start tracking candidates
+                <p className="text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
+                  Create your first job position to organize candidates by role and track your hiring pipeline for each opening.
                 </p>
-                <Button onClick={() => setIsCreateOpen(true)}>
+                <Button onClick={() => setIsCreateOpen(true)} data-testid="button-empty-add-position">
                   <Plus className="h-4 w-4 mr-2" />
                   Add Position
                 </Button>

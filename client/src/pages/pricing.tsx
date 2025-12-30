@@ -75,6 +75,11 @@ const includedFeatures = [
 
 const faqs = [
   {
+    question: "What counts as a search?",
+    answer:
+      "Each time you run a query - whether describing a candidate like 'senior React engineer with fintech experience' or using a profile URL to find similar candidates - that counts as one search. Refining your search with a new query uses another search. Viewing candidate details, saving candidates, and exporting don't count toward your limit.",
+  },
+  {
     question: "How is this different from LinkedIn Recruiter?",
     answer:
       "TalentPilot searches across public professional profiles including LinkedIn, GitHub, personal sites, and blogs - giving you access to candidates you won't find on LinkedIn alone. Plus, we explain why each candidate surfaced so you can make faster decisions.",

@@ -6,6 +6,7 @@ import { CandidateDialog } from "@/components/candidate-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { EmptyPipeline } from "@/components/empty/EmptyPipeline";
 import type { Candidate, CandidateFormData, CandidateStageType } from "@shared/schema";
 
 const pipelineStages: { stage: CandidateStageType; label: string }[] = [
@@ -90,30 +91,36 @@ export default function Pipeline() {
     );
   }
 
+  const isEmpty = candidates.length === 0;
+
   return (
     <div className="p-6 h-full flex flex-col">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold" data-testid="text-page-title">Pipeline</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Drag and drop candidates between stages
+          {isEmpty ? "Track candidates through your hiring stages" : "Drag and drop candidates between stages"}
         </p>
       </div>
 
-      <ScrollArea className="flex-1 -mx-6 px-6">
-        <div className="flex gap-4 pb-4 h-[calc(100vh-200px)]">
-          {pipelineStages.map(({ stage, label }) => (
-            <PipelineColumn
-              key={stage}
-              stage={stage}
-              label={label}
-              candidates={getCandidatesForStage(stage)}
-              onCandidateClick={handleCandidateClick}
-              onDrop={handleDrop}
-            />
-          ))}
-        </div>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      {isEmpty ? (
+        <EmptyPipeline />
+      ) : (
+        <ScrollArea className="flex-1 -mx-6 px-6">
+          <div className="flex gap-4 pb-4 h-[calc(100vh-200px)]">
+            {pipelineStages.map(({ stage, label }) => (
+                <PipelineColumn
+                key={stage}
+                stage={stage}
+                label={label}
+                candidates={getCandidatesForStage(stage)}
+                onCandidateClick={handleCandidateClick}
+                onDrop={handleDrop}
+              />
+            ))}
+          </div>
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+      )}
 
       <CandidateDialog
         open={dialogOpen}

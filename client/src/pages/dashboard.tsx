@@ -1,10 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { Users, UserCheck, Clock, TrendingUp, Calendar, Briefcase } from "lucide-react";
+import { Link } from "wouter";
+import { Users, UserCheck, Clock, TrendingUp, Calendar, Briefcase, Search } from "lucide-react";
 import { StatsCard } from "@/components/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import type { Candidate } from "@shared/schema";
 
 function getInitials(name: string): string {
@@ -110,8 +112,14 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             {recentCandidates.length === 0 ? (
-              <div className="py-8 text-center text-sm text-muted-foreground" data-testid="empty-recent">
-                No candidates yet. Add your first candidate to get started.
+              <div className="py-8 text-center" data-testid="empty-recent">
+                <p className="text-sm text-muted-foreground mb-3">No candidates yet. Run your first search to find qualified people.</p>
+                <Link href="/search">
+                  <Button size="sm" data-testid="button-dashboard-search">
+                    <Search className="w-4 h-4 mr-1" />
+                    Run a Search
+                  </Button>
+                </Link>
               </div>
             ) : (
               <div className="space-y-3">
@@ -150,7 +158,7 @@ export default function Dashboard() {
           <CardContent>
             {interviewCandidates.length === 0 ? (
               <div className="py-8 text-center text-sm text-muted-foreground" data-testid="empty-interviews">
-                No interviews scheduled. Move candidates to the interview stage.
+                No interviews scheduled. Move candidates to the interview stage when you're ready to speak with them.
               </div>
             ) : (
               <div className="space-y-3">

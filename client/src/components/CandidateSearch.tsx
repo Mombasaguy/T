@@ -46,6 +46,7 @@ import {
 import { SearchLoadingOverlay } from "@/components/onboarding/SearchLoadingOverlay";
 import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
 import { UsageNudgeBanner } from "@/components/onboarding/UsageNudgeBanner";
+import { SearchLimitCounter } from "@/components/SearchLimitCounter";
 import { FirstSavePrompt } from "@/components/onboarding/FirstSavePrompt";
 
 interface SearchResult {
@@ -553,6 +554,11 @@ export default function CandidateSearch() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <SearchLoadingOverlay isVisible={loading && isOnboarding} />
       <div className="max-w-4xl mx-auto px-4 py-4">
+        <SearchLimitCounter 
+          searchesUsed={subscription.searchesUsed} 
+          searchesLimit={subscription.searchesLimit} 
+          plan={subscription.plan} 
+        />
         <UsageNudgeBanner maxFreeSearches={subscription.searchesLimit} searchCount={localSearchCount} />
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
