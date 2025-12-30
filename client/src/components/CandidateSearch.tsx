@@ -34,6 +34,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { apiRequest } from "@/lib/queryClient";
 
 interface SearchResult {
@@ -215,8 +216,12 @@ export default function CandidateSearch() {
     status: 'active'
   });
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const [isOnboarding, setIsOnboarding] = useState(false);
+  const [showUsageNudge, setShowUsageNudge] = useState<string | null>(null);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
+  
+  const ONBOARDING_QUERY = "Senior backend engineer with fintech experience who's worked on payments systems";
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -307,12 +312,16 @@ export default function CandidateSearch() {
     };
     fetchSubscription();
     
-    // Auto-search if query parameter is present in URL
+    // Check for onboarding mode
     const urlParams = new URLSearchParams(window.location.search);
+    const onboardingParam = urlParams.get('onboarding');
     const urlQuery = urlParams.get('query');
-    if (urlQuery) {
+    
+    if (onboardingParam === 'true') {
+      setIsOnboarding(true);
+      setQuery(ONBOARDING_QUERY);
+    } else if (urlQuery) {
       setQuery(urlQuery);
-      // Trigger search after setting query
       setTimeout(() => {
         handleSearch(urlQuery);
       }, 100);
@@ -398,9 +407,30 @@ export default function CandidateSearch() {
       const searchResults = data.results || [];
       setResults(searchResults);
 
-      // Update subscription usage
+      // Update subscription usage and show nudges
       if (data.usage) {
         setSubscription(prev => ({ ...prev, ...data.usage }));
+        const used = data.usage.searchesUsed || 0;
+        const limit = data.usage.searchesLimit || 10;
+        
+        // Show usage nudges at specific thresholds (free plan only)
+        if (data.usage.plan === 'free') {
+          if (used === 4) {
+            setShowUsageNudge("You've used 4 of your 10 free searches. Most recruiters refine their searches a few times before finding strong matches.");
+          } else if (used === 8) {
+            setShowUsageNudge("Recruiting teams usually upgrade once they've identified candidates they want to follow up with.");
+          } else if (used >= limit) {
+            setShowUsageNudge("You've used your free searches. Upgrade to continue sourcing, saving, and managing candidates.");
+          } else {
+            setShowUsageNudge(null);
+          }
+        }
+      }
+      
+      // Clear onboarding state after first search
+      if (isOnboarding) {
+        setIsOnboarding(false);
+        localStorage.setItem("onboardingComplete", "true");
       }
 
       if (searchMode === "url" && data.sourceProfile) {
@@ -548,29 +578,39 @@ export default function CandidateSearch() {
                 )}
               </Button>
             </div>
+            {isOnboarding && (
+              <p className="text-sm text-gray-500 mt-2">
+                Write this the way you'd explain the role to a colleague. You can edit this at any time.
+              </p>
+            )}
           </div>
 
           {!searchPerformed && (
-            <div className="flex flex-wrap justify-center gap-3">
-              <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-                <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-                <span className="text-sm font-medium text-gray-700">LinkedIn</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-                <Github className="w-5 h-5 text-gray-900" />
-                <span className="text-sm font-medium text-gray-700">GitHub</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-                </svg>
-                <span className="text-sm font-medium text-gray-700">Personal Sites</span>
-              </div>
-              <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
-                <Mail className="w-5 h-5 text-white" />
-                <span className="text-sm font-medium text-white">AI Outreach</span>
+            <div className="text-center py-8">
+              <p className="text-gray-600 mb-6">
+                Describe the candidate you're looking for - experience, background, or outcomes.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700">LinkedIn</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+                  <Github className="w-5 h-5 text-gray-900" />
+                  <span className="text-sm font-medium text-gray-700">GitHub</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
+                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700">Personal Sites</span>
+                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
+                  <Mail className="w-5 h-5 text-white" />
+                  <span className="text-sm font-medium text-white">AI Outreach</span>
+                </div>
               </div>
             </div>
           )}
@@ -584,14 +624,21 @@ export default function CandidateSearch() {
                   {loading ? "Searching..." : `${results.length} Results`}
                 </h2>
                 {results.length > 0 && (
-                  <button
-                    onClick={exportToCSV}
-                    className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-2"
-                    data-testid="button-export-csv"
-                  >
-                    <Download className="w-4 h-4" />
-                    Export CSV
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        onClick={exportToCSV}
+                        className="px-4 py-2 bg-white hover:bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 flex items-center gap-2"
+                        data-testid="button-export-csv"
+                      >
+                        <Download className="w-4 h-4" />
+                        Export CSV
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="text-xs">Download your candidate list as a CSV file.</p>
+                    </TooltipContent>
+                  </Tooltip>
                 )}
               </div>
 
@@ -714,15 +761,25 @@ export default function CandidateSearch() {
                 </div>
               )}
 
+              {showUsageNudge && (
+                <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <p className="text-sm text-amber-800">{showUsageNudge}</p>
+                  {subscription.searchesUsed >= subscription.searchesLimit && (
+                    <a href="/pricing" className="inline-block mt-2 text-sm font-medium text-amber-700 hover:text-amber-900 underline" data-testid="link-view-plans">
+                      View Plans
+                    </a>
+                  )}
+                </div>
+              )}
+
               <ScrollArea className="h-[calc(100vh-280px)]">
                 <div className="space-y-2 pr-4">
                   {loading ? (
-                    <>
-                      <SkeletonCard />
-                      <SkeletonCard />
-                      <SkeletonCard />
-                      <SkeletonCard />
-                    </>
+                    <div className="text-center py-12">
+                      <Loader2 className="h-8 w-8 mx-auto mb-4 animate-spin text-blue-500" />
+                      <p className="text-gray-700 font-medium">Searching public professional profiles...</p>
+                      <p className="text-sm text-gray-500 mt-1">Looking at experience, work, and relevant professional signals.</p>
+                    </div>
                   ) : (() => {
                     const filteredResults = results.filter((r) => {
                       if (filters.platform !== "all" && r.platform !== filters.platform) return false;
@@ -752,7 +809,8 @@ export default function CandidateSearch() {
                       return (
                         <div className="text-center py-12 text-gray-500">
                           <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                          <p>No results found. Try adjusting filters or a different query.</p>
+                          <p className="font-medium text-gray-700">No results found</p>
+                          <p className="text-sm mt-1">Try broadening your description or focusing on experience rather than titles.</p>
                         </div>
                       );
                     }
@@ -780,14 +838,28 @@ export default function CandidateSearch() {
                               </h3>
                               <div className="flex items-center gap-1.5 shrink-0">
                                 {result.score !== undefined && result.score !== null && result.score > 0 && (
-                                  <span className="text-xs text-gray-500">
-                                    {Math.round(result.score * 100)}%
-                                  </span>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <span className="text-xs text-gray-500 cursor-help">
+                                        {Math.round(result.score * 100)}%
+                                      </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Reflects how well this profile aligns with your search description.</p>
+                                    </TooltipContent>
+                                  </Tooltip>
                                 )}
                                 {result.matchStatus === "match" ? (
-                                  <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-xs px-1.5 py-0">
-                                    Match
-                                  </Badge>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <Badge className="bg-emerald-500/20 text-emerald-600 border-emerald-500/30 text-xs px-1.5 py-0 cursor-help">
+                                        Match
+                                      </Badge>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p className="text-xs">Matches based on role, experience, and demonstrated work.</p>
+                                    </TooltipContent>
+                                  </Tooltip>
                                 ) : result.matchStatus === "miss" ? (
                                   <Badge className="bg-red-500/20 text-red-600 border-red-500/30 text-xs px-1.5 py-0">
                                     Miss
@@ -835,6 +907,14 @@ export default function CandidateSearch() {
                         <p className="text-sm text-gray-500 mb-4 line-clamp-2">
                           {selectedCandidate.subtitle}
                         </p>
+                      )}
+
+                      {selectedCandidate.matchStatus === "match" && (
+                        <div className="mb-4 p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+                          <p className="text-sm text-emerald-800">
+                            This candidate surfaced because of relevant experience matching your search criteria.
+                          </p>
+                        </div>
                       )}
 
                       {selectedCandidate.text && (
@@ -893,7 +973,14 @@ export default function CandidateSearch() {
                       <div className="mb-4">
                         <div className="flex items-center gap-2 mb-2">
                           <Tag className="w-4 h-4 text-gray-400" />
-                          <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">Status</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide cursor-help">Status</span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="text-xs">Track where this candidate is in your hiring process.</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {statusTags.map((tag) => {
@@ -968,7 +1055,7 @@ export default function CandidateSearch() {
                         <FileText className="h-8 w-8 text-gray-400" />
                       </div>
                       <p className="text-gray-500 text-sm">
-                        Select a candidate to view their digital footprint
+                        Select a candidate to view their professional footprint.
                       </p>
                     </div>
                   )}

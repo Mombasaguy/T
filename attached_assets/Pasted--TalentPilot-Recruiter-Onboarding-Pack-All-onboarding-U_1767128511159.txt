@@ -1,0 +1,260 @@
+# TalentPilot – Recruiter Onboarding Pack
+_All onboarding UX flow, screens, microcopy, nudges, and demo alignment_
+
+---
+
+# =========================
+# ONBOARDING GOAL
+# =========================
+
+Primary success metric:
+> User runs a search → clicks a candidate → understands why the candidate surfaced.
+
+Secondary success metric:
+> User saves at least one candidate.
+
+Everything below is designed to achieve those two outcomes as fast as possible.
+
+---
+
+# =========================
+# STEP 1: WELCOME SCREEN
+# =========================
+
+## Title
+Welcome to TalentPilot
+
+## Body Copy
+TalentPilot helps recruiters find qualified candidates beyond job boards by searching across public professional work.
+
+Start by describing the person you’re looking for. We’ll take care of the rest.
+
+## Primary Button
+Run Your First Search
+
+## Notes
+- No videos
+- No setup questions
+- No personalization forms
+- No AI explanations
+
+Purpose: calm confidence and immediate action.
+
+---
+
+# =========================
+# STEP 2: FIRST SEARCH (GUIDED)
+# =========================
+
+## Search Input (Pre-filled, Editable)
+Senior backend engineer with fintech experience who’s worked on payments systems
+
+## Helper Text (Below Input)
+Write this the way you’d explain the role to a colleague. You can edit this at any time.
+
+## Search Button
+Search Candidates
+
+## Notes
+- Always pre-fill with a realistic example
+- Make it editable
+- Avoid blank states
+
+---
+
+# =========================
+# STEP 3: SEARCH LOADING STATE
+# =========================
+
+## Loading Message
+Searching public professional profiles…
+
+## Subtext
+Looking at experience, work, and relevant professional signals.
+
+Purpose: trust-building while results load.
+
+---
+
+# =========================
+# STEP 4: RESULTS EDUCATION (INLINE ONLY)
+# =========================
+
+## Match Badge Tooltip
+Indicates how closely this candidate matches your search based on experience and demonstrated work.
+
+## Relevance Score Tooltip
+Reflects how well this profile aligns with your search description.
+
+## Candidate Panel Hint
+This panel explains why the candidate surfaced and highlights relevant experience.
+
+Notes:
+- No modal tours
+- No step-by-step walkthrough
+- Just small, contextual explanations
+
+---
+
+# =========================
+# STEP 5: FIRST “AHA” MOMENT
+# =========================
+
+## Highlight Callout (On First Candidate Click)
+This candidate surfaced because of relevant experience in fintech systems and hands-on work with payment infrastructure.
+
+Purpose:
+Connect the user’s words → candidate → trust.
+
+---
+
+# =========================
+# STEP 6: FIRST ACTION PROMPT
+# =========================
+
+After viewing a candidate for ~10–15 seconds:
+
+## Prompt
+Save this candidate to review later?
+
+## Primary Action
+Save Candidate
+
+## Secondary (Optional)
+Add a quick note
+
+Notes:
+- Do NOT push outreach
+- Do NOT push upgrades
+- Do NOT push team invites
+
+---
+
+# =========================
+# FREE PLAN USAGE NUDGES
+# =========================
+
+## After 4 Searches (Soft, Informational)
+You’ve used 4 of your 10 free searches. Most recruiters refine their searches a few times before finding strong matches.
+
+## After 8 Searches (Social Proof)
+Recruiting teams usually upgrade once they’ve identified candidates they want to follow up with.
+
+## After 10 Searches (Hard Wall)
+You’ve used your free searches.
+
+Upgrade to continue sourcing, saving, and managing candidates.
+
+[View Plans]
+
+Tone:
+- Calm
+- Fair
+- Non-urgent
+- No guilt
+
+---
+
+# =========================
+# EMPTY & EDGE STATES
+# =========================
+
+## Empty Search State
+Describe the candidate you’re looking for — experience, background, or outcomes.
+
+## No Results State
+Try broadening your description or focusing on experience rather than titles.
+
+## No Saved Candidates
+Saved candidates will appear here so you can review them later.
+
+---
+
+# =========================
+# ONBOARDING MICROCOPY (DROP-IN)
+# =========================
+
+Search Placeholder:
+Describe the candidate you’re looking for…
+
+Notes Placeholder:
+Add notes about this candidate…
+
+Status Tooltip:
+Track where this candidate is in your hiring process.
+
+Export Tooltip:
+Download your candidate list as a CSV file.
+
+---
+
+# =========================
+# ONBOARDING → DEMO ALIGNMENT
+# =========================
+
+## 30-Second Demo Script (Matches Onboarding)
+
+Intro:
+“TalentPilot helps recruiters find qualified candidates beyond job boards by searching across public professional work.”
+
+Search:
+“I describe the role in plain English — the way I already think about candidates.”
+
+Results:
+“Instead of a long list, I get a focused shortlist ranked by relevance.”
+
+Candidate:
+“When I click a profile, I can immediately see why this person surfaced.”
+
+Close:
+“This saves time and helps me confidently decide who to contact.”
+
+---
+
+# =========================
+# METRICS TO TRACK
+# =========================
+
+Activation Metrics:
+- % of users who run first search
+- % who click a candidate
+- % who save at least one candidate
+
+Conversion Signals:
+- Searches per user
+- Time to first save
+- Searches before upgrade
+
+Drop-Off Warnings:
+- Users who search but never click a candidate
+- Users who click but don’t understand relevance
+
+---
+
+# =========================
+# WHAT NOT TO BUILD (YET)
+# =========================
+
+- Multi-step onboarding wizards
+- Mandatory profile setup
+- AI explanation screens
+- Feature tours
+- Outreach-first onboarding
+
+---
+
+# =========================
+# ONBOARDING PHILOSOPHY
+# =========================
+
+TalentPilot onboarding should feel like:
+“This tool understands how recruiters think.”
+
+Not:
+“This tool is teaching me how to use AI.”
+
+---
+
+# =========================
+# END OF FILE
+# =========================

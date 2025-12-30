@@ -17,6 +17,7 @@ import Pricing from "./pages/pricing";
 import Welcome from "./pages/welcome";
 import Landing from "./pages/landing";
 import Compliance from "./pages/compliance";
+import Onboarding from "./pages/onboarding";
 import NotFound from "./pages/not-found";
 
 function InternalRouter() {
@@ -32,6 +33,7 @@ function InternalRouter() {
       <Route path="/pricing" component={Pricing} />
       <Route path="/welcome" component={Welcome} />
       <Route path="/compliance" component={Compliance} />
+      <Route path="/onboarding" component={Onboarding} />
       <Route component={NotFound} />
     </Switch>
   );
