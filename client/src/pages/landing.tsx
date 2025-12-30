@@ -338,6 +338,10 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto text-center text-gray-500 text-sm">
           <p className="font-medium text-gray-700">TalentPilot</p>
           <p className="mt-1">Modern candidate discovery for recruiting teams</p>
+          <div className="flex justify-center gap-4 mt-4">
+            <a href="/pricing" className="hover:text-gray-700 transition-colors">Pricing</a>
+            <a href="/compliance" className="hover:text-gray-700 transition-colors">Compliance</a>
+          </div>
         </div>
       </footer>
     </div>

@@ -1,0 +1,320 @@
+# TalentPilot – Recruiter-Focused Copy Pack
+_All homepage, pricing, product microcopy, compliance, and demo content_
+
+---
+
+# =========================
+# HOMEPAGE
+# =========================
+
+## Hero
+
+### Find the right candidates — without digging through noise.
+
+TalentPilot helps recruiting teams proactively discover, evaluate, and prioritize qualified candidates across public professional profiles — not just resumes or job boards.
+
+Describe the person you need. Get a clear, ranked shortlist in minutes.
+
+[Find Candidates Now]
+
+---
+
+## Why TalentPilot
+
+### Recruiting isn’t about finding people.  
+### It’s about knowing who to contact.
+
+Most recruiting tools return long lists and leave the judgment to you.  
+TalentPilot highlights who stands out, explains why they’re a fit, and helps you decide what to do next.
+
+---
+
+## How TalentPilot Works
+
+### Built for how recruiters actually search
+
+TalentPilot searches across a large index of **public professional profiles**, including:
+
+- LinkedIn
+- GitHub
+- Blogs and writing
+- Portfolios and personal sites
+- Public talks, publications, and project work
+
+Instead of relying on keywords or job titles alone, TalentPilot understands **search intent**, so you can describe candidates in plain language.
+
+Example searches:
+- “Healthcare operations leaders who’ve led EHR rollouts”
+- “Product managers at fintech companies who write about design systems”
+- “Senior engineers who’ve spoken at React conferences”
+
+---
+
+## What You Get
+
+### A focused shortlist — not a long list
+
+TalentPilot returns candidates who clearly match what you’re looking for, ranked by relevance and explained in plain terms.
+
+Each result includes:
+- Why the candidate surfaced
+- Where the information comes from
+- How closely they match your search
+
+No guessing. No manual screening.
+
+---
+
+## See the Whole Person
+
+### Go beyond resumes and titles
+
+TalentPilot brings together:
+- Real work and hands-on experience
+- Writing, talks, or publications
+- Career progression and leadership history
+- Evidence of impact — not just keywords
+
+This helps recruiters evaluate what someone has actually done.
+
+---
+
+## Ask Better Questions
+
+### Search in plain English
+
+Stop guessing keywords or building complex filters.
+
+With TalentPilot, you can search the way you naturally think about candidates — by experience, outcomes, and context.
+
+---
+
+## Know Who to Reach Out To
+
+### Clear matches. Clear next steps.
+
+Candidates are returned:
+- Ranked by relevance
+- Labeled with match indicators
+- Explained so you understand the reasoning
+
+You decide who to contact and when.
+
+---
+
+## Built for Real Recruiting Workflows
+
+- Save candidates
+- Add notes and tags
+- Star and rate prospects
+- Track status (Contacted, Interview, Rejected, Follow-up)
+- Export results to CSV
+
+No complex setup. No forced process.
+
+---
+
+## Outreach (Optional)
+
+### Personalized outreach when you want it
+
+TalentPilot can help draft professional outreach messages based on a candidate’s background and your role.
+
+You control:
+- Tone
+- Content
+- When outreach happens
+
+Nothing is sent automatically.
+
+---
+
+## Responsible & Transparent Sourcing
+
+TalentPilot uses **publicly available professional information** and supports responsible recruiting practices.
+
+- Clear source visibility
+- No hidden data
+- Recruiters control all outreach decisions
+
+---
+
+## Closing CTA
+
+### From question to shortlist — without the busywork
+
+Spend less time searching.  
+Spend more time hiring the right people.
+
+[Find Candidates Now]
+
+---
+
+# =========================
+# PRICING PAGE
+# =========================
+
+## Simple, transparent pricing for recruiting teams
+
+Choose the plan that fits how often you source candidates.
+
+### Free
+For light sourcing and evaluation
+
+- 10 candidate searches per month
+- Full access to search and candidate previews
+- Save and review candidates
+
+$0 / month
+
+---
+
+### Professional
+For recruiters sourcing regularly
+
+- 200 candidate searches per month
+- Save and manage candidates
+- Candidate notes, tags, and status tracking
+- Personalized outreach drafting
+
+$99 / month
+
+---
+
+### Team
+For recruiting teams and agencies
+
+- 1,000 candidate searches per month
+- Unlimited team members
+- Shared candidate workspace
+- Outreach drafting for the whole team
+
+$299 / month
+
+---
+
+All plans include:
+- Public-profile sourcing
+- Explainable matches
+- CSV export
+- No long-term contracts
+
+---
+
+# =========================
+# IN-PRODUCT MICROCOPY
+# =========================
+
+## Search Bar Placeholder
+“Describe the candidate you’re looking for…”
+
+## Filters
+- Platform: “Where should we look?”
+- Match Type: “How closely should candidates match?”
+- Date Range: “When was this work done?”
+- Location: “Where should candidates be based?”
+
+## Match Label Tooltip
+“Matches based on role, experience, and demonstrated work.”
+
+## Score Slider Tooltip
+“Adjust how closely candidates should match your search.”
+
+## Empty State
+“Run a search to see candidates who match your criteria.”
+
+## Candidate Panel Empty State
+“Select a candidate to view their professional footprint.”
+
+## Notes Placeholder
+“Add notes about this candidate…”
+
+## Status Tooltip
+“Track where this candidate is in your hiring process.”
+
+---
+
+# =========================
+# COMPLIANCE & TRUST PAGE
+# =========================
+
+## Responsible Candidate Sourcing
+
+TalentPilot is designed to support ethical, transparent, and responsible recruiting.
+
+### Data Sources
+TalentPilot uses **publicly available professional information**, including:
+- Public profiles
+- Personal websites and portfolios
+- Public writing, talks, and publications
+
+TalentPilot does not access private data.
+
+---
+
+### Recruiter Control
+- Recruiters decide who to contact
+- No automated outreach
+- No messaging without review
+
+---
+
+### Transparency
+Each candidate includes:
+- Source visibility
+- Context for why they surfaced
+- Clear relevance indicators
+
+---
+
+### Compliance Support
+TalentPilot is designed to align with responsible recruiting practices, including:
+- Respect for public data boundaries
+- Clear sourcing visibility
+- Recruiter-driven engagement
+
+For compliance questions, contact: support@talentpilot.ai
+
+---
+
+# =========================
+# DEMO SCRIPT (RECRUITERS)
+# =========================
+
+## 30-Second Intro
+“TalentPilot helps recruiters find qualified candidates beyond job boards by searching across public professional work — not just resumes.”
+
+---
+
+## Search Demo
+“I’ll start by describing the type of candidate I’m looking for in plain English.”
+
+[Type search]
+
+“Instead of a long list, TalentPilot gives me a focused shortlist ranked by relevance.”
+
+---
+
+## Candidate Review
+“When I click into a candidate, I can immediately see why they surfaced and what work they’ve actually done.”
+
+---
+
+## Decision Support
+“I can save candidates, add notes, and track where they are in my hiring process — all in one place.”
+
+---
+
+## Outreach (Optional)
+“If I want help drafting outreach, TalentPilot can suggest a professional message — but I stay fully in control.”
+
+---
+
+## Close
+“This helps recruiters spend less time searching and more time talking to the right people.”
+
+---
+
+# =========================
+# END OF FILE
+# =========================

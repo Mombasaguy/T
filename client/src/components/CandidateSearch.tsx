@@ -531,7 +531,7 @@ export default function CandidateSearch() {
                   setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
                 }}
                 onKeyDown={handleKeyDown}
-                placeholder="Senior React developers in Austin who contribute to open source"
+                placeholder="Describe the candidate you're looking for..."
                 className="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
                 data-testid="input-search"
               />

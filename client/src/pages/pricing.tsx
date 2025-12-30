@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, Check, Sparkles, Zap, Users, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
+import { Loader2, Check, Zap, Users, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "wouter";
 
 const PRICE_IDS = {
@@ -14,7 +14,6 @@ interface PricingTier {
   priceNote?: string;
   description: string;
   features: string[];
-  comparison?: string;
   buttonText: string;
   plan?: string;
   featured?: boolean;
@@ -25,12 +24,12 @@ const pricingTiers: PricingTier[] = [
     name: "Free",
     price: "$0",
     priceNote: "/month",
-    description: "Get started with basic search",
+    description: "For light sourcing and evaluation",
     features: [
-      "10 searches per month",
-      "Search LinkedIn, GitHub, blogs",
-      "Export to CSV",
-      "View candidate profiles",
+      "10 candidate searches per month",
+      "Full access to search and candidate previews",
+      "Save and review candidates",
+      "CSV export",
     ],
     buttonText: "Start Free",
   },
@@ -38,17 +37,15 @@ const pricingTiers: PricingTier[] = [
     name: "Professional",
     price: "$99",
     priceNote: "/month",
-    description: "Everything you need for serious recruiting",
+    description: "For recruiters sourcing regularly",
     features: [
-      "200 searches per month",
-      "AI-powered email generation",
-      '"Find Similar" from any URL',
-      "Advanced filters",
-      "Unlimited exports",
-      "Priority support",
+      "200 candidate searches per month",
+      "Save and manage candidates",
+      "Candidate notes, tags, and status tracking",
+      "Personalized outreach drafting",
+      "CSV export",
     ],
-    comparison: "vs. LinkedIn Recruiter Lite: Save $852/year",
-    buttonText: "Start 14-Day Trial",
+    buttonText: "Get Professional",
     plan: "professional",
     featured: true,
   },
@@ -56,31 +53,36 @@ const pricingTiers: PricingTier[] = [
     name: "Team",
     price: "$299",
     priceNote: "/month",
-    description: "For growing recruiting teams",
+    description: "For recruiting teams and agencies",
     features: [
-      "1,000 searches per month",
-      "Up to 10 team members",
-      "Shared candidate lists",
-      "Team collaboration",
-      "Slack integration",
-      "Dedicated support",
+      "1,000 candidate searches per month",
+      "Unlimited team members",
+      "Shared candidate workspace",
+      "Outreach drafting for the whole team",
+      "CSV export",
     ],
-    comparison: "vs. LinkedIn Corporate (5 seats): Save $61,212/year",
-    buttonText: "Start Team Trial",
+    buttonText: "Get Team",
     plan: "team",
   },
+];
+
+const includedFeatures = [
+  "Public-profile sourcing",
+  "Explainable matches",
+  "CSV export",
+  "No long-term contracts",
 ];
 
 const faqs = [
   {
     question: "How is this different from LinkedIn Recruiter?",
     answer:
-      "We search across 1 billion+ profiles on LinkedIn, GitHub, personal sites, and blogs - giving you access to candidates you won't find on LinkedIn alone. Plus, our AI helps you craft personalized outreach at a fraction of the cost.",
+      "TalentPilot searches across public professional profiles including LinkedIn, GitHub, personal sites, and blogs - giving you access to candidates you won't find on LinkedIn alone. Plus, we explain why each candidate surfaced so you can make faster decisions.",
   },
   {
-    question: "What's included in AI email generation?",
+    question: "What data sources do you use?",
     answer:
-      "Our AI analyzes each candidate's profile, recent activity, and skills to generate personalized outreach emails. Each email is tailored to reference their specific work and achievements.",
+      "TalentPilot uses publicly available professional information including public profiles, personal websites and portfolios, and public writing, talks, and publications. We do not access private data.",
   },
   {
     question: "Can I export candidate lists?",
@@ -90,7 +92,7 @@ const faqs = [
   {
     question: "What's your refund policy?",
     answer:
-      "We offer a 14-day free trial on paid plans. If you're not satisfied, cancel anytime - no questions asked. For annual plans, we offer prorated refunds.",
+      "If you're not satisfied, cancel anytime - no questions asked. We don't lock you into long-term contracts.",
   },
 ];
 
@@ -133,122 +135,88 @@ export default function Pricing() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900">
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-4">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Sparkles className="w-6 h-6 text-white" />
-            <span className="text-white font-medium">LinkedIn Recruiter: $2,040/year</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-green-300 font-bold text-lg">We're $99/month</span>
-            <ArrowRight className="w-5 h-5 text-green-300" />
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-16">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-5xl mx-auto px-4 py-16">
         <header className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6" data-testid="text-pricing-title">
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Find Better Candidates.
-            </span>
-            <br />
-            <span className="text-white">Pay 10x Less.</span>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" data-testid="text-pricing-title">
+            Simple, transparent pricing for recruiting teams
           </h1>
           
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Search 1 billion profiles across LinkedIn, GitHub, and personal sites.
-            AI-powered outreach that gets responses.
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Choose the plan that fits how often you source candidates.
           </p>
         </header>
 
-        <div className="grid md:grid-cols-3 gap-8 pb-24">
+        <div className="grid md:grid-cols-3 gap-6 mb-16">
           {pricingTiers.map((tier) => (
             <div
               key={tier.name}
-              className={`relative rounded-2xl p-8 ${
+              className={`relative rounded-xl p-6 ${
                 tier.featured
-                  ? "bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-300"
-                  : "bg-gray-800 border-2 border-gray-700"
+                  ? "bg-gray-900 text-white border-2 border-gray-900"
+                  : "bg-white border-2 border-gray-200"
               }`}
               data-testid={`card-pricing-${tier.name.toLowerCase()}`}
             >
               {tier.featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-blue-500 text-white text-xs font-medium px-3 py-1 rounded-full">
                     Most Popular
                   </span>
                 </div>
               )}
 
-              <div className="flex items-center gap-3 mb-4">
-                {tier.name === "Free" && <Zap className={`w-8 h-8 ${tier.featured ? "text-purple-600" : "text-blue-400"}`} />}
-                {tier.name === "Professional" && <Sparkles className={`w-8 h-8 ${tier.featured ? "text-purple-600" : "text-blue-400"}`} />}
-                {tier.name === "Team" && <Users className={`w-8 h-8 ${tier.featured ? "text-purple-600" : "text-blue-400"}`} />}
-                <h3 className={`text-2xl font-bold ${tier.featured ? "text-gray-900" : "text-white"}`}>
+              <div className="mb-6">
+                <h3 className={`text-xl font-bold mb-2 ${tier.featured ? "text-white" : "text-gray-900"}`}>
                   {tier.name}
                 </h3>
+                <p className={`text-sm ${tier.featured ? "text-gray-300" : "text-gray-600"}`}>
+                  {tier.description}
+                </p>
               </div>
 
-              <div className="mb-4">
-                <span className={`text-5xl font-bold ${tier.featured ? "text-gray-900" : "text-white"}`}>
+              <div className="mb-6">
+                <span className={`text-4xl font-bold ${tier.featured ? "text-white" : "text-gray-900"}`}>
                   {tier.price}
                 </span>
-                <span className={`text-lg ${tier.featured ? "text-gray-600" : "text-gray-400"}`}>
+                <span className={`text-sm ${tier.featured ? "text-gray-300" : "text-gray-500"}`}>
                   {tier.priceNote}
                 </span>
               </div>
 
-              <p className={`mb-6 ${tier.featured ? "text-gray-700" : "text-gray-300"}`}>
-                {tier.description}
-              </p>
-
-              <ul className="space-y-3 mb-8">
-                {tier.features.map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <Check className={`w-5 h-5 flex-shrink-0 mt-0.5 ${tier.featured ? "text-green-600" : "text-green-400"}`} />
-                    <span className={tier.featured ? "text-gray-700" : "text-gray-300"}>
+              <ul className="space-y-3 mb-6">
+                {tier.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${tier.featured ? "text-blue-400" : "text-gray-500"}`} />
+                    <span className={`text-sm ${tier.featured ? "text-gray-200" : "text-gray-600"}`}>
                       {feature}
                     </span>
                   </li>
                 ))}
               </ul>
 
-              {tier.comparison && (
-                <div className={`mb-6 p-3 rounded-lg ${
-                  tier.featured
-                    ? "bg-green-100 text-green-800"
-                    : "bg-green-900/30 text-green-300"
-                } text-sm font-medium text-center`}>
-                  {tier.comparison}
-                </div>
-              )}
-
               {tier.plan ? (
                 <Button
                   onClick={() => handleSubscribe(tier.plan!)}
                   disabled={loadingPlan === tier.plan}
-                  className="w-full py-4 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 shadow-lg h-auto"
-                  data-testid={`button-subscribe-${tier.plan}`}
+                  className={`w-full ${
+                    tier.featured
+                      ? "bg-white text-gray-900 hover:bg-gray-100"
+                      : "bg-gray-900 text-white hover:bg-gray-800"
+                  }`}
+                  data-testid={`button-subscribe-${tier.name.toLowerCase()}`}
                 >
                   {loadingPlan === tier.plan ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Redirecting...
-                    </>
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     tier.buttonText
                   )}
                 </Button>
               ) : (
                 <Link href="/search">
-                  <Button 
-                    className={`w-full py-4 rounded-xl font-semibold h-auto ${
-                      tier.featured
-                        ? "bg-gray-900 text-white hover:bg-gray-800"
-                        : "bg-gray-700 text-white hover:bg-gray-600"
-                    }`}
+                  <Button
+                    variant="outline"
+                    className="w-full"
                     data-testid="button-start-free"
                   >
                     {tier.buttonText}
@@ -259,36 +227,59 @@ export default function Pricing() {
           ))}
         </div>
 
-      </div>
+        <div className="bg-gray-50 rounded-xl p-6 mb-16">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">All plans include:</h3>
+          <div className="flex flex-wrap gap-4">
+            {includedFeatures.map((feature, idx) => (
+              <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
+                <Check className="w-4 h-4 text-gray-400" />
+                <span>{feature}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-      <div className="bg-gray-800 py-16">
-        <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-white text-center mb-12">
+        <div className="max-w-2xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-8">
             Frequently Asked Questions
           </h2>
-          
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
+
+          <div className="space-y-3">
+            {faqs.map((faq, idx) => (
               <div
-                key={index}
-                className="bg-gray-700/50 rounded-xl p-6 cursor-pointer"
-                onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
-                data-testid={`card-faq-${index}`}
+                key={idx}
+                className="border border-gray-200 rounded-lg overflow-hidden"
               >
-                <div className="flex items-center justify-between gap-4">
-                  <h3 className="font-medium text-white">{faq.question}</h3>
-                  {expandedFaq === index ? (
-                    <ChevronUp className="h-5 w-5 text-gray-400 shrink-0" />
+                <button
+                  onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+                  data-testid={`button-faq-${idx}`}
+                >
+                  <span className="font-medium text-gray-900 text-sm">{faq.question}</span>
+                  {expandedFaq === idx ? (
+                    <ChevronUp className="w-4 h-4 text-gray-500" />
                   ) : (
-                    <ChevronDown className="h-5 w-5 text-gray-400 shrink-0" />
+                    <ChevronDown className="w-4 h-4 text-gray-500" />
                   )}
-                </div>
-                {expandedFaq === index && (
-                  <p className="mt-4 text-gray-300">{faq.answer}</p>
+                </button>
+                {expandedFaq === idx && (
+                  <div className="px-4 pb-4">
+                    <p className="text-sm text-gray-600">{faq.answer}</p>
+                  </div>
                 )}
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="text-center mt-16">
+          <p className="text-gray-600 mb-4">Ready to find better candidates?</p>
+          <Link href="/search">
+            <Button className="bg-gray-900 text-white hover:bg-gray-800" data-testid="button-cta-start">
+              Find Candidates Now
+              <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
