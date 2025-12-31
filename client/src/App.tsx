@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { getOnboardingState } from "@/lib/onboarding";
+import { PageTransition } from "@/components/PageTransition";
 
 import Dashboard from "./pages/dashboard";
 import Candidates from "./pages/candidates";
@@ -38,20 +39,22 @@ function OnboardingGuard({ children }: { children: React.ReactNode }) {
 function InternalRouter() {
   return (
     <OnboardingGuard>
-      <Switch>
-        <Route path="/search" component={CandidateSearch} />
-        <Route path="/dashboard" component={Dashboard} />
-        <Route path="/candidates" component={Candidates} />
-        <Route path="/pipeline" component={Pipeline} />
-        <Route path="/stats" component={Stats} />
-        <Route path="/positions" component={Positions} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/pricing" component={Pricing} />
-        <Route path="/welcome" component={Welcome} />
-        <Route path="/compliance" component={Compliance} />
-        <Route path="/onboarding" component={Onboarding} />
-        <Route component={NotFound} />
-      </Switch>
+      <PageTransition>
+        <Switch>
+          <Route path="/search" component={CandidateSearch} />
+          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/candidates" component={Candidates} />
+          <Route path="/pipeline" component={Pipeline} />
+          <Route path="/stats" component={Stats} />
+          <Route path="/positions" component={Positions} />
+          <Route path="/settings" component={Settings} />
+          <Route path="/pricing" component={Pricing} />
+          <Route path="/welcome" component={Welcome} />
+          <Route path="/compliance" component={Compliance} />
+          <Route path="/onboarding" component={Onboarding} />
+          <Route component={NotFound} />
+        </Switch>
+      </PageTransition>
     </OnboardingGuard>
   );
 }
