@@ -101,47 +101,9 @@ export default function LandingPage() {
               Find Candidates Now
             </button>
           </div>
-        </div>
-      </section>
-
-      {/* Built for how recruiters actually search */}
-      <section className="py-12 px-4 md:px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for how recruiters actually search</h2>
-          <p className="text-gray-600 mb-4">
-            TalentPilot searches across a continuously refreshed index of public professional profiles, including:
-          </p>
-
-          {/* Platform Chips */}
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
-              <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
-              LinkedIn
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
-              <SiGithub className="w-4 h-4" />
-              GitHub
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
-              <Globe className="w-4 h-4 text-gray-500" />
-              Blogs and long-form writing
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
-              <User className="w-4 h-4 text-gray-500" />
-              Portfolios and personal sites
-            </span>
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
-              <Mic className="w-4 h-4 text-gray-500" />
-              Talks, publications, and conference appearances
-            </span>
-          </div>
-
-          <p className="text-gray-600 mb-6">
-            Instead of matching keywords or job titles, TalentPilot understands search intent — so you can describe candidates the same way you would to a colleague.
-          </p>
 
           {/* Example Prompts */}
-          <div className="space-y-3">
+          <div className="mt-6 space-y-3">
             <button
               onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
               className="w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors"
@@ -184,6 +146,41 @@ export default function LandingPage() {
               </div>
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* Built for how recruiters actually search */}
+      <section className="py-12 px-4 md:px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for how recruiters actually search</h2>
+          <p className="text-gray-600 mb-4">
+            TalentPilot searches across a continuously refreshed index of public professional profiles, including:
+          </p>
+
+          {/* Platform Chips */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
+              LinkedIn
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <SiGithub className="w-4 h-4" />
+              GitHub
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Globe className="w-4 h-4 text-gray-500" />
+              Blogs and long-form writing
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <User className="w-4 h-4 text-gray-500" />
+              Portfolios and personal sites
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Mic className="w-4 h-4 text-gray-500" />
+              Talks, publications, and conference appearances
+            </span>
+          </div>
+
         </div>
       </section>
 
