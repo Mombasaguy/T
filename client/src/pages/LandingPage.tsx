@@ -67,7 +67,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="mx-auto max-w-3xl px-5 pb-12 pt-20 md:pt-28">
+      <section className="mx-auto max-w-3xl px-5 pb-12 pt-20 md:pt-28 text-center">
         <h1 className="text-3xl md:text-4xl font-semibold leading-tight tracking-tight text-gray-900">
           Search 1B+ profiles with one sentence.
         </h1>
@@ -77,7 +77,7 @@ export default function LandingPage() {
         </p>
 
         {/* Proof Chips */}
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap justify-center gap-2 mt-4">
           {proofChips.map((chip, idx) => (
             <span 
               key={idx}
@@ -89,7 +89,7 @@ export default function LandingPage() {
         </div>
 
         {/* Platform Icons */}
-        <div className="flex items-center gap-4 mt-4">
+        <div className="flex items-center justify-center gap-4 mt-4">
           <span className="text-xs text-gray-400">Searches across:</span>
           <div className="flex items-center gap-3">
             <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
