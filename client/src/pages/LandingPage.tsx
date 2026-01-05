@@ -67,7 +67,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="mx-auto max-w-3xl px-5 pb-12 pt-20 md:pt-28 text-center">
+      <section className="mx-auto max-w-3xl px-5 pb-8 pt-20 md:pt-28 text-center">
         <h1 className="text-3xl md:text-4xl font-semibold leading-tight tracking-tight text-gray-900">
           Search 1B+ public profiles with one sentence
         </h1>
@@ -103,7 +103,7 @@ export default function LandingPage() {
           </div>
 
           {/* Example Prompts */}
-          <div className="mt-2 border-t border-gray-100 pt-2 space-y-1">
+          <div className="mt-2 border-t border-gray-100 pt-1 space-y-1">
               <button
                 onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
                 className="w-full text-left"
