@@ -47,7 +47,6 @@ import {
 import { SearchLoadingOverlay } from "@/components/onboarding/SearchLoadingOverlay";
 import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
 import { UsageNudgeBanner } from "@/components/onboarding/UsageNudgeBanner";
-import { SearchLimitCounter } from "@/components/SearchLimitCounter";
 import { FirstSavePrompt } from "@/components/onboarding/FirstSavePrompt";
 
 interface SearchResult {
@@ -572,11 +571,6 @@ export default function CandidateSearch() {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <SearchLoadingOverlay isVisible={loading && isOnboarding} />
       <div className="max-w-4xl mx-auto px-4 py-4">
-        <SearchLimitCounter 
-          searchesUsed={subscription.searchesUsed} 
-          searchesLimit={subscription.searchesLimit} 
-          plan={subscription.plan} 
-        />
         <UsageNudgeBanner maxFreeSearches={subscription.searchesLimit} searchCount={localSearchCount} />
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
@@ -606,47 +600,69 @@ export default function CandidateSearch() {
                 )}
               </Button>
             </div>
-            {isOnboarding && (
-              <p className="text-sm text-gray-500 mt-2">
-                Write this the way you'd explain the role to a colleague. You can edit this at any time.
-              </p>
+
+            {/* Example Prompts */}
+            {!searchPerformed && (
+              <div className="mt-3 border-t border-gray-100 pt-2 space-y-1">
+                <button
+                  onClick={() => {
+                    setQuery("Healthcare operations leaders who've led EHR rollouts");
+                    handleSearch("Healthcare operations leaders who've led EHR rollouts");
+                  }}
+                  className="w-full text-left"
+                  data-testid="button-example-healthcare"
+                >
+                  <div className="flex items-start gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50/50 transition-colors">
+                    <div className="mt-0.5 text-gray-400">
+                      <Search className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-sm font-normal text-gray-600 leading-snug">Healthcare operations leaders who've led EHR rollouts</div>
+                      <div className="text-xs text-gray-400 mt-0.5">Hands-on delivery experience — not just titles.</div>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setQuery("Product managers at fintech companies who write about design systems");
+                    handleSearch("Product managers at fintech companies who write about design systems");
+                  }}
+                  className="w-full text-left"
+                  data-testid="button-example-fintech"
+                >
+                  <div className="flex items-start gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50/50 transition-colors">
+                    <div className="mt-0.5 text-gray-400">
+                      <Search className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-sm font-normal text-gray-600 leading-snug">Product managers at fintech companies who write about design systems</div>
+                      <div className="text-xs text-gray-400 mt-0.5">Real writing, portfolio work, and relevant experience.</div>
+                    </div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setQuery("Senior engineers who've spoken at React conferences");
+                    handleSearch("Senior engineers who've spoken at React conferences");
+                  }}
+                  className="w-full text-left"
+                  data-testid="button-example-react"
+                >
+                  <div className="flex items-start gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50/50 transition-colors">
+                    <div className="mt-0.5 text-gray-400">
+                      <Search className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-sm font-normal text-gray-600 leading-snug">Senior engineers who've spoken at React conferences</div>
+                      <div className="text-xs text-gray-400 mt-0.5">Visible in talks, code, and professional profiles.</div>
+                    </div>
+                  </div>
+                </button>
+              </div>
             )}
           </div>
-
-          {!searchPerformed && (
-            <div className="py-8">
-              <div className="text-center mb-6">
-                <p className="text-gray-600">Type your search like you'd tell a coworker.</p>
-              </div>
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
-                  Natural language search
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
-                  1B+ profiles indexed
-                </span>
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
-                  Explainable results
-                </span>
-              </div>
-              <div className="flex flex-wrap justify-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
-                  <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                  </svg>
-                  <span className="text-xs text-gray-600">LinkedIn</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
-                  <Github className="w-4 h-4 text-gray-900" />
-                  <span className="text-xs text-gray-600">GitHub</span>
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
-                  <Globe className="w-4 h-4 text-green-600" />
-                  <span className="text-xs text-gray-600">Personal Sites</span>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {searchPerformed && (
