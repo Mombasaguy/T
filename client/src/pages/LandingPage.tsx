@@ -110,13 +110,20 @@ export default function LandingPage() {
           </div>
 
           {/* Subtle example prompts */}
-          <p className="text-xs text-gray-400 mt-4 text-center">
-            Try: <button onClick={() => setSearchQuery("Senior engineers who've built payments systems")} className="text-gray-500 hover:text-gray-700 underline underline-offset-2">payments engineers</button>
-            {" · "}
-            <button onClick={() => setSearchQuery("Product managers at fintech who write about design")} className="text-gray-500 hover:text-gray-700 underline underline-offset-2">fintech PMs</button>
-            {" · "}
-            <button onClick={() => setSearchQuery("Healthcare ops leaders who've led EHR rollouts")} className="text-gray-500 hover:text-gray-700 underline underline-offset-2">healthcare ops</button>
-          </p>
+          <div className="mt-4 space-y-1.5">
+            <p className="text-xs text-gray-400 text-center">Try:</p>
+            <div className="flex flex-col gap-1 text-center">
+              <button onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                Healthcare operations leaders who've led EHR rollouts
+              </button>
+              <button onClick={() => setSearchQuery("Product managers at fintech companies who write about design systems")} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                Product managers at fintech companies who write about design systems
+              </button>
+              <button onClick={() => setSearchQuery("Senior engineers who've spoken at React conferences")} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                Senior engineers who've spoken at React conferences
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
