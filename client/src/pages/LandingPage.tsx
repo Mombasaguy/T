@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { ArrowRight, CheckCircle, X, Shield, Globe } from 'lucide-react';
+import { ArrowRight, CheckCircle, X, Shield, Globe, Search, Mic, FileText, User } from 'lucide-react';
 import { SiLinkedin, SiGithub } from 'react-icons/si';
 
 export default function LandingPage() {
@@ -88,16 +88,6 @@ export default function LandingPage() {
           ))}
         </div>
 
-        {/* Platform Icons */}
-        <div className="flex items-center justify-center gap-4 mt-4">
-          <span className="text-xs text-gray-400">Searches across:</span>
-          <div className="flex items-center gap-3">
-            <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
-            <SiGithub className="w-4 h-4 text-gray-700" />
-            <Globe className="w-4 h-4 text-gray-500" />
-          </div>
-        </div>
-
         <div className="mt-7">
           <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
             <input
@@ -120,20 +110,88 @@ export default function LandingPage() {
             </button>
           </div>
 
-          {/* Subtle example prompts */}
-          <div className="mt-4 space-y-1.5">
-            <p className="text-xs text-gray-400 text-center">Try:</p>
-            <div className="flex flex-col gap-1 text-center">
-              <button onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                Healthcare operations leaders who've led EHR rollouts
-              </button>
-              <button onClick={() => setSearchQuery("Product managers at fintech companies who write about design systems")} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                Product managers at fintech companies who write about design systems
-              </button>
-              <button onClick={() => setSearchQuery("Senior engineers who've spoken at React conferences")} className="text-xs text-gray-500 hover:text-gray-700 transition-colors">
-                Senior engineers who've spoken at React conferences
-              </button>
-            </div>
+        </div>
+      </section>
+
+      {/* Built for how recruiters actually search */}
+      <section className="py-12 px-4 md:px-6">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for how recruiters actually search</h2>
+          <p className="text-gray-600 mb-4">
+            TalentPilot searches across a large index of public professional profiles, including:
+          </p>
+
+          {/* Platform Chips */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
+              LinkedIn
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <SiGithub className="w-4 h-4" />
+              GitHub
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Globe className="w-4 h-4 text-gray-500" />
+              Blogs and writing
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <User className="w-4 h-4 text-gray-500" />
+              Portfolios and personal sites
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Mic className="w-4 h-4 text-gray-500" />
+              Talks and publications
+            </span>
+          </div>
+
+          <p className="text-gray-600 mb-6">
+            Instead of relying on keywords or job titles alone, TalentPilot understands search intent, so you can describe candidates in plain language.
+          </p>
+
+          {/* Example Prompts */}
+          <div className="space-y-3">
+            <button
+              onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
+              className="w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors"
+              data-testid="button-example-healthcare"
+            >
+              <div className="flex items-start gap-3">
+                <Search className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">"Healthcare operations leaders who've led EHR rollouts"</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Finds operators with hands-on delivery experience—not just titles.</p>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setSearchQuery("Product managers at fintech companies who write about design systems")}
+              className="w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors"
+              data-testid="button-example-fintech"
+            >
+              <div className="flex items-start gap-3">
+                <Search className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">"Product managers at fintech companies who write about design systems"</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Surfaces PMs with real writing, portfolio work, and relevant experience.</p>
+                </div>
+              </div>
+            </button>
+
+            <button
+              onClick={() => setSearchQuery("Senior engineers who've spoken at React conferences")}
+              className="w-full text-left p-4 rounded-xl border border-gray-200 bg-white hover:border-gray-300 transition-colors"
+              data-testid="button-example-react"
+            >
+              <div className="flex items-start gap-3">
+                <Search className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-gray-900">"Senior engineers who've spoken at React conferences"</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Finds engineers who show up in talks, code, and professional profiles.</p>
+                </div>
+              </div>
+            </button>
           </div>
         </div>
       </section>
