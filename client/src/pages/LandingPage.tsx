@@ -164,7 +164,7 @@ export default function LandingPage() {
                 <Search className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-gray-900">"Healthcare operations leaders who've led EHR rollouts"</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Finds operators with hands-on delivery experience—not just titles.</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Finds operators with hands-on delivery experience — not just titles.</p>
                 </div>
               </div>
             </button>
@@ -192,7 +192,7 @@ export default function LandingPage() {
                 <Search className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-gray-900">"Senior engineers who've spoken at React conferences"</p>
-                  <p className="text-sm text-gray-500 mt-0.5">Finds engineers who show up in talks, code, and professional profiles.</p>
+                  <p className="text-sm text-gray-500 mt-0.5">Finds engineers visible in talks, code, and professional profiles.</p>
                 </div>
               </div>
             </button>
