@@ -80,7 +80,7 @@ export default function LandingPage() {
           1B+ public profiles indexed • ~50M refreshed weekly • Natural language search
         </p>
 
-        <div className="mt-7">
+        <div className="mt-7 max-w-xl mx-auto">
           <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
             <input
               type="text"
