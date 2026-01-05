@@ -108,6 +108,15 @@ export default function LandingPage() {
               Find Candidates Now
             </button>
           </div>
+
+          {/* Subtle example prompts */}
+          <p className="text-xs text-gray-400 mt-4 text-center">
+            Try: <button onClick={() => setSearchQuery("Senior engineers who've built payments systems")} className="text-gray-500 hover:text-gray-700 underline underline-offset-2">payments engineers</button>
+            {" · "}
+            <button onClick={() => setSearchQuery("Product managers at fintech who write about design")} className="text-gray-500 hover:text-gray-700 underline underline-offset-2">fintech PMs</button>
+            {" · "}
+            <button onClick={() => setSearchQuery("Healthcare ops leaders who've led EHR rollouts")} className="text-gray-500 hover:text-gray-700 underline underline-offset-2">healthcare ops</button>
+          </p>
         </div>
       </section>
 
