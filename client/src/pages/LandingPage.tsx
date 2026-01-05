@@ -108,45 +108,51 @@ export default function LandingPage() {
               Examples (optional)
             </div>
 
-            <div className="space-y-2 rounded-xl bg-gray-50/60 p-2 sm:p-3">
+            <div className="rounded-xl bg-gray-50/60 p-2 sm:p-3">
               <button
                 onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
-                className="w-full text-left px-3 py-2.5 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                className="w-full text-left"
                 data-testid="button-example-healthcare"
               >
-                <div className="flex items-start gap-2.5">
-                  <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">"Healthcare operations leaders who've led EHR rollouts"</p>
-                    <p className="text-xs text-gray-500 mt-0.5">Finds operators with hands-on delivery experience — not just titles.</p>
+                <div className="flex items-start gap-3 rounded-lg px-3 py-2 hover:bg-white/60 transition-colors">
+                  <div className="mt-0.5 text-gray-400">
+                    <Search className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-gray-800 leading-snug">"Healthcare operations leaders who've led EHR rollouts"</div>
+                    <div className="text-xs text-gray-500 leading-snug mt-0.5">Finds operators with hands-on delivery experience — not just titles.</div>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => setSearchQuery("Product managers at fintech companies who write about design systems")}
-                className="w-full text-left px-3 py-2.5 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                className="w-full text-left"
                 data-testid="button-example-fintech"
               >
-                <div className="flex items-start gap-2.5">
-                  <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">"Product managers at fintech companies who write about design systems"</p>
-                    <p className="text-xs text-gray-500 mt-0.5">Surfaces PMs with real writing, portfolio work, and relevant experience.</p>
+                <div className="flex items-start gap-3 rounded-lg px-3 py-2 hover:bg-white/60 transition-colors">
+                  <div className="mt-0.5 text-gray-400">
+                    <Search className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-gray-800 leading-snug">"Product managers at fintech companies who write about design systems"</div>
+                    <div className="text-xs text-gray-500 leading-snug mt-0.5">Surfaces PMs with real writing, portfolio work, and relevant experience.</div>
                   </div>
                 </div>
               </button>
 
               <button
                 onClick={() => setSearchQuery("Senior engineers who've spoken at React conferences")}
-                className="w-full text-left px-3 py-2.5 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                className="w-full text-left"
                 data-testid="button-example-react"
               >
-                <div className="flex items-start gap-2.5">
-                  <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">"Senior engineers who've spoken at React conferences"</p>
-                    <p className="text-xs text-gray-500 mt-0.5">Finds engineers visible in talks, code, and professional profiles.</p>
+                <div className="flex items-start gap-3 rounded-lg px-3 py-2 hover:bg-white/60 transition-colors">
+                  <div className="mt-0.5 text-gray-400">
+                    <Search className="w-3.5 h-3.5" />
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-medium text-gray-800 leading-snug">"Senior engineers who've spoken at React conferences"</div>
+                    <div className="text-xs text-gray-500 leading-snug mt-0.5">Finds engineers visible in talks, code, and professional profiles.</div>
                   </div>
                 </div>
               </button>
