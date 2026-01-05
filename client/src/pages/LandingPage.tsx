@@ -85,14 +85,26 @@ export default function LandingPage() {
         </p>
 
         <div className="mt-7">
-          <button
-            type="button"
-            onClick={handleSearch}
-            className="rounded-xl bg-gray-900 px-8 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
-            data-testid="button-hero-search"
-          >
-            Find Candidates Now
-          </button>
+          <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="Describe the person you need..."
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none"
+              data-testid="input-hero-search"
+            />
+
+            <button
+              type="button"
+              onClick={handleSearch}
+              className="mt-3 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+              data-testid="button-hero-search"
+            >
+              Find Candidates Now
+            </button>
+          </div>
         </div>
       </section>
 
