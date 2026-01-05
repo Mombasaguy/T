@@ -109,7 +109,7 @@ export default function LandingPage() {
                 className="w-full text-left"
                 data-testid="button-example-healthcare"
               >
-                <div className="flex items-start gap-3 rounded-lg px-3 py-2 hover:bg-white/60 transition-colors">
+                <div className="flex items-start gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50/50 transition-colors">
                   <div className="mt-0.5 text-gray-400">
                     <Search className="w-3.5 h-3.5" />
                   </div>
@@ -125,7 +125,7 @@ export default function LandingPage() {
                 className="w-full text-left"
                 data-testid="button-example-fintech"
               >
-                <div className="flex items-start gap-3 rounded-lg px-3 py-2 hover:bg-white/60 transition-colors">
+                <div className="flex items-start gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50/50 transition-colors">
                   <div className="mt-0.5 text-gray-400">
                     <Search className="w-3.5 h-3.5" />
                   </div>
@@ -141,7 +141,7 @@ export default function LandingPage() {
                 className="w-full text-left"
                 data-testid="button-example-react"
               >
-                <div className="flex items-start gap-3 rounded-lg px-3 py-2 hover:bg-white/60 transition-colors">
+                <div className="flex items-start gap-2 px-2 py-1.5 rounded-md hover:bg-gray-50/50 transition-colors">
                   <div className="mt-0.5 text-gray-400">
                     <Search className="w-3.5 h-3.5" />
                   </div>
