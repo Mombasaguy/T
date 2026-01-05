@@ -114,7 +114,7 @@ export default function LandingPage() {
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-normal text-gray-600 leading-snug">"Healthcare operations leaders who've led EHR rollouts"</div>
+                    <div className="text-sm font-normal text-gray-600 leading-snug">Healthcare operations leaders who've led EHR rollouts</div>
                     <div className="text-xs text-gray-400 mt-0.5">Hands-on delivery experience — not just titles.</div>
                   </div>
                 </div>
@@ -130,7 +130,7 @@ export default function LandingPage() {
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-normal text-gray-600 leading-snug">"Product managers at fintech companies who write about design systems"</div>
+                    <div className="text-sm font-normal text-gray-600 leading-snug">Product managers at fintech companies who write about design systems</div>
                     <div className="text-xs text-gray-400 mt-0.5">Real writing, portfolio work, and relevant experience.</div>
                   </div>
                 </div>
@@ -146,7 +146,7 @@ export default function LandingPage() {
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-normal text-gray-600 leading-snug">"Senior engineers who've spoken at React conferences"</div>
+                    <div className="text-sm font-normal text-gray-600 leading-snug">Senior engineers who've spoken at React conferences</div>
                     <div className="text-xs text-gray-400 mt-0.5">Visible in talks, code, and professional profiles.</div>
                   </div>
                 </div>
