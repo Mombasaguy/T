@@ -103,48 +103,54 @@ export default function LandingPage() {
           </div>
 
           {/* Example Prompts */}
-          <div className="mt-4 md:mt-5 space-y-2">
-            <button
-              onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
-              className="w-full text-left px-3 py-2.5 rounded-lg border border-gray-100 bg-white hover:border-gray-200 transition-colors"
-              data-testid="button-example-healthcare"
-            >
-              <div className="flex items-start gap-2.5">
-                <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-medium text-gray-800">"Healthcare operations leaders who've led EHR rollouts"</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Finds operators with hands-on delivery experience — not just titles.</p>
-                </div>
-              </div>
-            </button>
+          <div className="mt-3 max-w-3xl mx-auto">
+            <div className="text-[11px] font-medium text-gray-500 mb-2">
+              Examples (optional)
+            </div>
 
-            <button
-              onClick={() => setSearchQuery("Product managers at fintech companies who write about design systems")}
-              className="w-full text-left px-3 py-2.5 rounded-lg border border-gray-100 bg-white hover:border-gray-200 transition-colors"
-              data-testid="button-example-fintech"
-            >
-              <div className="flex items-start gap-2.5">
-                <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-medium text-gray-800">"Product managers at fintech companies who write about design systems"</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Surfaces PMs with real writing, portfolio work, and relevant experience.</p>
+            <div className="space-y-2 rounded-xl bg-gray-50/60 p-2 sm:p-3">
+              <button
+                onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
+                className="w-full text-left px-3 py-2.5 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                data-testid="button-example-healthcare"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">"Healthcare operations leaders who've led EHR rollouts"</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Finds operators with hands-on delivery experience — not just titles.</p>
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
 
-            <button
-              onClick={() => setSearchQuery("Senior engineers who've spoken at React conferences")}
-              className="w-full text-left px-3 py-2.5 rounded-lg border border-gray-100 bg-white hover:border-gray-200 transition-colors"
-              data-testid="button-example-react"
-            >
-              <div className="flex items-start gap-2.5">
-                <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm font-medium text-gray-800">"Senior engineers who've spoken at React conferences"</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Finds engineers visible in talks, code, and professional profiles.</p>
+              <button
+                onClick={() => setSearchQuery("Product managers at fintech companies who write about design systems")}
+                className="w-full text-left px-3 py-2.5 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                data-testid="button-example-fintech"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">"Product managers at fintech companies who write about design systems"</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Surfaces PMs with real writing, portfolio work, and relevant experience.</p>
+                  </div>
                 </div>
-              </div>
-            </button>
+              </button>
+
+              <button
+                onClick={() => setSearchQuery("Senior engineers who've spoken at React conferences")}
+                className="w-full text-left px-3 py-2.5 rounded-lg bg-white hover:bg-gray-50 transition-colors"
+                data-testid="button-example-react"
+              >
+                <div className="flex items-start gap-2.5">
+                  <Search className="w-3.5 h-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">"Senior engineers who've spoken at React conferences"</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Finds engineers visible in talks, code, and professional profiles.</p>
+                  </div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </section>
