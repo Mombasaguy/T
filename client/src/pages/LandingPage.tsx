@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { ArrowRight, CheckCircle, X, Shield, RefreshCw, MessageSquare, Search } from 'lucide-react';
+import { ArrowRight, CheckCircle, X, Shield, Globe } from 'lucide-react';
+import { SiLinkedin, SiGithub } from 'react-icons/si';
 
 export default function LandingPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -85,6 +86,16 @@ export default function LandingPage() {
               {chip}
             </span>
           ))}
+        </div>
+
+        {/* Platform Icons */}
+        <div className="flex items-center gap-4 mt-4">
+          <span className="text-xs text-gray-400">Searches across:</span>
+          <div className="flex items-center gap-3">
+            <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
+            <SiGithub className="w-4 h-4 text-gray-700" />
+            <Globe className="w-4 h-4 text-gray-500" />
+          </div>
         </div>
 
         <div className="mt-7">
