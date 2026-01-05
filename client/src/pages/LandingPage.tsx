@@ -69,47 +69,30 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="mx-auto max-w-3xl px-5 pb-12 pt-20 md:pt-28 text-center">
         <h1 className="text-3xl md:text-4xl font-semibold leading-tight tracking-tight text-gray-900">
-          Search 1B+ profiles with one sentence.
+          Search 1B+ public profiles with one sentence
         </h1>
 
-        <p className="mt-4 text-base text-gray-600">
-          Describe who you need. Get a ranked shortlist in seconds.
+        <p className="mt-4 text-base font-medium text-gray-700">
+          Not filters. Not Boolean. Not a closed database.
         </p>
 
-        {/* Proof Chips */}
-        <div className="flex flex-wrap justify-center gap-2 mt-4">
-          {proofChips.map((chip, idx) => (
-            <span 
-              key={idx}
-              className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700"
-            >
-              {chip}
-            </span>
-          ))}
-        </div>
+        <p className="mt-2 text-base text-gray-600">
+          Describe who you need and get a ranked shortlist in seconds.
+        </p>
+
+        <p className="mt-4 text-sm text-gray-500">
+          1B+ public profiles indexed • ~50M refreshed weekly • Natural language search
+        </p>
 
         <div className="mt-7">
-          <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-              placeholder="Describe the person you need..."
-              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none"
-              data-testid="input-hero-search"
-            />
-
-            <button
-              type="button"
-              onClick={handleSearch}
-              className="mt-3 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
-              data-testid="button-hero-search"
-            >
-              Find Candidates Now
-            </button>
-          </div>
-
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="rounded-xl bg-gray-900 px-8 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors"
+            data-testid="button-hero-search"
+          >
+            Find Candidates Now
+          </button>
         </div>
       </section>
 
