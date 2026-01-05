@@ -54,8 +54,7 @@ export default function LandingPage() {
     "Natural language search",
     "Fresh data, refreshed weekly",
     "Every match explained",
-    "Ranked by relevance, not keywords",
-    "Built for real recruiting workflows"
+    "Ranked by relevance, not keywords"
   ];
 
   const trustBullets = [
