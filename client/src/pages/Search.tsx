@@ -569,6 +569,19 @@ export default function CandidateSearch() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <SearchLoadingOverlay isVisible={loading && isOnboarding} />
+      
+      {/* Header */}
+      <header className="border-b border-gray-100 bg-white">
+        <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+          <a href="/" className="text-lg font-semibold text-gray-900 hover:text-gray-700 transition-colors" data-testid="link-home">
+            TalentPilot
+          </a>
+          <a href="/pricing" className="text-sm text-gray-600 hover:text-gray-900 transition-colors" data-testid="link-pricing">
+            Pricing
+          </a>
+        </div>
+      </header>
+
       <div className="max-w-4xl mx-auto px-4 py-4">
         <div ref={searchContainerRef}>
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
