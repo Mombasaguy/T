@@ -68,11 +68,11 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="mx-auto max-w-3xl px-5 pb-12 pt-20 md:pt-28">
         <h1 className="text-3xl md:text-4xl font-semibold leading-tight tracking-tight text-gray-900">
-          Find the right candidates — without digging through noise.
+          Search 1B+ profiles with one sentence.
         </h1>
 
         <p className="mt-4 text-base text-gray-600">
-          Describe who you need. Get a ranked shortlist in minutes.
+          Describe the hire you need in plain English. TalentPilot scans 1B+ public professional profiles across the web and refreshes weekly (+50M new/updated profiles). Get a ranked shortlist with clear "why this matched" explanations.
         </p>
 
         {/* Proof Chips */}

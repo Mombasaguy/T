@@ -1,0 +1,217 @@
+Replit Change Notes: Remove Onboarding + Add First-Run + Update Landing Page Messaging
+Objective
+
+Remove onboarding completely
+
+Send users straight into the app’s search experience
+
+Add a first-run empty state that explains the product in one screen
+
+Update landing page hero to: “Search 1B+ profiles with one sentence.”
+
+Make copy more scannable (less text, more bullets), emphasizing:
+
+Natural language search (no Boolean / filters)
+
+1B+ profiles
+
+Weekly refresh (+50M new/updated profiles)
+
+Ranked shortlist + “why this matched”
+
+1) Remove onboarding flow (full removal)
+Required changes
+
+Delete / disable the onboarding route(s), components, and redirects:
+
+Any route like /onboarding, /welcome, /setup, /step-1, etc.
+
+Remove any logic that forces onboarding on first login:
+
+Example patterns: if (!user.onboarded) navigate("/onboarding")
+
+Remove onboarded gating entirely.
+
+Navigation changes
+
+All CTA buttons (“Find Candidates Now”, “Start”, etc.) must route directly to the search page:
+
+Target route should be your product entry page (examples): /search or /candidates or /app
+
+If any internal nav item currently points to onboarding, update it.
+
+Data model cleanup (optional but recommended)
+
+If you store onboarding fields like role/company/hiring volume:
+
+Stop requiring them.
+
+Do NOT block any functionality if missing.
+
+You can keep the DB columns for now, but don’t reference them.
+
+2) Implement First-Run Experience (Empty State on Search Page)
+Where to implement
+
+In the search page when there are no results yet (initial state).
+
+Show a full “empty state” panel with:
+
+Headline
+
+One short paragraph
+
+Search input
+
+Example text
+
+Primary button
+
+Small trust line
+
+Optional 3-hint row (shown only on first run)
+
+First-Run Copy (use exactly)
+
+Title:
+Search 1B+ profiles with one sentence.
+
+Body:
+Describe the hire you need in plain English. TalentPilot scans over 1 billion public professional profiles across the web, refreshed weekly, and returns a ranked shortlist with clear reasons for every match.
+No Boolean. No filters. No setup.
+
+Example label:
+Try a search like:
+
+Example helper:
+Senior backend engineer with Python and AWS experience in healthcare
+
+Search placeholder:
+Describe the candidate you’re looking for…
+
+Primary button:
+Run Search
+
+Trust line (small text under button):
+Public data only • Transparent matches • You control outreach
+
+Optional hint row (show only on first run):
+
+Natural language search — type it like you’d say it
+
+Whole-web coverage — not limited to one platform
+
+Explainable results — see why each candidate matched
+
+3) “First-Run” Behavior Rules (important)
+When to show the hint row
+
+Show the hint row only until the user successfully runs their first search.
+
+After the first successful search:
+
+Hide the hint row permanently.
+
+The empty state may still show when there are no results, but without the extra coaching.
+
+How to persist this
+
+Use a simple boolean flag:
+
+hasRunSearch
+
+Store it:
+
+Preferably in user profile in DB
+
+Or local storage as MVP fallback
+
+Logic:
+
+On first successful search (results returned or search executed), set hasRunSearch = true.
+
+Don’t show onboarding ever.
+
+4) Update Results Microcopy (post-search headers)
+
+After results load, set these labels:
+
+Results header:
+Top matches TalentPilot found
+
+Results subheader:
+Ranked by relevance, with clear match reasons and source signals.
+
+5) Add Zero Results State (edge case)
+
+If search returns zero results:
+
+Title:
+No exact matches — try broadening slightly
+
+Body:
+TalentPilot searches the whole web, but widening skills, location, or seniority can surface stronger matches.
+
+Button:
+Edit Search
+
+6) Landing Page Copy Updates (high priority)
+Hero headline (replace existing)
+
+Search 1B+ profiles with one sentence.
+
+Hero subheadline (replace existing)
+
+Describe the hire you need in plain English. TalentPilot scans 1B+ public professional profiles across the web and refreshes weekly (+50M new/updated profiles). Get a ranked shortlist with clear “why this matched” explanations.
+
+Add proof chips under subheadline (above fold)
+
+1B+ profiles indexed
+
++50M refreshed weekly
+
+Natural language search (no Boolean)
+
+CTA button text
+
+Find Candidates Now
+
+Remove demo CTA
+
+Do not add “See a demo” or anything similar.
+
+7) Reduce Wordiness / Convert Paragraphs to Bullets
+
+Global formatting rule:
+
+No paragraph > 2 lines on desktop.
+
+Convert feature explanations into bullets or cards.
+
+Add/keep sections in this order:
+
+Hero (headline + proof chips + CTA)
+
+How it works (3 cards)
+
+Why TalentPilot is different (2-column comparison)
+
+Built for recruiting workflows (feature bullets)
+
+Responsible sourcing (short + trust bullets)
+
+Final CTA
+
+8) QA Checklist (Replit should verify)
+
+Landing page loads and hero shows the new positioning instantly.
+
+CTA routes directly into search page (no onboarding).
+
+First-run empty state displays correctly.
+
+After first search, coaching hint row disappears permanently.
+
+Zero-results state renders correctly.
+
+Mobile layout: headline + input + button visible without excessive scrolling.
