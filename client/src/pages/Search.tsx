@@ -45,7 +45,6 @@ import {
   trackEvent
 } from "@/lib/onboarding";
 import { SearchLoadingOverlay } from "@/components/onboarding/SearchLoadingOverlay";
-import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
 import { FirstSavePrompt } from "@/components/onboarding/FirstSavePrompt";
 
 interface SearchResult {
@@ -957,8 +956,6 @@ export default function CandidateSearch() {
                         </p>
                       )}
 
-                      <CandidateWhyCard />
-
                       {selectedCandidate.text && (
                         <div className="mb-4">
                           <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
@@ -1146,8 +1143,6 @@ export default function CandidateSearch() {
                   {selectedCandidate.subtitle}
                 </p>
               )}
-
-              <CandidateWhyCard />
 
               {selectedCandidate.text && (
                 <div className="mb-4">
