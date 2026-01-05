@@ -44,17 +44,18 @@ export default function LandingPage() {
   ];
 
   const traditionalTools = [
-    "Boolean queries required",
-    "Stale, outdated profiles",
-    "No explanation of results",
-    "Manual screening process"
+    "Require Boolean logic and rigid filters",
+    "Search static, outdated databases",
+    "Surface titles, not evidence",
+    "Force manual screening"
   ];
 
   const talentPilotAdvantages = [
     "Natural language search",
     "Fresh data, refreshed weekly",
     "Every match explained",
-    "Ranked by relevance"
+    "Ranked by relevance, not keywords",
+    "Built for real recruiting workflows"
   ];
 
   const trustBullets = [
@@ -246,7 +247,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-6 text-left">
             {/* Traditional Tools */}
             <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-              <h3 className="font-semibold text-gray-500 mb-4">Traditional tools</h3>
+              <h3 className="font-semibold text-gray-500 mb-4">Traditional recruiting tools</h3>
               <ul className="space-y-2">
                 {traditionalTools.map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-sm text-gray-600">
