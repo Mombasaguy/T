@@ -1,0 +1,206 @@
+Goal
+
+Recruiters scan, not read. These changes convert long paragraphs into short, high-signal UI elements so TalentPilot’s value is understood in seconds.
+
+Change 1: Replace long hero paragraph with 1 subheadline + 3 proof chips
+Current issue
+
+Hero has a dense paragraph explaining multiple ideas at once.
+
+Key value (scale, natural language, freshness) is buried.
+
+Required change
+
+Keep one concise subheadline
+
+Move all “proof” into 3 short chips/badges
+
+Implement
+
+Subheadline: 1–2 lines max (already provided)
+
+Add 3 chips directly below it:
+
+1B+ profiles indexed
+
++50M refreshed weekly
+
+Natural language search (no Boolean)
+
+Rule: No paragraph in the hero longer than 2 lines on desktop.
+
+Change 2: Convert “How it works” text into 3 cards (no paragraphs)
+Current issue
+
+“How it works” is explained in paragraph form.
+
+Users don’t retain step-based flows in prose.
+
+Required change
+
+Replace all explanatory text with 3 equal cards
+
+Each card = title + one sentence
+
+Implement
+
+Cards only:
+
+Describe the hire
+Type it like you’d tell a coworker.
+
+We search the whole web
+1B+ public profiles, refreshed weekly.
+
+Get ranked matches + reasons
+Every result explains why it matched.
+
+Rule: No paragraphs in this section at all.
+
+Change 3: Replace feature paragraphs with bullet lists (max 5 bullets)
+Current issue
+
+Feature sections use multi-sentence descriptions.
+
+Too much cognitive load.
+
+Required change
+
+Convert every feature explanation into bullets.
+
+Each bullet = one benefit, not a feature description.
+
+Implement example
+
+Instead of:
+
+“TalentPilot allows recruiters to save candidates, add notes, track progress, and manage workflows…”
+
+Use bullets:
+
+Save and revisit top candidates
+
+Add notes, tags, and ratings
+
+Track hiring progress in one place
+
+Export candidate lists when needed
+
+Rule: Max 5 bullets per section. No prose blocks.
+
+Change 4: Add a comparison table instead of explanation text
+Current issue
+
+“Why we’re different” is explained verbally.
+
+Recruiters compare tools instinctively.
+
+Required change
+
+Use a 2-column comparison instead of paragraphs.
+
+Implement
+
+Left: Traditional tools
+Right: TalentPilot
+
+Each side:
+
+4 bullets max
+
+No sentences longer than one line
+
+Rule: No descriptive paragraphs in comparison sections.
+
+Change 5: Convert trust/compliance explanation into bullet facts
+Current issue
+
+Responsible sourcing is explained in reassuring but verbose text.
+
+Recruiters just want quick confirmation.
+
+Required change
+
+Replace explanation paragraph with:
+
+1 short intro line
+
+4 trust bullets
+
+Implement
+
+Intro line (1 sentence max):
+
+Responsible sourcing, by design.
+
+Bullets:
+
+Public data only
+
+Source transparency
+
+Explainable matching
+
+You control outreach
+
+Rule: Trust sections should be skimmable in under 3 seconds.
+
+Change 6: Replace onboarding explanations with first-run empty state bullets
+Current issue
+
+Onboarding explains the product before users can use it.
+
+This duplicates what the UI already shows.
+
+Required change
+
+No onboarding text.
+
+First-run empty state replaces all explanation.
+
+Implement
+
+1 headline
+
+1 short paragraph (2 lines max)
+
+3 micro-bullets (shown only on first run)
+
+Micro-bullets:
+
+Natural language search
+
+Whole-web coverage
+
+Explainable results
+
+Rule: Teaching happens inside the product, not before it.
+
+Change 7: Enforce a global “paragraph kill rule”
+This is a styling + content rule Replit must follow everywhere.
+
+Hard rules to apply across the app and landing page:
+
+❌ No paragraph longer than 2 lines (desktop)
+
+❌ No section with more than one paragraph
+
+✅ Prefer bullets, cards, chips, or tables
+
+✅ Headings must communicate the takeaway alone
+
+If text feels like it needs 3+ sentences:
+→ It must become bullets or UI elements.
+
+Final Reminder for Replit
+
+This is not cosmetic copy editing.
+This is information architecture.
+
+The product’s advantage (natural language + billion-profile scale + freshness) must be:
+
+Visible without scrolling
+
+Understandable without reading
+
+Reinforced visually, not verbally

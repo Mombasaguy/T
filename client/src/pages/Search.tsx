@@ -27,6 +27,7 @@ import {
   Square,
   CheckSquare,
   Link2,
+  Globe,
 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -613,30 +614,35 @@ export default function CandidateSearch() {
           </div>
 
           {!searchPerformed && (
-            <div className="text-center py-8">
-              <p className="text-gray-600 mb-6">
-                Describe the candidate you're looking for - experience, background, or outcomes.
-              </p>
+            <div className="py-8">
+              <div className="text-center mb-6">
+                <p className="text-gray-600">Type your search like you'd tell a coworker.</p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                  Natural language search
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                  1B+ profiles indexed
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                  Explainable results
+                </span>
+              </div>
               <div className="flex flex-wrap justify-center gap-3">
-                <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-                  <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+                  <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                   </svg>
-                  <span className="text-sm font-medium text-gray-700">LinkedIn</span>
+                  <span className="text-xs text-gray-600">LinkedIn</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-                  <Github className="w-5 h-5 text-gray-900" />
-                  <span className="text-sm font-medium text-gray-700">GitHub</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+                  <Github className="w-4 h-4 text-gray-900" />
+                  <span className="text-xs text-gray-600">GitHub</span>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-full">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
-                  </svg>
-                  <span className="text-sm font-medium text-gray-700">Personal Sites</span>
-                </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-blue-500 border-2 border-blue-500 rounded-full">
-                  <Mail className="w-5 h-5 text-white" />
-                  <span className="text-sm font-medium text-white">AI Outreach</span>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+                  <Globe className="w-4 h-4 text-green-600" />
+                  <span className="text-xs text-gray-600">Personal Sites</span>
                 </div>
               </div>
             </div>
