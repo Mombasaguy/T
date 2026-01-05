@@ -567,7 +567,7 @@ export default function CandidateSearch() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-white">
       <SearchLoadingOverlay isVisible={loading && isOnboarding} />
       
       {/* Header */}
@@ -582,39 +582,39 @@ export default function CandidateSearch() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 py-4">
-        <div ref={searchContainerRef}>
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
-            <div className="flex gap-3">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder="Describe the candidate you're looking for..."
-                className="flex-1 px-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
-                data-testid="input-search"
-              />
-              <Button
-                onClick={() => handleSearch()}
-                disabled={loading || !query.trim()}
-                className="px-6 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition-colors"
-                data-testid="button-search"
-              >
-                {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Search"
-                )}
-              </Button>
-            </div>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div ref={searchContainerRef} className="max-w-xl mx-auto">
+          <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setAutocompleteSuggestions(getAutocompleteSuggestions(e.target.value));
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder="Describe the person you need..."
+              className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:outline-none"
+              data-testid="input-search"
+            />
+            <button
+              type="button"
+              onClick={() => handleSearch()}
+              disabled={loading || !query.trim()}
+              className="mt-3 w-full rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              data-testid="button-search"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+              ) : (
+                "Find Candidates Now"
+              )}
+            </button>
+          </div>
 
-            {/* Example Prompts */}
-            {!searchPerformed && (
-              <div className="mt-3 border-t border-gray-100 pt-2 space-y-1">
+          {/* Example Prompts */}
+          {!searchPerformed && (
+            <div className="mt-2 border-t border-gray-100 pt-1 space-y-1">
                 <button
                   onClick={() => {
                     setQuery("Healthcare operations leaders who've led EHR rollouts");
@@ -674,7 +674,6 @@ export default function CandidateSearch() {
               </div>
             )}
           </div>
-        </div>
 
         {searchPerformed && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
