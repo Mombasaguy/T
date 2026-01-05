@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { ArrowRight, CheckCircle, X, Shield, Globe, Search, Mic, FileText, User } from 'lucide-react';
+import { ArrowRight, CheckCircle, X, Shield, Globe, Search, Mic, FileText, User, Star, FileText as Notes, Tag, BarChart3, Download } from 'lucide-react';
 import { SiLinkedin, SiGithub } from 'react-icons/si';
 
 export default function LandingPage() {
@@ -196,22 +196,41 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How It Works - 3 Cards */}
+      {/* Built for real recruiting workflows */}
       <section className="py-12 px-4 md:px-6 bg-gray-50">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">How it works</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for real recruiting workflows</h2>
+          <p className="text-gray-600 mb-6">
+            Stay organized from first search to outreach. TalentPilot includes tools recruiters already expect:
+          </p>
           
-          <div className="grid md:grid-cols-3 gap-4 text-left">
-            {howItWorks.map((step, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-5 border border-gray-200">
-                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-white text-xs font-medium mb-3">
-                  {idx + 1}
-                </span>
-                <h3 className="font-semibold text-gray-900 mb-1">{step.title}</h3>
-                <p className="text-sm text-gray-600">{step.description}</p>
-              </div>
-            ))}
+          {/* Feature Chips */}
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Star className="w-4 h-4 text-gray-500" />
+              Save candidates
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <FileText className="w-4 h-4 text-gray-500" />
+              Add notes and tags
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Tag className="w-4 h-4 text-gray-500" />
+              Star and rate prospects
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <BarChart3 className="w-4 h-4 text-gray-500" />
+              Track status
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
+              <Download className="w-4 h-4 text-gray-500" />
+              Export to CSV
+            </span>
           </div>
+
+          <p className="text-gray-500 text-sm">
+            It works like a smarter recruiting workspace — not another system to learn.
+          </p>
         </div>
       </section>
 
