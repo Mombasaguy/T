@@ -295,19 +295,15 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="py-16 px-4 md:px-6 bg-gray-50">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Start finding candidates now
-          </h2>
-          <p className="text-gray-600 mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">
             No Boolean. No busywork. Just results.
-          </p>
+          </h2>
           <button 
             onClick={() => setLocation('/search')}
-            className="px-8 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors inline-flex items-center gap-2"
+            className="px-8 py-3 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors"
             data-testid="button-cta-search"
           >
             Find Candidates Now
-            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </section>
