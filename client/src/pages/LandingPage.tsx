@@ -72,7 +72,7 @@ export default function LandingPage() {
         </h1>
 
         <p className="mt-4 text-base text-gray-600">
-          Describe who you need. Get a ranked shortlist in minutes.
+          Describe who you need. Get a ranked shortlist in seconds.
         </p>
 
         {/* Proof Chips */}
