@@ -72,11 +72,7 @@ export default function LandingPage() {
           Search 1B+ public profiles with one sentence
         </h1>
 
-        <p className="mt-4 text-base font-medium text-gray-700">
-          Not filters. Not Boolean. Not a closed database.
-        </p>
-
-        <p className="mt-2 text-base text-gray-600">
+        <p className="mt-4 text-base text-gray-600">
           Describe who you need and get a ranked shortlist in seconds.
         </p>
 
