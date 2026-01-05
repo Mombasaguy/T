@@ -241,7 +241,7 @@ export default function LandingPage() {
       {/* Comparison Table */}
       <section className="py-12 px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Why we're different</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Why TalentPilot works when other tools don't</h2>
           
           <div className="grid md:grid-cols-2 gap-6 text-left">
             {/* Traditional Tools */}
