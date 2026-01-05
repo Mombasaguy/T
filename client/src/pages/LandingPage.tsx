@@ -273,23 +273,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Workflow Features - Bullets */}
-      <section className="py-12 px-4 md:px-6 bg-gray-50">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for real workflows</h2>
-          <p className="text-gray-600 mb-6">Everything recruiters need, nothing they don't.</p>
-          
-          <ul className="space-y-2 inline-block text-left">
-            {workflowBullets.map((item, idx) => (
-              <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
-                <CheckCircle className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
       {/* Trust Section - Bullets */}
       <section className="py-12 px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center">
