@@ -104,15 +104,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Web-scale discovery intro */}
-      <section className="py-8 px-4 md:px-6">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-bold text-gray-900">
-            This isn't database search. It's web-scale people discovery.
-          </h2>
-        </div>
-      </section>
-
       {/* Built for how recruiters actually search */}
       <section className="py-12 px-4 md:px-6">
         <div className="max-w-3xl mx-auto text-center">
