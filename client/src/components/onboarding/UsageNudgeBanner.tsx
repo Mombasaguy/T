@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { getUsageNudgeMessage, trackEvent } from "@/lib/onboarding";
+import { getUsageNudgeMessage, trackEvent, ONBOARDING_EVENTS } from "@/lib/onboarding";
 import { AlertCircle, X } from "lucide-react";
 
 interface UsageNudgeBannerProps {
@@ -18,7 +18,7 @@ export function UsageNudgeBanner({ maxFreeSearches = 10, searchCount = 0 }: Usag
     setNudge(nudgeMessage);
     
     if (nudgeMessage?.showUpgrade && searchCount >= maxFreeSearches) {
-      trackEvent('paywall_shown');
+      trackEvent(ONBOARDING_EVENTS.PAYWALL_SHOWN);
     }
     
     if (nudgeMessage) {

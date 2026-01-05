@@ -38,14 +38,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { apiRequest } from "@/lib/queryClient";
 import { 
-  hasRunSearch, 
-  setHasRunSearch, 
+  getOnboardingState, 
+  setFirstSearchCompleted, 
   incrementSearchCount,
-  getSearchCount,
+  PREFILLED_SEARCH_QUERY,
   trackEvent
 } from "@/lib/onboarding";
+import { SearchLoadingOverlay } from "@/components/onboarding/SearchLoadingOverlay";
+import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
 import { UsageNudgeBanner } from "@/components/onboarding/UsageNudgeBanner";
 import { SearchLimitCounter } from "@/components/SearchLimitCounter";
+import { FirstSavePrompt } from "@/components/onboarding/FirstSavePrompt";
 
 interface SearchResult {
   id: string;
@@ -226,7 +229,7 @@ export default function CandidateSearch() {
     status: 'active'
   });
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const [isFirstRun, setIsFirstRun] = useState(!hasRunSearch());
+  const [isOnboarding, setIsOnboarding] = useState(false);
   const [localSearchCount, setLocalSearchCount] = useState(0);
 
   const statusTags = ["Contacted", "Interview", "Rejected", "Follow-up"];
@@ -320,14 +323,18 @@ export default function CandidateSearch() {
     };
     fetchSubscription();
     
-    // Check for URL query param
+    // Check for onboarding mode
     const urlParams = new URLSearchParams(window.location.search);
+    const onboardingParam = urlParams.get('onboarding');
     const urlQuery = urlParams.get('query');
+    const state = getOnboardingState();
     
-    setLocalSearchCount(getSearchCount());
-    setIsFirstRun(!hasRunSearch());
+    setLocalSearchCount(state.searchCount);
     
-    if (urlQuery) {
+    if (onboardingParam === '1' && !state.firstSearchCompleted) {
+      setIsOnboarding(true);
+      setQuery(PREFILLED_SEARCH_QUERY);
+    } else if (urlQuery) {
       setQuery(urlQuery);
       setTimeout(() => {
         handleSearch(urlQuery);
@@ -419,10 +426,10 @@ export default function CandidateSearch() {
         setSubscription(prev => ({ ...prev, ...data.usage }));
       }
       
-      // Mark first search as completed
-      if (isFirstRun) {
-        setIsFirstRun(false);
-        setHasRunSearch();
+      // Clear onboarding state after first search
+      if (isOnboarding) {
+        setIsOnboarding(false);
+        setFirstSearchCompleted();
       }
       
       // Track search count for usage nudges
@@ -563,6 +570,7 @@ export default function CandidateSearch() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <SearchLoadingOverlay isVisible={loading && isOnboarding} />
       <div className="max-w-4xl mx-auto px-4 py-4">
         <SearchLimitCounter 
           searchesUsed={subscription.searchesUsed} 
@@ -598,55 +606,45 @@ export default function CandidateSearch() {
                 )}
               </Button>
             </div>
+            {isOnboarding && (
+              <p className="text-sm text-gray-500 mt-2">
+                Write this the way you'd explain the role to a colleague. You can edit this at any time.
+              </p>
+            )}
           </div>
 
           {!searchPerformed && (
             <div className="py-8">
-              {isFirstRun ? (
-                <>
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-                      Search 1B+ profiles with one sentence.
-                    </h2>
-                    <p className="text-gray-600 max-w-xl mx-auto">
-                      Describe the hire you need in plain English. TalentPilot scans over 1 billion public professional profiles across the web, refreshed weekly, and returns a ranked shortlist with clear reasons for every match.
-                    </p>
-                    <p className="text-gray-500 text-sm mt-2">
-                      No Boolean. No filters. No setup.
-                    </p>
-                  </div>
-
-                  <div className="bg-gray-50 rounded-lg p-4 mb-6 max-w-md mx-auto">
-                    <p className="text-xs text-gray-500 mb-2">Try a search like:</p>
-                    <p className="text-sm text-gray-700 font-medium">
-                      Senior backend engineer with Python and AWS experience in healthcare
-                    </p>
-                  </div>
-
-                  <p className="text-center text-xs text-gray-400 mb-6">
-                    Public data only • Transparent matches • You control outreach
-                  </p>
-
-                  <div className="flex flex-wrap justify-center gap-3 text-xs text-gray-500">
-                    <div className="flex items-center gap-1.5">
-                      <Search className="w-3.5 h-3.5" />
-                      <span>Natural language search — type it like you'd say it</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Globe className="w-3.5 h-3.5" />
-                      <span>Whole-web coverage — not limited to one platform</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Explainable results — see why each candidate matched</span>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <div className="text-center py-4">
-                  <p className="text-gray-600">Describe the candidate you're looking for.</p>
+              <div className="text-center mb-6">
+                <p className="text-gray-600">Type your search like you'd tell a coworker.</p>
+              </div>
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                  Natural language search
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                  1B+ profiles indexed
+                </span>
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 text-xs font-medium text-gray-700">
+                  Explainable results
+                </span>
+              </div>
+              <div className="flex flex-wrap justify-center gap-3">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+                  <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                  </svg>
+                  <span className="text-xs text-gray-600">LinkedIn</span>
                 </div>
-              )}
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+                  <Github className="w-4 h-4 text-gray-900" />
+                  <span className="text-xs text-gray-600">GitHub</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-full">
+                  <Globe className="w-4 h-4 text-green-600" />
+                  <span className="text-xs text-gray-600">Personal Sites</span>
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -655,14 +653,9 @@ export default function CandidateSearch() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
             <div className="lg:col-span-2">
               <div className="flex items-center justify-between gap-4 mb-4">
-                <div>
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    {loading ? "Searching..." : results.length > 0 ? "Top matches TalentPilot found" : "No exact matches"}
-                  </h2>
-                  {!loading && results.length > 0 && (
-                    <p className="text-sm text-gray-500">Ranked by relevance, with clear match reasons and source signals.</p>
-                  )}
-                </div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {loading ? "Searching..." : `${results.length} Results`}
+                </h2>
                 {results.length > 0 && (
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -836,19 +829,10 @@ export default function CandidateSearch() {
                     
                     if (filteredResults.length === 0) {
                       return (
-                        <div className="text-center py-12">
-                          <Search className="h-12 w-12 mx-auto mb-4 text-gray-300" />
-                          <h3 className="font-semibold text-gray-900 mb-2">No exact matches — try broadening slightly</h3>
-                          <p className="text-sm text-gray-600 mb-4 max-w-sm mx-auto">
-                            TalentPilot searches the whole web, but widening skills, location, or seniority can surface stronger matches.
-                          </p>
-                          <Button
-                            onClick={() => setSearchPerformed(false)}
-                            variant="outline"
-                            data-testid="button-edit-search"
-                          >
-                            Edit Search
-                          </Button>
+                        <div className="text-center py-12 text-gray-500">
+                          <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                          <p className="font-medium text-gray-700">No results found</p>
+                          <p className="text-sm mt-1">Try broadening your description or focusing on experience rather than titles.</p>
                         </div>
                       );
                     }
@@ -946,6 +930,8 @@ export default function CandidateSearch() {
                           {selectedCandidate.subtitle}
                         </p>
                       )}
+
+                      <CandidateWhyCard />
 
                       {selectedCandidate.text && (
                         <div className="mb-4">
@@ -1134,6 +1120,8 @@ export default function CandidateSearch() {
                   {selectedCandidate.subtitle}
                 </p>
               )}
+
+              <CandidateWhyCard />
 
               {selectedCandidate.text && (
                 <div className="mb-4">
@@ -1447,8 +1435,17 @@ export default function CandidateSearch() {
         </div>
       )}
 
+      {selectedCandidate && (
+        <FirstSavePrompt
+          onSave={() => {
+            updateCandidateData(selectedCandidate, { 
+              tags: [...getCandidateData(selectedCandidate).tags, "Saved"]
+            });
+          }}
+        />
+      )}
 
-      {isFirstRun && !searchPerformed && (
+      {isOnboarding && !searchPerformed && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-40">
           <Button
             onClick={() => handleSearch()}

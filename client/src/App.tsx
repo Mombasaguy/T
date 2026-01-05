@@ -8,6 +8,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { InternalRouter } from "./routes";
 
 import LandingPage from "./pages/LandingPage";
+import Onboarding from "./pages/Onboarding";
 
 function AppContent() {
   const [location] = useLocation();
@@ -19,6 +20,10 @@ function AppContent() {
 
   if (location === "/") {
     return <LandingPage />;
+  }
+
+  if (location === "/onboarding") {
+    return <Onboarding />;
   }
 
   return (
