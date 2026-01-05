@@ -119,8 +119,8 @@ export default function LandingPage() {
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-gray-800 leading-snug">"Healthcare operations leaders who've led EHR rollouts"</div>
-                    <div className="text-xs text-gray-500 leading-snug mt-0.5">Finds operators with hands-on delivery experience — not just titles.</div>
+                    <div className="text-sm font-normal text-gray-700 leading-snug">"Healthcare operations leaders who've led EHR rollouts"</div>
+                    <div className="text-xs text-gray-400 mt-0.5">Hands-on delivery experience — not just titles.</div>
                   </div>
                 </div>
               </button>
@@ -135,8 +135,8 @@ export default function LandingPage() {
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-gray-800 leading-snug">"Product managers at fintech companies who write about design systems"</div>
-                    <div className="text-xs text-gray-500 leading-snug mt-0.5">Surfaces PMs with real writing, portfolio work, and relevant experience.</div>
+                    <div className="text-sm font-normal text-gray-700 leading-snug">"Product managers at fintech companies who write about design systems"</div>
+                    <div className="text-xs text-gray-400 mt-0.5">Real writing, portfolio work, and relevant experience.</div>
                   </div>
                 </div>
               </button>
@@ -151,8 +151,8 @@ export default function LandingPage() {
                     <Search className="w-3.5 h-3.5" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-medium text-gray-800 leading-snug">"Senior engineers who've spoken at React conferences"</div>
-                    <div className="text-xs text-gray-500 leading-snug mt-0.5">Finds engineers visible in talks, code, and professional profiles.</div>
+                    <div className="text-sm font-normal text-gray-700 leading-snug">"Senior engineers who've spoken at React conferences"</div>
+                    <div className="text-xs text-gray-400 mt-0.5">Visible in talks, code, and professional profiles.</div>
                   </div>
                 </div>
               </button>
