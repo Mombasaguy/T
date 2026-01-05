@@ -115,14 +115,14 @@ export default function LandingPage() {
 
       {/* Built for how recruiters actually search */}
       <section className="py-12 px-4 md:px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for how recruiters actually search</h2>
           <p className="text-gray-600 mb-4">
             TalentPilot searches across a large index of public professional profiles, including:
           </p>
 
           {/* Platform Chips */}
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
               <SiLinkedin className="w-4 h-4 text-[#0A66C2]" />
               LinkedIn
@@ -198,10 +198,10 @@ export default function LandingPage() {
 
       {/* How It Works - 3 Cards */}
       <section className="py-12 px-4 md:px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">How it works</h2>
           
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-4 text-left">
             {howItWorks.map((step, idx) => (
               <div key={idx} className="bg-white rounded-xl p-5 border border-gray-200">
                 <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-900 text-white text-xs font-medium mb-3">
@@ -217,10 +217,10 @@ export default function LandingPage() {
 
       {/* Comparison Table */}
       <section className="py-12 px-4 md:px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Why we're different</h2>
           
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 text-left">
             {/* Traditional Tools */}
             <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
               <h3 className="font-semibold text-gray-500 mb-4">Traditional tools</h3>
@@ -252,11 +252,11 @@ export default function LandingPage() {
 
       {/* Workflow Features - Bullets */}
       <section className="py-12 px-4 md:px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for real workflows</h2>
           <p className="text-gray-600 mb-6">Everything recruiters need, nothing they don't.</p>
           
-          <ul className="space-y-2">
+          <ul className="space-y-2 inline-block text-left">
             {workflowBullets.map((item, idx) => (
               <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
                 <CheckCircle className="w-4 h-4 text-gray-500 flex-shrink-0" />
@@ -269,13 +269,13 @@ export default function LandingPage() {
 
       {/* Trust Section - Bullets */}
       <section className="py-12 px-4 md:px-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-3 mb-4">
+        <div className="max-w-3xl mx-auto text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
             <Shield className="w-6 h-6 text-gray-900" />
             <h2 className="text-2xl font-bold text-gray-900">Responsible sourcing, by design.</h2>
           </div>
           
-          <ul className="space-y-2">
+          <ul className="space-y-2 inline-block text-left">
             {trustBullets.map((item, idx) => (
               <li key={idx} className="flex items-center gap-2 text-sm text-gray-700">
                 <CheckCircle className="w-4 h-4 text-gray-500 flex-shrink-0" />
