@@ -44,10 +44,8 @@ import {
   getSearchCount,
   trackEvent
 } from "@/lib/onboarding";
-import { CandidateWhyCard } from "@/components/onboarding/CandidateWhyCard";
 import { UsageNudgeBanner } from "@/components/onboarding/UsageNudgeBanner";
 import { SearchLimitCounter } from "@/components/SearchLimitCounter";
-import { FirstSavePrompt } from "@/components/onboarding/FirstSavePrompt";
 
 interface SearchResult {
   id: string;
@@ -949,8 +947,6 @@ export default function CandidateSearch() {
                         </p>
                       )}
 
-                      <CandidateWhyCard />
-
                       {selectedCandidate.text && (
                         <div className="mb-4">
                           <h4 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
@@ -1138,8 +1134,6 @@ export default function CandidateSearch() {
                   {selectedCandidate.subtitle}
                 </p>
               )}
-
-              <CandidateWhyCard />
 
               {selectedCandidate.text && (
                 <div className="mb-4">
@@ -1453,17 +1447,8 @@ export default function CandidateSearch() {
         </div>
       )}
 
-      {selectedCandidate && (
-        <FirstSavePrompt
-          onSave={() => {
-            updateCandidateData(selectedCandidate, { 
-              tags: [...getCandidateData(selectedCandidate).tags, "Saved"]
-            });
-          }}
-        />
-      )}
 
-      {isOnboarding && !searchPerformed && (
+      {isFirstRun && !searchPerformed && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 md:hidden z-40">
           <Button
             onClick={() => handleSearch()}
