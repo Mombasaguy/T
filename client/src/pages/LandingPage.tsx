@@ -110,7 +110,7 @@ export default function LandingPage() {
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Built for how recruiters actually search</h2>
           <p className="text-gray-600 mb-4">
-            TalentPilot searches across a large index of public professional profiles, including:
+            TalentPilot searches across a continuously refreshed index of public professional profiles, including:
           </p>
 
           {/* Platform Chips */}
@@ -125,7 +125,7 @@ export default function LandingPage() {
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
               <Globe className="w-4 h-4 text-gray-500" />
-              Blogs and writing
+              Blogs and long-form writing
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
               <User className="w-4 h-4 text-gray-500" />
@@ -133,12 +133,12 @@ export default function LandingPage() {
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-700">
               <Mic className="w-4 h-4 text-gray-500" />
-              Talks and publications
+              Talks, publications, and conference appearances
             </span>
           </div>
 
           <p className="text-gray-600 mb-6">
-            Instead of relying on keywords or job titles alone, TalentPilot understands search intent, so you can describe candidates in plain language.
+            Instead of matching keywords or job titles, TalentPilot understands search intent — so you can describe candidates the same way you would to a colleague.
           </p>
 
           {/* Example Prompts */}
