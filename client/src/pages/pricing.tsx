@@ -109,7 +109,8 @@ export default function Pricing() {
     const priceId = PRICE_IDS[plan as keyof typeof PRICE_IDS];
     
     if (!priceId) {
-      console.error("Price ID not configured for plan:", plan);
+      alert("Pricing is being configured. Please try again in a moment.");
+      console.error("Price ID not configured for plan:", plan, "Available:", PRICE_IDS);
       return;
     }
 
