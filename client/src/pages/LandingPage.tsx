@@ -103,12 +103,7 @@ export default function LandingPage() {
           </div>
 
           {/* Example Prompts */}
-          <div className="mt-3 max-w-3xl mx-auto">
-            <div className="text-[11px] font-medium text-gray-500 mb-2">
-              Examples (optional)
-            </div>
-
-            <div className="rounded-xl bg-gray-50/60 p-2 sm:p-3">
+          <div className="mt-2 border-t border-gray-100 pt-2 space-y-1">
               <button
                 onClick={() => setSearchQuery("Healthcare operations leaders who've led EHR rollouts")}
                 className="w-full text-left"
@@ -156,7 +151,6 @@ export default function LandingPage() {
                   </div>
                 </div>
               </button>
-            </div>
           </div>
         </div>
       </section>
