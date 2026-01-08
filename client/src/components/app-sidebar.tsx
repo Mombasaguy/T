@@ -81,8 +81,8 @@ export function AppSidebar() {
             <Briefcase className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-semibold" data-testid="text-app-title">Command Center</span>
-            <span className="text-xs text-muted-foreground">Recruiting Hub</span>
+            <span className="text-sm font-semibold" data-testid="text-app-title">Talent Pilot</span>
+            <span className="text-xs text-muted-foreground">AI Recruiting</span>
           </div>
         </div>
       </SidebarHeader>
