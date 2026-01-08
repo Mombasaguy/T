@@ -28,25 +28,23 @@ export function optionalAuth(req: AuthRequest, res: Response, next: NextFunction
 export async function checkSearchLimit(req: AuthRequest, res: Response, next: NextFunction) {
   try {
     const userId = req.userId || 'guest';
-    const subscription = await storage.getSubscription(userId);
+    let subscription = await storage.getSubscription(userId);
     
+    // If no subscription exists, this is a new user - they have 0 searches used
+    // The subscription will be created after the first successful search
     if (!subscription) {
-      const guestSearches = parseInt(req.cookies?.guestSearches || '0');
-      if (guestSearches >= 10) {
-        return res.status(403).json({
-          error: "Search limit reached",
-          message: "You've used all 10 free searches. Sign up for more!",
-          upgradeUrl: "/pricing",
-          code: "LIMIT_REACHED"
-        });
-      }
       return next();
     }
     
+    // Check if user has reached their search limit
     if (subscription.searchesUsed >= subscription.searchesLimit) {
+      const planName = subscription.plan === 'free' ? 'Free' : 
+                       subscription.plan === 'professional' ? 'Professional' : 'Team';
       return res.status(403).json({
         error: "Search limit reached",
-        message: `You've used all ${subscription.searchesLimit} searches for this month.`,
+        message: subscription.plan === 'free' 
+          ? "You've used all 10 free searches. Upgrade to Professional for 200 searches/month!"
+          : `You've used all ${subscription.searchesLimit} searches for this month.`,
         upgradeUrl: "/pricing",
         code: "LIMIT_REACHED",
         usage: {
