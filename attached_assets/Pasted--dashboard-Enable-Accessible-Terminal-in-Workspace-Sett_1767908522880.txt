@@ -1,0 +1,172 @@
+
+/dashboard
+
+Enable "Accessible Terminal" in Workspace Settings to use a screen reader with the shell.
+npm run dev
+48m
+ • 
+49 minutes ago
+Time
+Deployment
+Source
+Log
+2026-01-08 07:49:54.03
+47a606db
+User
+'content-length': '381',
+2026-01-08 07:50:21.80
+47a606db
+User
+'original-request': 'req_5pcUUIXJfHqOVd',
+2026-01-08 07:50:21.80
+47a606db
+User
+rawType: 'invalid_request_error',
+2026-01-08 07:50:21.80
+47a606db
+User
+doc_url: 'https://stripe.com/docs/error-codes/resource-missing',
+2026-01-08 07:50:21.80
+47a606db
+User
+at vs (/home/runner/workspace/dist/index.cjs:70:115749)
+2026-01-08 07:50:21.80
+47a606db
+User
+'x-stripe-routing-context-priority-tier': 'livemode-critical',
+2026-01-08 07:50:21.80
+47a606db
+User
+'access-control-expose-headers': 'Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required',
+2026-01-08 07:50:21.80
+47a606db
+User
+'cache-control': 'no-cache, no-store',
+2026-01-08 07:50:21.80
+47a606db
+User
+'access-control-allow-methods': 'GET, HEAD, PUT, PATCH, POST, DELETE',
+2026-01-08 07:50:21.80
+47a606db
+User
+'x-wc': 'ABGHIJ',
+2026-01-08 08:19:18.35
+47a606db
+User
+1:19:18 PM [express] GET /api/stripe/config 304 in 191ms :: {"publishableKey":"pk_live_51Shd8TGVzMsk2vuuzcZq2sOQcFaYVxtSWSwj42rpmxYxTHBqqGaywlIlHEw62Q301F9xZOr8GjU4lhR1xUYe4KrZ00akxPGP0H","priceIds":{"professional":"price_1ShbDQDyfOUmbDiGiY3Tv3EC","team":"price_1ShbDRDyfOUmbDiGC9VR4AiB"}}
+2026-01-08 08:19:24.52
+47a606db
+User
+'request-id': 'req_aKW0k95XfaClLC',
+2026-01-08 08:19:24.52
+47a606db
+User
+doc_url: 'https://stripe.com/docs/error-codes/resource-missing',
+2026-01-08 08:19:24.52
+47a606db
+User
+param: 'line_items[0][price]',
+2026-01-08 08:19:24.52
+47a606db
+User
+code: 'resource_missing',
+2026-01-08 08:19:24.52
+47a606db
+User
+'x-stripe-priority-routing-enabled': 'true',
+2026-01-08 08:19:24.52
+47a606db
+User
+connection: 'keep-alive',
+2026-01-08 08:19:24.52
+47a606db
+User
+'access-control-allow-origin': '*',
+2026-01-08 08:19:24.52
+47a606db
+User
+'x-wc': 'ABGHIJ',
+2026-01-08 08:19:24.52
+47a606db
+User
+doc_url: 'https://stripe.com/docs/error-codes/resource-missing',
+2026-01-08 08:19:24.52
+47a606db
+User
+code: 'resource_missing',
+2026-01-08 08:19:24.52
+47a606db
+User
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+2026-01-08 08:19:24.52
+47a606db
+User
+'content-type': 'application/json',
+2026-01-08 08:19:24.52
+47a606db
+User
+vary: 'Origin',
+2026-01-08 08:19:24.52
+47a606db
+User
+'access-control-max-age': '300',
+2026-01-08 08:19:24.52
+47a606db
+User
+'access-control-expose-headers': 'Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required',
+2026-01-08 08:19:24.52
+47a606db
+User
+'content-security-policy': "base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; worker-src 'none'; upgrade-insecure-requests; report-uri https://q.stripe.com/csp-violation?q=nwhFmdYFxMIJDNQPMVH1fRbHDipCx-3P7MwKvorXuohLQ9JbHVtsfVIpa2lfih_p4zdkIljnFxADGnj1",
+2026-01-08 08:19:24.52
+47a606db
+User
+'original-request': 'req_aKW0k95XfaClLC',
+2026-01-08 08:19:24.52
+47a606db
+User
+detail: undefined,
+2026-01-08 08:19:28.76
+47a606db
+User
+doc_url: 'https://stripe.com/docs/error-codes/resource-missing',
+2026-01-08 08:19:28.76
+47a606db
+User
+connection: 'keep-alive',
+2026-01-08 08:19:28.76
+47a606db
+User
+'access-control-expose-headers': 'Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required',
+2026-01-08 08:19:28.76
+47a606db
+User
+server: 'nginx',
+2026-01-08 08:19:28.76
+47a606db
+User
+vary: 'Origin',
+2026-01-08 08:19:28.76
+47a606db
+User
+at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+2026-01-08 08:19:28.76
+47a606db
+User
+connection: 'keep-alive',
+2026-01-08 08:19:28.76
+47a606db
+User
+'cache-control': 'no-cache, no-store',
+2026-01-08 08:19:28.76
+47a606db
+User
+'content-type': 'application/json',
+2026-01-08 08:19:28.76
+47a606db
+User
+type: 'StripeInvalidRequestError',
+2026-01-08 08:19:28.76
+47a606db
+User
+date: 'Thu, 08 Jan 2026 13:19:28 GMT',
