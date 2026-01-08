@@ -1,12 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2, Check, Zap, Users, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { Link } from "wouter";
-
-const PRICE_IDS = {
-  professional: import.meta.env.VITE_STRIPE_PRICE_PROFESSIONAL || "",
-  team: import.meta.env.VITE_STRIPE_PRICE_TEAM || "",
-};
 
 interface PricingTier {
   name: string;
@@ -104,13 +99,25 @@ const faqs = [
 export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [priceIds, setPriceIds] = useState<{ professional: string; team: string }>({ professional: "", team: "" });
+
+  useEffect(() => {
+    fetch("/api/stripe/config")
+      .then(res => res.json())
+      .then(data => {
+        if (data.priceIds) {
+          setPriceIds(data.priceIds);
+        }
+      })
+      .catch(err => console.error("Failed to load Stripe config:", err));
+  }, []);
 
   const handleSubscribe = async (plan: string) => {
-    const priceId = PRICE_IDS[plan as keyof typeof PRICE_IDS];
+    const priceId = priceIds[plan as keyof typeof priceIds];
     
     if (!priceId) {
       alert("Pricing is being configured. Please try again in a moment.");
-      console.error("Price ID not configured for plan:", plan, "Available:", PRICE_IDS);
+      console.error("Price ID not configured for plan:", plan, "Available:", priceIds);
       return;
     }
 

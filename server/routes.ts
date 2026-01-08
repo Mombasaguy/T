@@ -632,7 +632,13 @@ Do not include [brackets] or placeholders. Write a complete email ready to send.
   app.get("/api/stripe/config", async (_req, res) => {
     try {
       const publishableKey = await getStripePublishableKey();
-      res.json({ publishableKey });
+      res.json({ 
+        publishableKey,
+        priceIds: {
+          professional: process.env.VITE_STRIPE_PRICE_PROFESSIONAL || "",
+          team: process.env.VITE_STRIPE_PRICE_TEAM || "",
+        }
+      });
     } catch (error) {
       console.error("Stripe config error:", error);
       res.status(500).json({ error: "Failed to get Stripe config" });
