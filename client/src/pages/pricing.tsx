@@ -100,9 +100,10 @@ export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [priceIds, setPriceIds] = useState<{ professional: string; team: string }>({ 
-    professional: "price_1ShbDQDyfOUmbDiGiY3Tv3EC", 
-    team: "price_1ShbDRDyfOUmbDiGC9VR4AiB" 
+    professional: "", 
+    team: "" 
   });
+  const [configLoaded, setConfigLoaded] = useState(false);
 
   useEffect(() => {
     fetch("/api/stripe/config")
@@ -114,17 +115,24 @@ export default function Pricing() {
         if (data.priceIds) {
           setPriceIds(data.priceIds);
         }
+        setConfigLoaded(true);
       })
       .catch(err => {
         console.error("Failed to load Stripe config:", err);
+        setConfigLoaded(true);
       });
   }, []);
 
   const handleSubscribe = async (plan: string) => {
+    if (!configLoaded) {
+      alert("Loading pricing information. Please wait a moment and try again.");
+      return;
+    }
+    
     const priceId = priceIds[plan as keyof typeof priceIds];
     
     if (!priceId) {
-      alert("Pricing is being configured. Please try again in a moment.");
+      alert("Pricing is not available. Please contact support.");
       console.error("Price ID not configured for plan:", plan, "Available:", priceIds);
       return;
     }
