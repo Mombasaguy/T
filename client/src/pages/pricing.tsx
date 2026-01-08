@@ -99,17 +99,25 @@ const faqs = [
 export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
-  const [priceIds, setPriceIds] = useState<{ professional: string; team: string }>({ professional: "", team: "" });
+  const [priceIds, setPriceIds] = useState<{ professional: string; team: string }>({ 
+    professional: "price_1ShbDQDyfOUmbDiGiY3Tv3EC", 
+    team: "price_1ShbDRDyfOUmbDiGC9VR4AiB" 
+  });
 
   useEffect(() => {
     fetch("/api/stripe/config")
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then(data => {
         if (data.priceIds) {
           setPriceIds(data.priceIds);
         }
       })
-      .catch(err => console.error("Failed to load Stripe config:", err));
+      .catch(err => {
+        console.error("Failed to load Stripe config:", err);
+      });
   }, []);
 
   const handleSubscribe = async (plan: string) => {
