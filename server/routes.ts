@@ -635,8 +635,8 @@ Do not include [brackets] or placeholders. Write a complete email ready to send.
       res.json({ 
         publishableKey,
         priceIds: {
-          professional: process.env.VITE_STRIPE_PRICE_PROFESSIONAL || "",
-          team: process.env.VITE_STRIPE_PRICE_TEAM || "",
+          professional: process.env.STRIPE_PRICE_PROFESSIONAL || process.env.VITE_STRIPE_PRICE_PROFESSIONAL || "",
+          team: process.env.STRIPE_PRICE_TEAM || process.env.VITE_STRIPE_PRICE_TEAM || "",
         }
       });
     } catch (error) {
