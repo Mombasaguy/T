@@ -136,8 +136,9 @@ export default function Pricing() {
       const data = await response.json();
       
       if (data.url) {
-        window.open(data.url, '_blank');
+        window.location.href = data.url;
       } else {
+        alert("Failed to start checkout. Please try again.");
         console.error("No checkout URL returned");
       }
     } catch (error) {
