@@ -46,9 +46,11 @@ integrations = ["javascript_anthropic_ai_integrations:2.0.0", "stripe:2.0.0", "g
 [userenv.shared]
 VITE_STRIPE_PRICE_PROFESSIONAL = "price_1ShbDQDyfOUmbDiGiY3Tv3EC"
 VITE_STRIPE_PRICE_TEAM = "price_1ShbDRDyfOUmbDiGC9VR4AiB"
-STRIPE_PRICE_PROFESSIONAL = "price_1SnKxULmDvETeInkCPWV1OT0"
-STRIPE_PRICE_TEAM = "price_1SnKxULmDvETeInkCMNVI0T0"
 
 [userenv.development]
+STRIPE_PRICE_PROFESSIONAL = "price_1SnOSiLJVP24theiBjEBmb6p"
+STRIPE_PRICE_TEAM = "price_1SnOSiLJVP24thei5Spmw2JY"
 
 [userenv.production]
+STRIPE_PRICE_PROFESSIONAL = "price_1SnKxULmDvETeInkCPWV1OT0"
+STRIPE_PRICE_TEAM = "price_1SnKxULmDvETeInkCMNVI0T0"
