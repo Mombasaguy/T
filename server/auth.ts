@@ -20,8 +20,12 @@ export function requireAuth(req: AuthRequest, res: Response, next: NextFunction)
 }
 
 export function optionalAuth(req: AuthRequest, res: Response, next: NextFunction) {
-  const userId = req.headers["x-user-id"] as string || req.cookies?.userId || 'guest';
-  req.userId = userId;
+  const user = req.user as any;
+  if (user?.claims?.sub) {
+    req.userId = user.claims.sub;
+  } else {
+    req.userId = 'guest';
+  }
   next();
 }
 

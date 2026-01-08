@@ -1,10 +1,7 @@
-import { type User, type InsertUser, type Candidate, type InsertCandidate, type Position, type InsertPosition, type Subscription, type InsertSubscription, getSearchLimitForPlan, SubscriptionPlan } from "@shared/schema";
+import { type Candidate, type InsertCandidate, type Position, type InsertPosition, type Subscription, type InsertSubscription, getSearchLimitForPlan, SubscriptionPlan } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
   
   // Candidate methods
   getAllCandidates(): Promise<Candidate[]>;
@@ -40,7 +37,6 @@ export interface IStorage {
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
   private candidates: Map<string, Candidate>;
   private positions: Map<string, Position>;
   private subscriptions: Map<string, Subscription>;
@@ -48,7 +44,6 @@ export class MemStorage implements IStorage {
   private demoDataLoaded: boolean = false;
 
   constructor() {
-    this.users = new Map();
     this.candidates = new Map();
     this.positions = new Map();
     this.subscriptions = new Map();
@@ -234,23 +229,6 @@ export class MemStorage implements IStorage {
       };
       this.candidates.set(id, fullCandidate);
     });
-  }
-
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
   }
 
   async getAllCandidates(): Promise<Candidate[]> {

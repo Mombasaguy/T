@@ -403,8 +403,16 @@ export default function CandidateSearch() {
       const data = await response.json();
       
       if (response.status === 403) {
-        alert(data.message || 'Search limit reached. Upgrade to continue searching.');
-        window.location.href = '/pricing';
+        const isGuest = subscription.plan === 'free';
+        if (isGuest) {
+          const signup = confirm("You've used all 10 free searches. Sign up to continue searching with more features!");
+          if (signup) {
+            window.location.href = '/api/login';
+          }
+        } else {
+          alert(data.message || 'Search limit reached. Upgrade your plan for more searches.');
+          window.location.href = '/pricing';
+        }
         return;
       }
       
@@ -609,6 +617,14 @@ export default function CandidateSearch() {
                 "Find Candidates Now"
               )}
             </button>
+            <div className="mt-2 text-center text-xs text-gray-400" data-testid="text-search-counter">
+              {subscription.searchesLimit - subscription.searchesUsed} of {subscription.searchesLimit} searches remaining
+              {subscription.plan === 'free' && subscription.searchesUsed >= 5 && (
+                <span className="ml-1">
+                  <a href="/pricing" className="text-gray-600 hover:text-gray-900 underline" data-testid="link-upgrade">Upgrade</a>
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Example Prompts */}
